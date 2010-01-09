@@ -1,0 +1,41 @@
+irc.saurik.com/#iphone, 2008-08-19
+(03:01:59 PM) DPGumby: shameless plug: here's an app I wrote in python: http://www.scott-wallace.net/iphone/appbackup
+(03:02:16 PM) zataang: natetrue: if i hit the bottom right corner of the screen, the dock "seems" to launch the last app launched by dock. is this a feature or just some random effect i am seeing
+(03:02:36 PM) DPGumby: it backs up saved data of appstore apps
+(03:02:39 PM) _BigBoss_: DPGumby do you want me to host that?
+(03:02:42 PM) pac^man [pacman@91-65-214-212-dynip.superkabel.de] entered the room.
+(03:02:44 PM) Sakurina: DPGumby: That's awesome
+(03:02:44 PM) DPGumby: Sure!
+(03:02:52 PM) _BigBoss_: DPGumby cool 
+(03:03:17 PM) _BigBoss_: DPGumby i'll grab your deb and start there
+(03:03:21 PM) DPGumby: _BigBoss_: Ok
+(03:03:30 PM) DPGumby: Please add a link to that page
+(03:03:31 PM) _BigBoss_: DPGumby if you make updates email me bigboss@thebigboss.org where to go get
+(03:03:34 PM) j3: DPGumby: what does it back up?  ALL of the app's files or just the data/plist/etc files?
+(03:03:35 PM) _BigBoss_: DPGumby you bet!
+(03:03:41 PM) Sakurina: j3: Was gonna ask that
+(03:03:55 PM) _BigBoss_: DPGumby is that icon on the top right of that page your app'sicon?
+(03:04:01 PM) DPGumby: It backs up appfolder/Documents and /Library
+(03:04:05 PM) j3: like if i upgrade to a new version of an app, but the data got wiped and i want to restore the data (but not the binary)
+(03:04:09 PM) DPGumby: _BigBoss_: yep
+(03:04:16 PM) j3: hrm ok
+(03:04:18 PM) DPGumby: j3: exactly
+(03:04:34 PM) natetrue: zataang: probably a bug
+(03:04:37 PM) Atoro [markus@dtmd-4db25cc4.pool.einsundeins.de] entered the room.
+(03:04:38 PM) zataang: natetrue: yah, looks like a reproducible thing. the last app is launched.
+(03:04:44 PM) DPGumby: now it actually saves a tarball of those 2 directories in ~mobile/Library/AppBackup/tarballs
+(03:04:51 PM) DPGumby: if y'all are curious
+(03:04:55 PM) j3: DPGumby: i manually did that this morniing
+(03:05:07 PM) Sakurina: hahahahaha DPGumby, love your webclip icon for Fucking NDA
+(03:05:11 PM) j3: and thank god i did because itunes hosed me
+(03:05:13 PM) badblody left the room (quit: Quit: kill -9 $me || ctrl + c ||  + q).
+(03:05:16 PM) DPGumby: thanks
+(03:05:18 PM) zataang: natetrue: obviously it's a tad annoying since now i can't hit the bottom tabs on some apps (like cydia) without being careful
+(03:05:18 PM) SkylarEC [SkylarEC@adsl-154-211-93.jax.bellsouth.net] entered the room.
+(03:05:38 PM) natetrue: not so cool now is it :P
+(03:05:50 PM) zataang: yah :)
+(03:05:54 PM) _BigBoss_: DPGumby i was going to make a page in bossprefs to do what "appdir" does. Its a good idea
+(03:06:30 PM) j3: DPGumby: yea nice work
+(03:06:36 PM) j3: DPGumby: if it works as advertised ;)
+(03:06:41 PM) DPGumby: _BigBoss_, j3: thanks
+(03:07:14 PM) _BigBoss_: ;)

@@ -1,0 +1,16 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+mkdir .debtmp &>/dev/null
+cd .debtmp
+rm ./*.deb &>/dev/null
+rm ../deb/Applications/AppBackup.app/AppBackupPython
+ln -s /usr/bin/python ../deb/Applications/AppBackup.app/AppBackupPython
+dpkg-deb -b ../deb .
+DEBFILE=`ls | grep .deb`
+echo $DEBFILE
+mv $DEBFILE ..
+cd ..
+scp "$DEBFILE" mobile@scottPhone:~/Packages
+ssh root@scottPhone "dpkg -i /var/mobile/Packages/$DEBFILE"
+ssh mobile@scottPhone "tail -fn0 ~/Library/AppBackup/debug.log"
+ssh mobile@scottPhone

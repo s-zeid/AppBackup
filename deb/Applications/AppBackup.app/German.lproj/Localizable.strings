@@ -1,0 +1,57 @@
+/*
+ * Localizable strings for AppBackup (German)
+ * This is a standard *.lproj/Localizable.strings file; see Apple's docs for
+ *   more info.
+ *
+ * Strings containing %s mean that the %s is replaced by something.  This
+ * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
+ * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
+ *
+ * Thanks to Chris Zander for this translation!
+ *
+ */
+
+"baktext_yes" = "Letzte Sicherung:  %s"; /* %s = last backup time */
+"baktext_no" = "Keine Sicherung erstellt.";
+"app_corrupted_list" = "Die Applikation ist in einem inkonsistenten Zustand";
+"app_corrupted_prompt" = "Die Daten dieser Applikation sind in einem inkonsistenten Zustand und können nicht gesichert werden.";
+"all_button" = "Alle";
+"all_apps" = "Alle Applikationen";
+"about_button" = "Info";
+"about_title" = "Über %s"; /* %s = AppBackup */
+"main_window_title" = "App Store Applikationen";
+"plural_last_letter" = ""; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
+"singular_possessive" = "%s's"; /* %s = app name */
+"plural_possessive" = "%s'"; /* %s = app name */
+"please_wait" = "Einen Moment bitte...";
+"ok" = "OK";
+"cancel" = "Abbrechen";
+"backup" = "Sichern";
+"restore" = "Wiederherstellen";
+"backup_1_app" = "Möchten Sie die Daten dieser Applikation sichern?";
+"backup_restore_1_app" = "Möchten Sie die Daten dieser Applikation sichern oder wiederherstellen?";
+"backup_all_apps" = "Möchten Sie die Daten aller Applikationen sichern?";
+"backup_restore_all_apps" = "Möchten Sie die Daten aller Applikationen sichern oder wiederherstellen?";
+"web_site" = "Web Seite";
+"done" = "%s fertig!"; /* %s = action */
+"partially_done" = "%s teilweise fertig"; /* %s = action */
+"backup_done" = "Sicherung fertig!";
+"backup_partially_done" = "Sicherung teilweise fertig";
+"backup_failed" = "Sicherung gescheitert";
+"restore_done" = "Wiederherstellung fertig!";
+"restore_partially_done" = "Wiederherstellung teilweise fertig";
+"restore_failed" = "Wiederherstellung gescheitert";
+"all_status_backup_doing" = "Sichere die Daten aller Applikationen";
+"all_status_backup_done" = "Die Daten aller Applikationen sind gesichert";
+"all_status_backup_failed" = "Die Daten folgender Applikationen konnten nicht gesichert werden";
+"all_status_backup_corrupted" = "Die Daten folgender Applikationen konnten nicht gesichert werden, da diese inkonsistent sind:";
+"all_status_restore_doing" = "Stelle die Daten aller Applikationen wieder her.";
+"all_status_restore_done" = "Die Daten aller Applikationen sind wiederhergestellt";
+"all_status_restore_failed" = "Die Daten folgender Applikationen konnten nicht wiederhergestellt werden:";
+"all_status_restore_corrupted" = "Die Daten folgender Applikationen konnten nicht wiederhergestellt werden, da diese inkonsistent sind:";
+"1_status_backup_doing" = "Sichere die Daten von %s..."; /* %s = app name */
+"1_status_backup_done" = "Die Daten von %s sind gesichert!"; /* %s = app name */
+"1_status_backup_failed" = "Die Daten von %s konnten nicht gesichert werden."; /* %s = app name */
+"1_status_restore_doing" = "Stelle die Daten von %s wieder her..."; /* %s = app name */
+"1_status_restore_done" = "Die Daten von %s sind wiederhergestellt!"; /* %s = app name */
+"1_status_restore_failed" = "Die Daten von %s konnten nicht wiederhergestellt werden."; /* %s = app name */

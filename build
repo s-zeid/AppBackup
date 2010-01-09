@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm deb/Applications/AppBackup.app/AppBackupPython
+ln -s /usr/bin/python deb/Applications/AppBackup.app/AppBackupPython
+mv ./*.deb "Old versions" &>/dev/null
+dpkg-deb -b deb .

@@ -1,0 +1,55 @@
+/*
+ * Localizable strings for AppBackup (English)
+ * This is a standard *.lproj/Localizable.strings file; see Apple's docs for
+ *   more info.
+ *
+ * Strings containing %s mean that the %s is replaced by something.  This
+ * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
+ * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
+ *
+ */
+
+"baktext_yes" = "Last backed up:  %s"; /* %s = last backup time */
+"baktext_no" = "Never backed up.";
+"app_corrupted_list" = "This app is corrupted.";
+"app_corrupted_prompt" = "This app is corrupted and therefore cannot be backed up or restored.";
+"all_button" = "All";
+"all_apps" = "All Applications";
+"about_button" = "About";
+"about_title" = "About %s"; /* %s = AppBackup */
+"main_window_title" = "App Store Apps";
+"plural_last_letter" = "s"; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
+"singular_possessive" = "%s's"; /* %s = app name */
+"plural_possessive" = "%s'"; /* %s = app name */
+"please_wait" = "Please wait...";
+"ok" = "OK";
+"cancel" = "Cancel";
+"backup" = "Backup";
+"restore" = "Restore";
+"backup_1_app" = "Do you want to backup this app's saved data?";
+"backup_restore_1_app" = "Do you want to backup or restore this app's saved data?";
+"backup_all_apps" = "Do you want to backup all apps' saved data?";
+"backup_restore_all_apps" = "Do you want to backup or restore all apps' saved data?";
+"web_site" = "Web Site";
+"done" = "%s done!"; /* %s = action */
+"partially_done" = "%s partially done"; /* %s = action */
+"backup_done" = "Backup done!";
+"backup_partially_done" = "Backup partially done";
+"backup_failed" = "Backup failed";
+"restore_done" = "Restore done!";
+"restore_partially_done" = "Restore partially done";
+"restore_failed" = "Restore failed";
+"all_status_backup_doing" = "Backing up all apps' saved data...";
+"all_status_backup_done" = "Backed up all apps' data!";
+"all_status_backup_failed" = "The following apps' data could not be backed up:";
+"all_status_backup_corrupted" = "The following apps' data were not backed up because they are corrupted:";
+"all_status_restore_doing" = "Restoring all apps' saved data...";
+"all_status_restore_done" = "Restored all apps' data!";
+"all_status_restore_failed" = "The following apps' data could not be restored:";
+"all_status_restore_corrupted" = "The following apps' data were not restored because they are corrupted:";
+"1_status_backup_doing" = "Backing up %s saved data..."; /* %s = app name */
+"1_status_backup_done" = "Backed up %s data!"; /* %s = app name */
+"1_status_backup_failed" = "The app %s data could not be backed up."; /* %s = app name */
+"1_status_restore_doing" = "Restoring %s saved data..."; /* %s = app name */
+"1_status_restore_done" = "Restored %s data!"; /* %s = app name */
+"1_status_restore_failed" = "The app %s data could not be restored."; /* %s = app name */
