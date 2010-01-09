@@ -3,7 +3,7 @@
 # An iPhoneOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
-# Copyright (C) 2008-2009 Scott Wallace
+# Copyright (C) 2008-2010 Scott Wallace
 # http://www.scott-wallace.net/iphone/appbackup
 #
 # This program is free software; you can redistribute it and/or modify
