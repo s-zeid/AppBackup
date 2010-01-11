@@ -12,5 +12,5 @@ mv $DEBFILE ..
 cd ..
 scp "$DEBFILE" mobile@scottPhone:~/Packages
 ssh root@scottPhone "dpkg -i /var/mobile/Packages/$DEBFILE"
-ssh mobile@scottPhone "tail -fn0 ~/Library/AppBackup/debug.log"
+ssh mobile@scottPhone "tail -fn0 ~/Library/Preferences/AppBackup/debug.log"
 ssh mobile@scottPhone

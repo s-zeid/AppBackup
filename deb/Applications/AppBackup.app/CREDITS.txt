@@ -19,5 +19,6 @@ Tango icons are © Tango Desktop Project and are released under the Creative Com
 If you want to help translate AppBackup into a different language, please contact me at <iphone@srwz.us>.  Currently, it supports English, German, and Swedish.
 
 Changes in version 1.0.7:
+• Moved backup location to /var/mobile/Library/Preferences/AppBackup so that iTunes will back them up.
 • In 1.0.6, I added a French translation by Marc Klein and I forgot to mention it.
 • 1.0.6 worked around a problem caused by MobileSubstrate support, which was removed.

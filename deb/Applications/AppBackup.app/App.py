@@ -71,6 +71,7 @@ try:
  execfile("include/AboutBox.py")
  execfile("include/BackupAll.py")
  execfile("include/BackupOne.py")
+ execfile("include/LibraryDirectoryMoved.py")
  execfile("include/MainWindow.py")
  
  # initialize a bunch of variables used in various parts of the app
@@ -87,7 +88,7 @@ try:
  with open("%s/CREDITS.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
  shared.web_site = "http://www.scott-wallace.net/iphone/appbackup"
- shared.libroot = "/var/mobile/Library/AppBackup"
+ shared.libroot = "/var/mobile/Library/Preferences/AppBackup"
  shared.tarballs = shared.libroot+"/tarballs"
  shared.backuptimesfile = shared.libroot+"/backuptimes.plist"
  if os.path.exists(shared.libroot) != True:

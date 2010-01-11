@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # AppBackup
 # An iPhoneOS application that backs up and restores the saved data and
 # preferences of App Store apps.
@@ -24,23 +22,17 @@
 # Loosely based on Dave Arter's (dave@minus-zero.org) sample code from the
 # iPhone/Python package.
 
-# path to Python
-PYTHON_PATH="$(dirname "$0")"/AppBackupPython
-# path to script
-APPBACKUP_SCRIPT="$(dirname "$0")"/App.py
-# set to 1 to enable debugging; 0 to disable
-DEBUG_APP=1 # Debug logging is now done in App.py itself to reduce system noise
-# Make ~mobile/Library/Preferences/AppBackup if it doesn't exist
-mkdir -p /var/mobile/Library/Preferences/AppBackup
-# location of log file for debugging
-APPBACKUP_DEBUG_FILE="/var/mobile/Library/Preferences/AppBackup/debug.log"
+# Code related to the Backups Moved message
 
-export PYTHONPATH="$(dirname "$0")/modules:$PYTHONPATH"
-if [ "$DEBUG_APP" -eq "1" ]; then
- # with debugging
- exec $PYTHON_PATH -dO $APPBACKUP_SCRIPT "$@"
- #&>$APPBACKUP_DEBUG_FILE
-else
- # without debugging
- exec $PYTHON_PATH -O $APPBACKUP_SCRIPT "$@"
-fi
+# This is an Objective-C class.  You must do LibraryDirectoryMoved.alloc().init()
+# to get a new instance.
+class LibraryDirectoryMoved(UIActionSheet):
+ # shown on first run after upgrading from 1.0.6 or earlier to 1.0.7 or later
+ def init(self):
+  self = super(LibraryDirectoryMoved, self).init()
+  if self == None: return None
+  self.setTitle_("Backups Moved")
+  self.setBodyText_("Just in case you need to know, your backups have been moved from /var/mobile/Library/AppBackup to /var/mobile/Library/Preferences/ AppBackup so that iTunes will sync them.\n\nYou probably do not need to worry about this.")
+  ok = self.addButtonWithTitle_(string("ok"))
+  self.setCancelButtonIndex_(ok)
+  return self

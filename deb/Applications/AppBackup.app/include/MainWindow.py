@@ -189,6 +189,11 @@ class MainWindow(UIApplication):
   # hide the HUD
   self.hud.show_(NO)
   
+  # have we upgraded from <= 1.0.6 to >= 1.0.7?  If so, show an info message.
+  if os.path.exists(shared.libroot+"/moved") and os.path.isfile(shared.libroot+"/moved"):
+   LibraryDirectoryMoved.alloc().init().popupAlertAnimated_(YES)
+   os.remove(shared.libroot+"/moved")
+  
   # get rolling!
   log("Finished setting up main window.")
  

@@ -24,10 +24,12 @@
 # Loosely based on Dave Arter's (dave@minus-zero.org) sample code from the
 # iPhone/Python package.
 
-# Make ~mobile/Library/AppBackup if it doesn't exist
-mkdir -p /var/mobile/Library/AppBackup
+APPBACKUP_SETTINGS=/var/mobile/Library/Preferences/AppBackup
 
-chown -R mobile:mobile /var/mobile/Library/AppBackup
-chmod -R 644 /var/mobile/Library/AppBackup
-chmod 755 /var/mobile/Library/AppBackup
-chmod 755 /var/mobile/Library/AppBackup/tarballs
+# Make ~mobile/Library/Preferences/AppBackup if it doesn't exist
+mkdir -p $APPBACKUP_SETTINGS
+
+chown -R mobile:mobile $APPBACKUP_SETTINGS
+chmod -R 644 $APPBACKUP_SETTINGS
+chmod 755 $APPBACKUP_SETTINGS
+chmod 755 $APPBACKUP_SETTINGS/tarballs
