@@ -88,7 +88,11 @@ try:
  with open("%s/CREDITS.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
  shared.web_site = "http://www.scott-wallace.net/iphone/appbackup"
- shared.libroot = "/var/mobile/Library/Preferences/AppBackup"
+ if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
+  shared.libroot = "/var/mobile/Library/AppBackup"
+ else:
+  shared.libroot = "/var/mobile/Library/Preferences/AppBackup"
+ shared.backups_moved = False
  shared.tarballs = shared.libroot+"/tarballs"
  shared.backuptimesfile = shared.libroot+"/backuptimes.plist"
  if os.path.exists(shared.libroot) != True:

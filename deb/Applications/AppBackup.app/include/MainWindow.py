@@ -185,14 +185,24 @@ class MainWindow(UIApplication):
   # update the list
   shared.list.setDataSource_(self)
   shared.list.reloadData()
-  
+
+  # have we upgraded from <= 1.0.6 to >= 1.0.7?  If so, move the backups.
+  if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
+   os.rename("/var/mobile/Library/AppBackup", "/var/mobile/Library/Preferences/AppBackup")
+   shared.backups_moved = True
+   os.mkdir("/var/mobile/Library/AppBackup")
+   with open("/var/mobile/Library/AppBackup/This has been moved", "w") as f:
+    f.write("This folder has been moved to /var/mobile/Library/Preferences/AppBackup since AppBackup version 1.0.7.")
+   shared.libroot = "/var/mobile/Library/Preferences/AppBackup"
+   shared.tarballs = shared.libroot+"/tarballs"
+   shared.backuptimesfile = shared.libroot+"/backuptimes.plist"
+
   # hide the HUD
   self.hud.show_(NO)
-  
-  # have we upgraded from <= 1.0.6 to >= 1.0.7?  If so, show an info message.
-  if os.path.exists(shared.libroot+"/moved") and os.path.isfile(shared.libroot+"/moved"):
+
+  # Show an info message if we moved the backups earlier.
+  if shared.backups_moved == True:
    LibraryDirectoryMoved.alloc().init().popupAlertAnimated_(YES)
-   os.remove(shared.libroot+"/moved")
   
   # get rolling!
   log("Finished setting up main window.")

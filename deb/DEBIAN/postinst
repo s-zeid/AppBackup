@@ -1,15 +1,6 @@
 #!/bin/bash
 
 chown -R root:wheel /Applications/AppBackup.app
-if [ -e "/var/mobile/Library/AppBackup" -a ! -e "/var/mobile/Library/AppBackup/This has been moved" ]; then
- mv /var/mobile/Library/AppBackup /var/mobile/Library/Preferences/AppBackup
- touch /var/mobile/Library/Preferences/AppBackup/moved
- chown -R mobile:mobile /var/mobile/Library/Preferences/AppBackup
- mkdir /var/mobile/Library/AppBackup
- echo "This folder has been moved to /var/mobile/Library/Preferences/AppBackup since AppBackup version 1.0.7." > "/var/mobile/Library/AppBackup/This has been moved"
- chown -R mobile:mobile /var/mobile/Library/AppBackup
-fi
-/Applications/AppBackup.app/FixPermissions
 
 echo ""
 echo "If you have any problems with AppBackup,"
