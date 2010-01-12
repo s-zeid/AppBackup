@@ -35,6 +35,7 @@ mkdir -p /var/mobile/Library/Preferences/AppBackup
 # location of log file for debugging
 APPBACKUP_DEBUG_FILE="/var/mobile/Library/Preferences/AppBackup/debug.log"
 
+touch $APPBACKUP_DEBUG_FILE
 export PYTHONPATH="$(dirname "$0")/modules:$PYTHONPATH"
 if [ "$DEBUG_APP" -eq "1" ]; then
  # with debugging
