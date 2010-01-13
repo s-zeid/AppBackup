@@ -30,10 +30,15 @@ PYTHON_PATH="$(dirname "$0")"/AppBackupPython
 APPBACKUP_SCRIPT="$(dirname "$0")"/App.py
 # set to 1 to enable debugging; 0 to disable
 DEBUG_APP=1 # Debug logging is now done in App.py itself to reduce system noise
-# Make ~mobile/Library/Preferences/AppBackup if it doesn't exist
-mkdir -p /var/mobile/Library/Preferences/AppBackup
+if [ -e "/var/mobile/Library/AppBackup" -a ! -e "/var/mobile/Library/AppBackup/This has been moved" ]; then
+ LIBROOT="/var/mobile/Library/AppBackup"
+else
+ LIBROOT="/var/mobile/Library/Preferences/AppBackup"
+fi
+# Make $LIBROOT if it doesn't exist
+mkdir -p $LIBROOT
 # location of log file for debugging
-APPBACKUP_DEBUG_FILE="/var/mobile/Library/Preferences/AppBackup/debug.log"
+APPBACKUP_DEBUG_FILE="$LIBROOT/debug.log"
 
 touch $APPBACKUP_DEBUG_FILE
 export PYTHONPATH="$(dirname "$0")/modules:$PYTHONPATH"

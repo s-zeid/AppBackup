@@ -26,8 +26,13 @@
 
 from __future__ import with_statement # Cydia's Python is 2.5
 import atexit, os, sys, time, traceback
+
+if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
+ __libroot__ = "/var/mobile/Library/AppBackup"
+else:
+ __libroot__ = "/var/mobile/Library/Preferences/AppBackup"
 __starttime__ = time.time()
-__debuglog__ = open("/var/mobile/Library/AppBackup/debug.log", "w", 0)
+__debuglog__ = open(__libroot__ + "/debug.log", "w", 0)
 sys.stdout = __debuglog__
 sys.stderr = __debuglog__
 try:
@@ -88,10 +93,7 @@ try:
  with open("%s/CREDITS.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
  shared.web_site = "http://www.scott-wallace.net/iphone/appbackup"
- if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
-  shared.libroot = "/var/mobile/Library/AppBackup"
- else:
-  shared.libroot = "/var/mobile/Library/Preferences/AppBackup"
+ shared.libroot = __libroot__
  shared.backups_moved = False
  shared.tarballs = shared.libroot+"/tarballs"
  shared.backuptimesfile = shared.libroot+"/backuptimes.plist"

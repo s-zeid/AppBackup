@@ -1,4 +1,4 @@
-AppBackup 1.0.9
+AppBackup 1.0.9.1
 Copyright © 2008-2010 Scott Wallace (aka scottywz & DPGumby).
 
 Released under the GNU General Public License, version 2 or later.
@@ -18,8 +18,12 @@ Tango icons are © Tango Desktop Project and are released under the Creative Com
 
 If you want to help translate AppBackup into a different language, please contact me at <iphone@srwz.us>.  Currently, it supports English, German, and Swedish.
 
-Changes in 1.0.9:
+Changes in 1.0.9.1:
 • AppBackup no longer crashes on a new install.
+• Fixed complications when upgrading to 1.0.7 or later from 1.0.6 or earlier.
+
+Changes in 1.0.9:
+• Attempted to fix AppBackup crashing on new installs.
 
 Changes in version 1.0.7:
 • Moved backup location to /var/mobile/Library/Preferences/AppBackup so that iTunes will back them up.
