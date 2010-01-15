@@ -188,6 +188,8 @@ class MainWindow(UIApplication):
 
   # have we upgraded from <= 1.0.6 to >= 1.0.7?  If so, move the backups.
   if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
+   if os.path.exists("/var/mobile/Library/Preferences/AppBackup"):
+    os.rename("/var/mobile/Library/Preferences/AppBackup", "/var/mobile/Library/Preferences/AppBackup.old")
    os.rename("/var/mobile/Library/AppBackup", "/var/mobile/Library/Preferences/AppBackup")
    shared.backups_moved = True
    os.mkdir("/var/mobile/Library/AppBackup")
