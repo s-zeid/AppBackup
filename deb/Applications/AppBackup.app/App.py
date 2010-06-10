@@ -32,13 +32,14 @@ if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobi
 else:
  __libroot__ = "/var/mobile/Library/Preferences/AppBackup"
 __starttime__ = time.time()
-__debuglog__ = open(__libroot__ + "/debug.log", "w", 0)
-sys.stdout = __debuglog__
-sys.stderr = __debuglog__
+#__debuglog__ = open(__libroot__ + "/debug.log", "w", 0)
+#sys.stdout = __debuglog__
+#sys.stderr = __debuglog__
+sys.stderr = sys.stdout
 try:
  # import some more Python modules we'll use (I imported some a few lines above)
  import ctypes, tarfile, threading # standard library
- sys.stdout.write("[%#.3f] And now for something completely different.\n" % round(time.time() - __starttime__, 3))
+ sys.stdout.write("AB[%#.3f] And now for something completely different.\n" % round(time.time() - __starttime__, 3))
  import objc # PyObjC; this is a dependency of the AppBackup package
  from _uicaboodle import UIApplicationMain
  # import some objc constants
@@ -53,7 +54,7 @@ try:
  # load Latin diacritics for sorting purposes; goes into shared.latin_diacritics
  execfile("include/latin_diacritics.py")
  
- sys.stdout.write("[%#.3f] Iii-t'sss...\n" % round(time.time() - __starttime__, 3))
+ sys.stdout.write("AB[%#.3f] Iii-t'sss...\n" % round(time.time() - __starttime__, 3))
  
  # load UIKit
  objc.loadBundle("UIKit", globals(), "/System/Library/Frameworks/UIKit.framework")
@@ -85,7 +86,7 @@ try:
  shared.info = plist.read("Info.plist")
  shared.name = shared.info["CFBundleDisplayName"]
  shared.version = shared.info["CFBundleVersion"]
- sys.stdout.write("[%#.3f] %s version %s\n" % (round(time.time() - __starttime__, 3), shared.name, shared.version))
+ sys.stdout.write("AB[%#.3f] %s version %s\n" % (round(time.time() - __starttime__, 3), shared.name, shared.version))
  log("Started at %#.3f" % round(__starttime__, 3))
  shared.about_title = string("about_title") % shared.name
  shared.plural_last = string("plural_last_letter")
@@ -107,8 +108,8 @@ try:
  # and let's start 'er up!
  UIApplicationMain(sys.argv, MainWindow)
 except:
- sys.stdout.write(traceback.format_exc() + "\n")
- sys.stdout.write("Exiting...\n")
+ sys.stdout.write("AB:" + traceback.format_exc() + "\n")
+ sys.stdout.write("AB:Exiting...\n")
  sys.stdin.close()
  sys.stdout.flush()
  sys.stderr.flush()

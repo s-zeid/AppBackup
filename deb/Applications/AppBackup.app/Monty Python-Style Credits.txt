@@ -1,0 +1,28 @@
+AppBackup was conceived, written, and performed by Scott Wallace,
+with the help of:
+
+Dave Arter
+gojohnnyboi
+Contributors to the English Wikipedia
+People who have sent me bug reports
+
+Cydia:  Jay Freeman (saurik)
+Package hosting:  BigBoss
+
+French translation:  Marc Klein
+German translation:  Chris Zander
+Spanish translation:  Ramón Cutanda
+Swedish translation:  Magnus Palsson (with an o above the a in
+Palsson)
+
+Web hosting:  Joyent
+Software used:  Python, Ubuntu Linux, Firefox, gedit, GNOME, gnome-terminal,
+                zsh, ssh, scp, dpkg, tail, ls, ln, cd, mv, cp, etc.
+Abusive App Store approval process:  Apple
+Confusing UIKit framework documentation:  Apple
+
+BBC Colour
+
+Copyright 2008-2009 Scott Wallace.
+AppBackup is released under the terms of the GNU General Public
+License, either version 2 or any later version of your choice.

@@ -52,7 +52,7 @@ def escape_utf8(s):
 
 # print debugging text
 def log(text, newline=True):
- entry = "[%#.3f] %s: %s" % (round(time.time() - __starttime__, 3), shared.name, text)
+ entry = "AB[%#.3f] %s: %s" % (round(time.time() - __starttime__, 3), shared.name, text)
  entry = escape_utf8(entry)
  if newline:
   entry += "\n"
@@ -86,10 +86,13 @@ def thread(function, args = [], kwargs = {}):
 
 # call a given function with positional arguments args and keyword arguments
 # kwargs, and print a traceback and interrupt the main thread if something goes
-# wrong.
+# wrong.  Also sets up an NSAutoreleasePool for the thread.
+# AutoreleasePool code found in Obj-C by arekkusu at <http://bit.ly/9V2NwT>.
 def __thread_meta(function, args = [], kwargs = {}):
  try:
+  autoreleasepool = NSAutoreleasePool.alloc().init();
   function(*args, **kwargs)
+  autoreleasepool.release();
  except:
   sys.stdout.write("Exception in thread:\n")
   sys.stdout.write(traceback.format_exc() + "\n")
