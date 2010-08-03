@@ -11,18 +11,20 @@ Package hosting:  BigBoss
 
 French translation:  Marc Klein
 German translation:  Chris Zander
+Italian translation:  Pietropaolo Mastromarco
 Spanish translation:  Ramón Cutanda
 Swedish translation:  Magnus Palsson (with an o above the a in
 Palsson)
 
-Web hosting:  Joyent
-Software used:  Python, Ubuntu Linux, Firefox, gedit, GNOME, gnome-terminal,
-                zsh, ssh, scp, dpkg, tail, ls, ln, cd, mv, cp, etc.
-Abusive App Store approval process:  Apple
+Web hosting:  prgmr.com
+Software used:  Python, Ubuntu Linux, Firefox, Google Chrome, gedit, GNOME,
+                gnome-terminal, zsh, ssh, scp, dpkg, tail, ls, ln, cd, mv, cp,
+                etc.
+Abusive App Store approval process I've never experienced (thankfully):  Apple
 Confusing UIKit framework documentation:  Apple
 
 BBC Colour
 
-Copyright 2008-2009 Scott Wallace.
+Copyright 2008-2010 Scott Wallace.
 AppBackup is released under the terms of the GNU General Public
 License, either version 2 or any later version of your choice.

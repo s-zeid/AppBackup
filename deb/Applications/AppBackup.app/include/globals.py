@@ -40,6 +40,45 @@ class plist:
 
 ### FUNCTIONS ###
 
+# this backs up or restores a given app
+def act_on_app(app, index, action):
+ if app["useable"] == False:
+  return False
+ path = str(app["path"])
+ bundle = str(app["bundle"])
+ tarpath = str("%s/%s.tar.gz" % (shared.tarballs, bundle))
+ logtext = '"' + app["friendly"] + "\" (%s, %s, %s)..." % (bundle, path, tarpath)
+ if action == "Backup":  # Internal string; don't translate
+  log("Backing up " + escape_utf8(logtext))
+  if os.path.exists(tarpath) != True:
+   log("Creating archive...")
+   f = open(tarpath, "w")
+   f.close()
+  log("Opening archive...")
+  tar = tarfile.open(tarpath, "w:gz")
+  log("Archiving path/Documents...")
+  tar.add(path+"/Documents", arcname="Documents")
+  log("Archiving path/Library...")
+  tar.add(path+"/Library", arcname="Library")
+  log("Closing tarball...")
+  tar.close()
+  now = str(time.mktime(time.localtime()))
+  log("Finished backup at " + now)
+  return now
+ if action == "Restore":  # Internal string; don't translate
+  log("Restoring " + escape_utf8(logtext))
+  if os.path.exists(tarpath) == True:
+   log("Opening archive...")
+   tar = tarfile.open(tarpath)
+   log("Extracting...")
+   tar.extractall(path)
+   log("Closing archive...")
+   tar.close()
+   return True
+  else:
+   log("The file %s does not exist.  Asking Congress for a bailout..." % tarpath)
+   return False
+
 # escape utf8 characters; there's probably a much simpler way of doing this
 def escape_utf8(s):
  r = s.encode('utf8', 'replace').__repr__()
@@ -50,6 +89,24 @@ def escape_utf8(s):
    return r[1:-1]
  return r
 
+# find_apps and find_apps_old are defined at the bottom of this file because
+# they're very long.
+
+# takes a UNIX timestamp and makes it a string formatted according to
+# the device's locale and user preferences
+def localized_date(d):
+ date = time.strftime("%Y-%m-%d %H:%M:%S", d)
+ dateformat = NSDateFormatter.alloc().init()
+ dateformat.setDateFormat_("yyyy-MM-dd HH:mm:ss")
+ date2 = dateformat.dateFromString_(date)
+ dateformat2 = NSDateFormatter.alloc().init()
+ dateformat2.setDateStyle_(2)
+ dateformat2.setTimeStyle_(1)
+ out = dateformat2.stringFromDate_(date2)
+ if out == None:
+  out = time.strftime("%b %d, %Y %I:%M:%S %p", d)
+ return out
+
 # print debugging text
 def log(text, newline=True):
  entry = "AB[%#.3f] %s: %s" % (round(time.time() - __starttime__, 3), shared.name, text)
@@ -58,6 +115,14 @@ def log(text, newline=True):
   entry += "\n"
  sys.stdout.write(entry)
  sys.stdout.flush()
+
+# write the backup times to ~mobile/Library/AppBackup/backuptimes.plist
+def save_backuptimes_plist(init=False):
+ if init == True:
+  thedict = {}
+ else:
+  thedict = shared.times
+ plist.write(thedict, shared.backuptimesfile)
 
 # get a localizable string from LANGUAGE.lproj/Localizable.strings
 def string(s):
@@ -94,9 +159,9 @@ def __thread_meta(function, args = [], kwargs = {}):
   function(*args, **kwargs)
   autoreleasepool.release();
  except:
-  sys.stdout.write("Exception in thread:\n")
+  sys.stdout.write("AB:Exception in thread:\n")
   sys.stdout.write(traceback.format_exc() + "\n")
-  sys.stdout.write("Exiting...\n")
+  sys.stdout.write("AB:Exiting...\n")
   sys.stdin.close()
   sys.stdout.flush()
   sys.stderr.flush()
@@ -105,25 +170,23 @@ def __thread_meta(function, args = [], kwargs = {}):
   atexit._run_exitfuncs()
   os._exit(127)
 
-# takes a UNIX timestamp and makes it a string formatted according to
-# the device's locale and user preferences
-def localized_date(d):
- date = time.strftime("%Y-%m-%d %H:%M:%S", d)
- dateformat = NSDateFormatter.alloc().init()
- dateformat.setDateFormat_("yyyy-MM-dd HH:mm:ss")
- date2 = dateformat.dateFromString_(date)
- dateformat2 = NSDateFormatter.alloc().init()
- dateformat2.setDateStyle_(2)
- dateformat2.setTimeStyle_(1)
- return dateformat2.stringFromDate_(date2)
-
-# write the backup times to ~mobile/Library/AppBackup/backuptimes.plist
-def save_backuptimes_plist(init=False):
- if init == True:
-  thedict = {}
- else:
-  thedict = shared.times
- plist.write(thedict, shared.backuptimesfile)
+def update_backup_time(index = None, backupTime = None, iterate = True, iterateOnly = False):
+ if iterateOnly == False:
+  if index == None or backupTime == None:
+   return False
+  bundle = shared.apps[index]["bundle"]
+  shared.times[bundle] = backupTime
+  save_backuptimes_plist()
+  baksec = time.localtime(float(backupTime))
+  bak = localized_date(baksec)
+  shared.apps[index]["bak"] = bak
+  shared.apps[index]["bak_text"] = string("baktext_yes") % bak
+  shared.apps[index]["bak_time"] = baksec
+ if iterate:
+  shared.any_bak = True; shared.all_bak = True
+  for i in shared.apps:
+   if i["bundle"] not in shared.times:
+    shared.all_bak = False
 
 # makes a list where each item is a dict representing a given app
 # each dict has the name of a .app folder, a bundle ID (e.g. com.spam.app),
@@ -182,6 +245,7 @@ def find_apps(callback=None):
     baktext = string("baktext_yes") % bak
     shared.any_bak = True
    else:
+    baksec = None
     bak = None
     baktext = string("baktext_no")
     shared.all_bak = False
@@ -199,6 +263,7 @@ def find_apps(callback=None):
    else:
     bundle = "invalid.appbackup.corrupted"
    sortname = u"%s_%s" % (strip_latin_diacritics(friendly).lower(), bundle)
+   baksec = None
    bak = None
    baktext = string("app_corrupted_list")
   
@@ -218,6 +283,7 @@ def find_apps(callback=None):
    "possessive": possessive,
    "bak": bak,
    "bak_text": baktext,
+   "bak_time": baksec,
    "useable": useable
   }
  log("Found all App Store apps; sorting...")
@@ -232,61 +298,6 @@ def find_apps(callback=None):
  if callback != None:
   callback()
 
-# this backs up or restores a given app
-def act_on_app(app, index, action):
- if app["useable"] == False:
-  return False
- path = str(app["path"])
- bundle = str(app["bundle"])
- tarpath = str("%s/%s.tar.gz" % (shared.tarballs, bundle))
- logtext = '"' + app["friendly"] + "\" (%s, %s, %s)..." % (bundle, path, tarpath)
- if action == "Backup":  # Internal string; don't translate
-  log("Backing up " + escape_utf8(logtext))
-  if os.path.exists(tarpath) != True:
-   log("Creating archive...")
-   f = open(tarpath, "w")
-   f.close()
-  log("Opening archive...")
-  tar = tarfile.open(tarpath, "w:gz")
-  log("Archiving path/Documents...")
-  tar.add(path+"/Documents", arcname="Documents")
-  log("Archiving path/Library...")
-  tar.add(path+"/Library", arcname="Library")
-  log("Closing tarball...")
-  tar.close()
-  now = str(time.mktime(time.localtime()))
-  log("Finished backup at " + now)
-  return now
- if action == "Restore":  # Internal string; don't translate
-  log("Restoring " + escape_utf8(logtext))
-  if os.path.exists(tarpath) == True:
-   log("Opening archive...")
-   tar = tarfile.open(tarpath)
-   log("Extracting...")
-   tar.extractall(path)
-   log("Closing archive...")
-   tar.close()
-   return True
-  else:
-   log("The file %s does not exist.  Asking Congress for a bailout..." % tarpath)
-   return False
-
-def update_backup_time(index = None, backupTime = None, iterate = True, iterateOnly = False):
- if iterateOnly == False:
-  if index == None or backupTime == None:
-   return False
-  bundle = shared.apps[index]["bundle"]
-  shared.times[bundle] = backupTime
-  save_backuptimes_plist()
-  bak = localized_date(time.localtime(float(backupTime)))
-  shared.apps[index]["bak"] = bak
-  shared.apps[index]["bak_text"] = string("baktext_yes") % bak
- if iterate:
-  shared.any_bak = True; shared.all_bak = True
-  for i in shared.apps:
-   if i["bundle"] not in shared.times:
-    shared.all_bak = False
-
 # makes a list where each item is a dict representing a given app
 # each dict has the name of a .app folder, a bundle ID (e.g. com.spam.app),
 # the path to the .app folder's parent directory, the app's GUID, the
@@ -294,8 +305,9 @@ def update_backup_time(index = None, backupTime = None, iterate = True, iterateO
 # the last backup as a string, the text to display in the table that
 # tells you when/if it was backed up, and whether the app is useable
 # (not corrupted) or not.  It gets its info by manually looking at each App
-# Store app's Info.plist file, and has been deprecated by find_apps.  It used
-# to be called make_app_dict.
+# Store app's Info.plist file, and has been superseded by find_apps.  It is
+# kept around in case the new find_apps fails to load the
+# MobileInstallationCache.  This used to be called make_app_dict.
 #
 # The list is sorted by friendly name, then by bundle ID.
 def find_apps_old(callback=None):
@@ -336,6 +348,7 @@ def find_apps_old(callback=None):
       baktext = string("baktext_yes") % bak
       shared.any_bak = True
      else:
+      baksec = None
       bak = None
       baktext = string("baktext_no")
       shared.all_bak = False
@@ -344,6 +357,7 @@ def find_apps_old(callback=None):
      friendly = j.rsplit(u".app", 1)[0]
      bundle = "invalid.appbackup.corrupted"
      sortname = u"%s_%s" % (friendly, bundle)
+     baksec = None
      bak = None
      baktext = string("app_corrupted_list")
      useable = False
@@ -364,6 +378,7 @@ def find_apps_old(callback=None):
      "possessive": possessive,
      "bak": bak,
      "bak_text": baktext,
+     "bak_time": bacsec,
      "useable": useable
     }
  log("Found all App Store apps; sorting...")

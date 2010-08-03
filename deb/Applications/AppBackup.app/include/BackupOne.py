@@ -38,7 +38,7 @@ class BackupOne(UIActionSheet):
   if app["useable"] == False:
    prompt = string("app_corrupted_prompt")
    canceltext = string("ok")
-  elif app["bak"] != None:
+  elif app["bak_time"] != None:
    backup = self.addButtonWithTitle_(string("backup"))
    restore = self.addButtonWithTitle_(string("restore"))
    prompt = string("backup_restore_1_app")

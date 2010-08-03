@@ -162,13 +162,15 @@ class MainWindow(UIApplication):
   self.hud.show_(YES)
   self.view.addSubview_(self.hud)
   
-  # find AppStore apps for the 1st time, in a separate thread so the user sees
-  # the HUD
-  shared.times = dict(plist.read(shared.backuptimesfile))
-  probing_thread = thread(find_apps, [self.launchPart2])
+  # finish in a separate thread so the user sees the HUD
+  new_thread = thread(self.launchPart2)
  
- # called within probing_thread to finish setting up the UI
+ # finish setting up the UI
  def launchPart2(self):
+  # find AppStore apps for the 1st time
+  shared.times = dict(plist.read(shared.backuptimesfile))
+  find_apps()
+  
   # set up the about box
   self.aboutBox = AboutBox.alloc().init()
   

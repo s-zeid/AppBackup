@@ -36,6 +36,7 @@ __starttime__ = time.time()
 #sys.stdout = __debuglog__
 #sys.stderr = __debuglog__
 sys.stderr = sys.stdout
+
 try:
  # import some more Python modules we'll use (I imported some a few lines above)
  import ctypes, tarfile, threading # standard library
@@ -81,13 +82,13 @@ try:
  execfile("include/MainWindow.py")
  
  # initialize a bunch of variables used in various parts of the app
- shared.apps_probed = False
  shared.script = sys.argv[0]
  shared.info = plist.read("Info.plist")
  shared.name = shared.info["CFBundleDisplayName"]
  shared.version = shared.info["CFBundleVersion"]
  sys.stdout.write("AB[%#.3f] %s version %s\n" % (round(time.time() - __starttime__, 3), shared.name, shared.version))
  log("Started at %#.3f" % round(__starttime__, 3))
+ shared.apps_probed = False
  shared.about_title = string("about_title") % shared.name
  shared.plural_last = string("plural_last_letter")
  # Credits are English only for now
@@ -96,8 +97,8 @@ try:
  shared.web_site = "http://www.scott-wallace.net/iphone/appbackup"
  shared.libroot = __libroot__
  shared.backups_moved = False
- shared.tarballs = shared.libroot+"/tarballs"
- shared.backuptimesfile = shared.libroot+"/backuptimes.plist"
+ shared.tarballs = os.path.join(shared.libroot, "tarballs")
+ shared.backuptimesfile = os.path.join(shared.libroot, "backuptimes.plist")
  if os.path.exists(shared.libroot) != True:
   os.mkdir(shared.libroot)
  if os.path.exists(shared.tarballs) != True:

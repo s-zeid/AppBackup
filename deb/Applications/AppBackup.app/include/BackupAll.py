@@ -93,7 +93,7 @@ class BackupAll(UIActionSheet):
      else:
       update_backup_time(position, ret, iterate=False)
       shared.list.reloadData()
-    elif action == string("restore") and app["bak"] != None:
+    elif action == string("restore") and app["bak_time"] != None:
      ret = act_on_app(app, position, "Restore")
      if ret != True:
       alldone = False
