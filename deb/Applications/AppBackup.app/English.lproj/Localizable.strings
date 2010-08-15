@@ -7,6 +7,8 @@
  * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
  * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
  *
+ * *** Please save this file in UTF-8 encoding if you can! ***
+ *
  */
 
 "baktext_yes" = "Last backed up:  %s"; /* %s = last backup time */

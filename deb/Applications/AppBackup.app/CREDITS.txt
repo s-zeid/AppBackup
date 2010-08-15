@@ -1,4 +1,4 @@
-AppBackup 1.0.10
+AppBackup 1.0.11
 Copyright © 2008-2010 Scott Wallace (aka scottywz & DPGumby).
 
 Released under the GNU General Public License, version 2 or later.
@@ -10,6 +10,7 @@ I would like to thank the following people who paid me lots of money to see thei
 • Dave Arter, for writing the Python sample code used as the basis for this app.
 • gojohnnyboi, for posting the (Obj-C) source code of his apps so people like me could learn from it.
 • BigBoss, for hosting AppBackup on his repository.
+• Dennis Morren for the Dutch translation.
 • Marc Klein for the French translation.
 • Chris Zander for the German translation.
 • Pietropaolo Mastromarco for the Italian translation.
@@ -19,9 +20,7 @@ I would like to thank the following people who paid me lots of money to see thei
 
 Tango icons are © Tango Desktop Project and are released under the Creative Commons Attribution Share-Alike license.
 
-If you want to help translate AppBackup into a different language, please contact me at <iphone@srwz.us>.  Currently, it supports English, French, German, Italian, Spanish, and Swedish.
+If you want to help translate AppBackup into a different language, please contact me at <iphone@srwz.us>.  Currently, it supports English, Dutch, French, German, Italian, Spanish, and Swedish.
 
-Changes in 1.0.10:
-• Added an Italian translation by Pietropaolo Mastromarco.
-• Fixed a bug where the restore option didn't appear if we couldn't get a localized date string from the operating system, even though the app was backed up already.
-• (Only of interest to developers) Sorted the functions in include/globals.py alphabetically, except for a couple of long ones which were left at the bottom.
+Changes in 1.0.11:
+• Added a Dutch translation by Dennis Morren.
