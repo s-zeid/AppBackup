@@ -1,0 +1,76 @@
+Changes in 1.0.11 (2010-mm-dd):
+• Added a Dutch translation by Dennis Morren.
+• Source changes related to Python naming conventions and docstrings in include/globals.py.
+• Credits and changelog reorganized in source tree and other small changes.
+• Full changelog now shipped with AppBackup and shown in the About dialog.
+
+Changes in 1.0.10 (2010-08-03):
+• Added an Italian translation by Pietropaolo Mastromarco.
+• Fixed a bug where the restore option didn't appear if we couldn't get a localized date string from the operating system, even though the app was backed up already.
+• (Only of interest to developers) Sorted the functions in include/globals.py alphabetically, except for a couple of long ones which were left at the bottom.
+
+Changes in 1.0.9.9 (2010-06-10):
+• Added a Spanish translation by Ramón Cutanda.
+• Changed the debug logging method again.
+• Threads now have autorelease pools.
+• This version is mainly intended to help me figure out crashing problems that people are having, although the above change might help some.
+
+Changes in 1.0.9.2 (2010-01-14):
+• Fixed another problem when upgrading to 1.0.7 or later from 1.0.6 or earlier.
+
+Changes in 1.0.9.1 (2010-01-13):
+• AppBackup no longer crashes on a new install.
+• Fixed complications when upgrading to 1.0.7 or later from 1.0.6 or earlier.
+
+Changes in 1.0.9 (2010-01-11):
+• Attempted to fix AppBackup crashing on new installs.
+
+Changes in 1.0.8:
+• There is NO version 1.0.8!
+
+Changes in 1.0.7 (2010-01-10):
+• Moved backup location to /var/mobile/Library/Preferences/AppBackup so that iTunes will back them up.
+
+Changes in 1.0.6 (2009-09-19?):
+• Added a French translation by Marc Klein and I forgot to mention it.
+• Worked around a problem caused by MobileSubstrate support, which was removed.
+
+Changes in 1.0.5 (2009-08-17):
+• Fixed a problem where apps whose .app folders' names had non-ASCII characters in them (e.g. "é" or "™") would crash AppBackup.
+• Support for sorting app names that have accented letters has been added.  (e.g. "Métro" now comes before "Mint")
+• CPU-intensive functions are now executed in separate threads.  This should result in better performance.  Specifically, finding apps and the actual backup and restore processes are now executed in separate threads.
+• The method used for finding apps has changed except for firmware versions below 2.1.
+• Reorganized the code A LOT.
+• Changed the debug logging process.
+• Made other small changes.
+
+Changes in 1.0.4 (2009-07-09):
+• Works on iPhoneOS 3.0
+• Worked around bug where an app that localized its name on the SpringBoard and didn't have a CFBundleDisplayName key in its Info.plist file would crash AppBackup
+• Fixed more crash-on-startup bugs
+• Added credits for the translations to the About screen (VERY sorry about not doing this earlier, translators)
+• Added MobileSubstrate support
+
+Changes in 1.0.3final (2008-09-27):
+• Added German and Swedish translations
+• Uses date format according to user's locale and preferences
+• Source is now compiled into optimized Python bytecode to run a little quicker; this may fix some crashing problems people have been having, especially after updating to 2.1.
+• Changes to UI:  All and About buttons moved to bottom; buttons in dialogs are now on separate rows.  This is to better support translated strings.
+• Sorting of apps in the list is now done case-insensitively.
+
+Changes in 1.0.2 (2008-09-02):
+• Fixed a problem where if an app's Info.plist file didn't exist, AppBackup would crash by checking to see if it exists (thanks Steven B.)
+• Fixed a problem where AppBackup would crash if you have a non-directory file in /var/mobile/Applications (thanks Ryan H.)
+• Changed some strings to stress that this doesn't backup the actual apps, but just their saved data
+• Added support for localization.  If you want to help translate AppBackup into a different language, please contact me.
+• Other small code changes
+
+Changes in 1.0.1 (2008-08-19):
+• Now outputs debugging info to /var/mobile/Library/AppBackup/debug.log
+• Fixed a problem with BigBoss-provided debs causing it to crash
+• Changed something that I think might cause a crashing bug if you have lots of AppStore apps
+• Added thanks to BigBoss for hosting it
+• Some minor, unnoticeable changes (like changing some comments in the code)
+
+Changes in 1.0 (2008-08-17):
+• Initial public release

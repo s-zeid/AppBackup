@@ -168,7 +168,7 @@ class MainWindow(UIApplication):
  # finish setting up the UI
  def launchPart2(self):
   # find AppStore apps for the 1st time
-  shared.times = dict(plist.read(shared.backuptimesfile))
+  shared.times = dict(FoundationPlist.read(shared.backuptimesfile))
   find_apps()
   
   # set up the about box

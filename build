@@ -1,6 +1,11 @@
 #!/bin/sh
 
+cd "$(dirname "$0")"
+
+mv ./*.deb "../AppBackup - Non-source Files/Old versions" &>/dev/null
+
 rm deb/Applications/AppBackup.app/AppBackupPython
 ln -s /usr/bin/python deb/Applications/AppBackup.app/AppBackupPython
-mv ./*.deb "Old versions" &>/dev/null
+touch deb/Applications/AppBackup.app/about.txt
+echo | cat CREDITS - CHANGELOG > deb/Applications/AppBackup.app/about.txt
 dpkg-deb -b deb .

@@ -55,4 +55,3 @@
 "1_status_restore_doing" = "Bezig met terugzetten met de data van %s ..."; /* %s = app name */
 "1_status_restore_done" = "Alle data is teruggezet!"; /* %s = app name */
 "1_status_restore_failed" = "De applicatie %s kan niet worden teruggezet."; /* %s = app name */
-

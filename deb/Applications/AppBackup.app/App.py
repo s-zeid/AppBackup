@@ -28,11 +28,11 @@ from __future__ import with_statement # Cydia's Python is 2.5
 import atexit, os, sys, time, traceback
 
 if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
- __libroot__ = "/var/mobile/Library/AppBackup"
+ libroot = "/var/mobile/Library/AppBackup"
 else:
- __libroot__ = "/var/mobile/Library/Preferences/AppBackup"
+ libroot = "/var/mobile/Library/Preferences/AppBackup"
 __starttime__ = time.time()
-#__debuglog__ = open(__libroot__ + "/debug.log", "w", 0)
+#__debuglog__ = open(libroot + "/debug.log", "w", 0)
 #sys.stdout = __debuglog__
 #sys.stderr = __debuglog__
 sys.stderr = sys.stdout
@@ -83,7 +83,7 @@ try:
  
  # initialize a bunch of variables used in various parts of the app
  shared.script = sys.argv[0]
- shared.info = plist.read("Info.plist")
+ shared.info = FoundationPlist.read("Info.plist")
  shared.name = shared.info["CFBundleDisplayName"]
  shared.version = shared.info["CFBundleVersion"]
  sys.stdout.write("AB[%#.3f] %s version %s\n" % (round(time.time() - __starttime__, 3), shared.name, shared.version))
@@ -92,10 +92,10 @@ try:
  shared.about_title = string("about_title") % shared.name
  shared.plural_last = string("plural_last_letter")
  # Credits are English only for now
- with open("%s/CREDITS.txt" % os.path.dirname(shared.script)) as textfo:
+ with open("%s/about.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
  shared.web_site = "http://www.scott-wallace.net/iphone/appbackup"
- shared.libroot = __libroot__
+ shared.libroot = libroot
  shared.backups_moved = False
  shared.tarballs = os.path.join(shared.libroot, "tarballs")
  shared.backuptimesfile = os.path.join(shared.libroot, "backuptimes.plist")
