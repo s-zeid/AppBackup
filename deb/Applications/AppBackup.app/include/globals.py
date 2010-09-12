@@ -32,7 +32,6 @@ class FoundationPlist:
  def read(cls, filename):
   """Reads a binary or XML plist from the given file name and returns the resulting dictionary."""
   return NSDictionary.alloc().initWithContentsOfFile_(filename)
- # write a dictionary to an XML plist
  @classmethod
  def write(cls, dictionary, filename):
   """Writes a dictionary to an XML plist at filename."""
