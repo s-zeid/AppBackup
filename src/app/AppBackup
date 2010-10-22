@@ -24,12 +24,15 @@
 # Loosely based on Dave Arter's (dave@minus-zero.org) sample code from the
 # iPhone/Python package.
 
+# Fix permissions on user directory (This is a binary with setuid root)
+"$(dirname "$0")"/FixPermissions
+
 # path to Python
 PYTHON_PATH="$(dirname "$0")"/AppBackupPython
 # path to script
 APPBACKUP_SCRIPT="$(dirname "$0")"/App.py
 # set to 1 to enable debugging; 0 to disable
-DEBUG_APP=1 # (Not anymore) Debug logging is now done in App.py itself to reduce system noise
+DEBUG_APP=1
 if [ -e "/var/mobile/Library/AppBackup" -a ! -e "/var/mobile/Library/AppBackup/This has been moved" ]; then
  LIBROOT="/var/mobile/Library/AppBackup"
 else
@@ -41,7 +44,6 @@ mkdir -p $LIBROOT
 APPBACKUP_DEBUG_FILE="$LIBROOT/debug.log"
 
 touch $APPBACKUP_DEBUG_FILE
-export PYTHONPATH="$(dirname "$0")/modules:$PYTHONPATH"
 if [ "$DEBUG_APP" -eq "1" ]; then
  # with debugging
  exec $PYTHON_PATH -dO $APPBACKUP_SCRIPT "$@" &>$APPBACKUP_DEBUG_FILE

@@ -8,23 +8,11 @@ fi
 
 cd "$(dirname "$0")"
 
-mkdir .debtmp &>/dev/null
-cd .debtmp
-rm ./*.deb &>/dev/null
-
-rm ../deb/Applications/AppBackup.app/AppBackupPython
-ln -s /usr/bin/python ../deb/Applications/AppBackup.app/AppBackupPython
-touch ../deb/Applications/AppBackup.app/about.txt
-echo | cat ../CREDITS - ../CHANGELOG > ../deb/Applications/AppBackup.app/about.txt
-dpkg-deb -b ../deb .
-
-DEBFILE=`ls | grep .deb`
 PREFIX="test_"
-echo $PREFIX$DEBFILE
-mv $DEBFILE ../$PREFIX$DEBFILE
-cd ..
+./build $PREFIX
+DEBFILE=`ls | grep "^test_.*\.deb$"`
 
-scp "$PREFIX$DEBFILE" mobile@$DEVICE:~/Packages
-ssh root@$DEVICE "dpkg -i /var/mobile/Packages/$PREFIX$DEBFILE"
+scp "$DEBFILE" mobile@$DEVICE:/tmp
+ssh root@$DEVICE "dpkg -i /tmp/$DEBFILE && rm /tmp/$DEBFILE"
 ssh mobile@$DEVICE "tail -fn0 ~/Library/Preferences/AppBackup/debug.log"
 ssh mobile@$DEVICE

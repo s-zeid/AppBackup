@@ -1,11 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 
 cd "$(dirname "$0")"
 
 mv ./*.deb "../AppBackup - Non-source Files/Old versions" &>/dev/null
 
-rm deb/Applications/AppBackup.app/AppBackupPython
-ln -s /usr/bin/python deb/Applications/AppBackup.app/AppBackupPython
-touch deb/Applications/AppBackup.app/about.txt
-echo | cat CREDITS - CHANGELOG > deb/Applications/AppBackup.app/about.txt
-dpkg-deb -b deb .
+mkdir debtmp &>/dev/null
+cd debtmp
+rm ./*.deb &>/dev/null
+
+mkdir -p files/Applications
+cp -a ../src/python files/Applications/AppBackup.app
+cp -a ../DEBIAN files
+ln -s /usr/bin/python files/Applications/AppBackup.app/AppBackupPython
+touch files/Applications/AppBackup.app/about.txt
+echo | cat ../CREDITS - ../CHANGELOG > files/Applications/AppBackup.app/about.txt
+
+# TODO: add code to compile FixPermissions.c
+
+dpkg-deb -b files .
+DEBFILE=`ls | grep .deb`
+PREFIX="$1"
+mv $DEBFILE ../$PREFIX$DEBFILE
+cd ..
+
+rm -r debtmp

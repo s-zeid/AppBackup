@@ -1,8 +1,17 @@
 Changes in 1.0.11 (2010-mm-dd):
 • Added a Dutch translation by Dennis Morren.
-• Source changes related to Python naming conventions and docstrings in include/globals.py.
-• Credits and changelog reorganized in source tree and other small changes.
 • Full changelog now shipped with AppBackup and shown in the About dialog.
+• Permissions on /var/mobile/Library/Preferences/AppBackup are now fixed on startup to reduce crashes
+• Source changes:
+   · Changes related to Python naming conventions and docstrings in include/globals.py.
+   · Source tree reorganized, changes and credits reorganized.
+   · Build process modified.
+   · PermissionsFix is now FixPermissions.old and is deprecated.
+   · Setuid binary called FixPermissions added to fix permissions on startup.
+   · README and LICENSE files added.
+   · Trivial changes.
+TODO: Add license to UI
+TODO: Add Retina icon (and maybe Default.png too?)
 
 Changes in 1.0.10 (2010-08-03):
 • Added an Italian translation by Pietropaolo Mastromarco.

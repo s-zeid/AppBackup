@@ -10,4 +10,4 @@ Icon: http://www.scott-wallace.net/uploads/images/AppBackup/icon.png
 Maintainer: Scott Wallace <iphone@srwz.us>
 Author: Scott Wallace <iphone@srwz.us>
 Section: Utilities
-Depends: python, pyobjc, uicaboodle.py
+Depends: bash, coreutils-bin, python, pyobjc, uicaboodle.py
