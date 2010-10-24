@@ -1,6 +1,7 @@
 #!/bin/bash
 
 chown -R root:wheel /Applications/AppBackup.app
+chmod u+s /Applications/AppBackup.app/FixPermissions
 
 echo ""
 echo "If you have any problems with AppBackup, please contact the author, Scott Wallace, by going to"

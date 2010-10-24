@@ -1,1 +1,108 @@
-TODO: write this
+AppBackup
+An iPhoneOS application that backs up and restores the saved data and 
+preferences of App Store apps.
+
+Copyright (C) 2008-2010 Scott Wallace
+http://www.scott-wallace.net/iphone/appbackup
+
+This is the source tree for AppBackup.  AppBackup is written in Python 2.5.
+
+Contents
+========
+ - Directory structure with descriptions for some files
+ - Prerequisites for building
+ - Building AppBackup
+ - License
+
+Directory structure with descriptions for some files
+====================================================
+/
+  DEBIAN/ - Debian package control files
+  src/
+    app/  - Main app source code
+      *.lproj/ - Localizations
+      include/ - Various Python files included by App.py using execfile
+      about.txt - Generated from /CREDITS and /CHANGELOG
+      App.py - The app itself (along with include/*)
+      AppBackup - Launcher shell script
+      FixPermissions - compiled binary to fix user directory permissions*
+      ...
+    util/ - FixPermissions source code
+      FixPermissions.c - source code to fix user directory permissions
+      Makefile
+  AppBackup.geany - Geany project file; I don't use this (but I do use Geany)
+  build - Build a Debian package (./build [device-hostname] [deb-file-prefix])**
+  config - Configuration (path to arm-apple-darwin9-gcc) for build and test
+  test - Script to test AppBackup on your own device (./test device-address)
+  ...
+
+* FixPermissions is not setuid root until after the package is installed.
+** See Building AppBackup for details.  FixPermissions is not re-compiled by
+   default.
+
+Prerequisites for building
+==========================
+Computer:
+ - Ubuntu Linux (other distros, OS X, Cygwin, etc. may work but I haven't tested
+                 them)
+ - Working iPhone toolchain that has GCC
+ - bash, dpkg, GNU make, OpenSSH client
+Device:
+ - Jailbroken iPhone, iPod touch, or iPad
+ - Cydia (or at least the default sources)
+ - bash, dpkg, ldid
+ - OpenSSH server WITH THE ROOT AND MOBILE PASSWORDS CHANGED!
+ - AppBackup package dependencies:
+    - bash, coreutils-bin, python, pyobjc, uicaboodle.py
+
+Building AppBackup
+==================
+To build a .deb file, run build (a shell script).  You can specify an optional
+prefix for your .deb's file name as an argument (e.g.
+./build 192.168.7.16 test_).
+
+You can choose whether or not to build the FixPermissions binary; a pre-built
+version is in src/app.  If you want to compile it, edit config and change the CC
+variable to point to arm-apple-darwin9-gcc in your toolchain.  Then run build
+with your device's hostname or IP address as THE FIRST argument.  You will need
+SSH to sign FixPermissions using ldid; make sure you have SSH on your device,
+YOUR ROOT AND MOBILE PASSWORDS ARE NOT THE DEFAULT ONES, and you have ldid
+installed.
+
+To disable compiling FixPermissions, you don't need to do anything unless the
+default value exists as an executable file on your system.  You can edit config
+so that the CC variable is empty; e.g.:
+  CC=
+or
+  CC= #/home/scottywz/opt/iphone-toolchain/pre/bin/arm-apple-darwin9-gcc
+Do not provide a hostname or IP address for your device if you do this.
+
+You can choose what to do with old .deb files by changing OLD_DEBS in config.
+An empty value or one that isn't a directory will cause build to leave them
+alone.  Setting it to /dev/null will cause build to delete them, and a valid
+directory name will cause build to move them to that directory.  The default is
+to leave them alone, as the default value probably doesn't exist on your machine.
+
+There is a script called test which will build a package whose filename starts
+with test_, install that package onto your device, show the debug log using
+tail -fn0, and then give you a shell as mobile when you press ^C while tail is
+running.
+
+This process has been tested on Ubuntu 10.10 with an iPhone 3.1.2 toolchain,
+and an iPhone 2G running iOS 3.1.2.
+
+License
+=======
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA

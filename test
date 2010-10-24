@@ -1,17 +1,18 @@
 #!/bin/bash
 
-DEVICE=scottPhone
-
-if [ ! "$1" = "" ]; then
- DEVICE=$1
+DEVICE=$1
+if [ "$1" = "" ]; then
+ echo "Usage: $0 device-address"
+ exit 2
 fi
 
 cd "$(dirname "$0")"
 
-PREFIX="test_"
-./build $PREFIX
+# Build .deb
+./build $DEVICE test_
 DEBFILE=`ls | grep "^test_.*\.deb$"`
 
+# Test on device
 scp "$DEBFILE" mobile@$DEVICE:/tmp
 ssh root@$DEVICE "dpkg -i /tmp/$DEBFILE && rm /tmp/$DEBFILE"
 ssh mobile@$DEVICE "tail -fn0 ~/Library/Preferences/AppBackup/debug.log"

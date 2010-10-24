@@ -26,8 +26,10 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <grp.h>
+#include <limits.h>
 #include <pwd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -36,13 +38,15 @@
 int walk(char *name, uid_t uid, gid_t gid) {
  DIR           *d;
  struct dirent *dir;
- int            cwd;
+ char          *cwd, *abspath;
  
  chown(name, uid, gid);
  chmod(name, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH |
              S_IXOTH);
  
- cwd = open(name, O_RDONLY);
+ cwd = malloc(PATH_MAX + 1);
+ realpath(".", cwd);
+ printf("%s/\n", name);
  chdir(name);
  
  d = opendir(name);
@@ -54,15 +58,19 @@ int walk(char *name, uid_t uid, gid_t gid) {
    continue;
   }
   if (dir->d_type == DT_DIR) {
-   walk(dir->d_name, uid, gid);
+   abspath = malloc(PATH_MAX + 1);
+   realpath(dir->d_name, abspath);
+   walk(abspath, uid, gid);
+   free(abspath);
   } else if (dir->d_type == DT_REG) {
-   chown(name, uid, gid);
-   chmod(name, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+   printf("%s/%s\n", name, dir->d_name);
+   chown(dir->d_name, uid, gid);
+   chmod(dir->d_name, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
   }
  }
  closedir(d);
- fchdir(cwd);
- close(cwd);
+ chdir(cwd);
+ free(cwd);
  return 0;
 }
 

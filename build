@@ -2,25 +2,56 @@
 
 cd "$(dirname "$0")"
 
-mv ./*.deb "../AppBackup - Non-source Files/Old versions" &>/dev/null
+CC=""; OLD_DEBS=""
+[ -f "config" ] && . ./config
+[ -n "$CC" -a -f "$CC" -a -x "$CC" ]; USE_CC=$?
 
+DEVICE=$1
+PREFIX=$2
+
+if [ "$DEVICE" = "" -a $USE_CC -eq 0 ]; then
+ echo "CC is enabled; the first argument should be your device's network address"
+ exit 2
+elif [ $USE_CC -eq 1 -a "$PREFIX" = "" ]; then
+ DEVICE=""
+ PREFIX=$1
+fi
+
+# Compile FixPermissions if $CC is set, exists, and is executable
+if [ $USE_CC -eq 0 ]; then
+ cd src/util
+ make clean
+ make CC="$CC" DEVICE="$DEVICE"
+ cp FixPermissions ../app/
+ cd ../..
+fi
+
+# Clean up old deb files if $OLD_DEBS is set
+if [ "$OLD_DEBS" = "/dev/null" ]; then
+ rm ./*.deb
+elif [ ! "$OLD_DEBS" = "" -a -d "$OLD_DEBS" ]; then
+ mv ./*.deb "$OLD_DEBS" &>/dev/null
+fi
+
+# Temporary directory for .deb building
 mkdir debtmp &>/dev/null
 cd debtmp
 rm ./*.deb &>/dev/null
 
-mkdir -p files/Applications
-cp -a ../src/python files/Applications/AppBackup.app
-cp -a ../DEBIAN files
+# Copying and symlinking
+mkdir -p files/Applications/AppBackup.app
+mkdir -p files/DEBIAN
+cp -a ../DEBIAN/* files/DEBIAN/
+cp -a ../src/app/* files/Applications/AppBackup.app/
 ln -s /usr/bin/python files/Applications/AppBackup.app/AppBackupPython
 touch files/Applications/AppBackup.app/about.txt
 echo | cat ../CREDITS - ../CHANGELOG > files/Applications/AppBackup.app/about.txt
 
-# TODO: add code to compile FixPermissions.c
-
+# Build .deb and move it
 dpkg-deb -b files .
 DEBFILE=`ls | grep .deb`
-PREFIX="$1"
 mv $DEBFILE ../$PREFIX$DEBFILE
 cd ..
 
+# Clean up
 rm -r debtmp

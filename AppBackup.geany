@@ -21,7 +21,7 @@ FILE_NAME_0=60;None;0;16;0;1;0;/home/scottywz/Projects/Software/AppBackup/.geany
 
 [build-menu]
 NF_00_LB=_Build DEB
-NF_00_CM=%p/build
+NF_00_CM=%p/build scottPhone
 NF_00_WD=
 NF_01_LB=
 NF_01_CM=
@@ -30,7 +30,7 @@ NF_02_LB=
 NF_02_CM=
 NF_02_WD=
 EX_00_LB=_Test on scottPhone
-EX_00_CM=%p/test
+EX_00_CM=%p/test scottPhone
 EX_00_WD=
 EX_01_LB=_Execute
 EX_01_CM=python "%f"

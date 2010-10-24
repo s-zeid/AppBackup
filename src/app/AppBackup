@@ -25,7 +25,11 @@
 # iPhone/Python package.
 
 # Fix permissions on user directory (This is a binary with setuid root)
-"$(dirname "$0")"/FixPermissions
+# Make a blank file in /Applications/AppBackup.app called NoFixPermissions to
+# disable this.
+if [ ! -e "$(dirname "$0")/NoFixPermissions" ]; then
+ "$(dirname "$0")"/FixPermissions > /tmp/FixPermissions.log
+fi
 
 # path to Python
 PYTHON_PATH="$(dirname "$0")"/AppBackupPython
