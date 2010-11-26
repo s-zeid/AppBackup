@@ -33,7 +33,12 @@
 # NB:  This file is not compiled into optimized Python bytecode anymore.
 
 from __future__ import with_statement # Cydia's Python is 2.5
-import atexit, os, sys, time, traceback
+
+import atexit
+import os
+import sys
+import time
+import traceback
 
 if os.path.exists("/var/mobile/Library/AppBackup") and os.path.exists("/var/mobile/Library/AppBackup/This has been moved") == False:
  libroot = "/var/mobile/Library/AppBackup"
@@ -47,8 +52,10 @@ sys.stderr = sys.stdout
 
 try:
  # import some more Python modules we'll use (I imported some a few lines above)
- import ctypes, tarfile, threading # standard library
- sys.stdout.write("AB[%#.3f] And now for something completely different.\n" % round(time.time() - __starttime__, 3))
+ import ctypes
+ import tarfile
+ import threading # standard library
+ sys.stdout.write("AppBackup[%#.3f]: And now for something completely different.\n" % round(time.time() - __starttime__, 3))
  import objc # PyObjC; this is a dependency of the AppBackup package
  from _uicaboodle import UIApplicationMain
  # import some objc constants
@@ -63,7 +70,7 @@ try:
  # load Latin diacritics for sorting purposes; goes into shared.latin_diacritics
  execfile("include/latin_diacritics.py")
  
- sys.stdout.write("AB[%#.3f] Iii-t'sss...\n" % round(time.time() - __starttime__, 3))
+ sys.stdout.write("AppBackup[%#.3f]: Iii-t'sss...\n" % round(time.time() - __starttime__, 3))
  
  # load UIKit
  objc.loadBundle("UIKit", globals(), "/System/Library/Frameworks/UIKit.framework")
@@ -94,7 +101,7 @@ try:
  shared.info = FoundationPlist.read("Info.plist")
  shared.name = shared.info["CFBundleDisplayName"]
  shared.version = shared.info["CFBundleVersion"]
- sys.stdout.write("AB[%#.3f] %s version %s\n" % (round(time.time() - __starttime__, 3), shared.name, shared.version))
+ sys.stdout.write("AppBackup[%#.3f]: %s version %s\n" % (round(time.time() - __starttime__, 3), shared.name, shared.version))
  log("Started at %#.3f" % round(__starttime__, 3))
  shared.apps_probed = False
  shared.about_title = string("about_title") % shared.name
@@ -117,8 +124,8 @@ try:
  # and let's start 'er up!
  UIApplicationMain(sys.argv, MainWindow)
 except:
- sys.stdout.write("AB:" + traceback.format_exc() + "\n")
- sys.stdout.write("AB:Exiting...\n")
+ sys.stdout.write("AppBackup: " + traceback.format_exc() + "\n")
+ sys.stdout.write("AppBackup: Exiting...\n")
  sys.stdin.close()
  sys.stdout.flush()
  sys.stderr.flush()

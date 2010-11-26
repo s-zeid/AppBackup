@@ -49,6 +49,7 @@ class BackupOne(UIActionSheet):
   elif app["bak_time"] != None:
    backup = self.addButtonWithTitle_(string("backup"))
    restore = self.addButtonWithTitle_(string("restore"))
+   delete = self.addButtonWithTitle_(string("delete"))
    prompt = string("backup_restore_1_app")
    canceltext = string("cancel")
   else:
@@ -73,9 +74,12 @@ class BackupOne(UIActionSheet):
    if action == string("backup"):
     log("I'm about to back up the data of app %s" % escape_utf8(app["friendly"]))
     text = string("1_status_backup_doing") % app["possessive"]
-   if action == string("restore"):
+   elif action == string("restore"):
     log("I'm about to restore the data of app %s" % escape_utf8(app["friendly"]))
     text = string("1_status_restore_doing") % app["possessive"]
+   elif action == string("delete"):
+    log("I'm about to delete the backup of app %s" % escape_utf8(app["friendly"]))
+    text = string("1_status_delete_doing") % app["possessive"]
    modal.setBodyText_(text)
    modal.popupAlertAnimated_(YES)
    log("Notified user of this.  Starting thread for this action.")
@@ -96,13 +100,14 @@ class BackupOne(UIActionSheet):
     #log("Finding apps again...")
     #find_apps()
     shared.list.reloadData()
+    time.sleep(1)
     donetext = string("backup_done")
     use = text2
    else:
     log("Backup was NOT successful!")
     donetext = string("backup_failed")
     use = text3
-  if action == string("restore"):
+  elif action == string("restore"):
    text2 = string("1_status_restore_done") % app["possessive"]
    text3 = string("1_status_restore_failed") % app["possessive"]
    log("Now restoring data of %s..." % escape_utf8(app["friendly"]))
@@ -114,6 +119,22 @@ class BackupOne(UIActionSheet):
    else:
     log("Restore was NOT successful!")
     donetext = string("restore_failed")
+    use = text3
+  elif action == string("delete"):
+   text2 = string("1_status_delete_done") % app["possessive"]
+   text3 = string("1_status_delete_failed") % app["possessive"]
+   log("Now deleting backup of %s..." % escape_utf8(app["friendly"]))
+   ret = act_on_app(app, shared.current_app, "Delete")
+   if ret == True:
+    log("Deletion was successful.")
+    update_backup_time(shared.current_app, None)
+    shared.list.reloadData()
+    time.sleep(1)
+    donetext = string("delete_done")
+    use = text2
+   else:
+    log("Deletion was NOT successful!")
+    donetext = string("delete_failed")
     use = text3
   modal.dismiss()
   log("Dismissed modal view.")

@@ -44,6 +44,7 @@ class BackupAll(UIActionSheet):
   if shared.any_bak == True:
    text = string("backup_restore_all_apps")
    restore = self.addButtonWithTitle_(string("restore"))
+   delete = self.addButtonWithTitle_(string("delete"))
   else:
    text = string("backup_all_apps")
   self.setBodyText_(text)
@@ -66,8 +67,10 @@ class BackupAll(UIActionSheet):
    modal.setTitle_(string("please_wait"))
    if action == string("backup"):
     text = string("all_status_backup_doing")
-   if action == string("restore"):
+   elif action == string("restore"):
     text = string("all_status_restore_doing")
+   elif action == string("delete"):
+    text = string("all_status_delete_doing")
    modal.setBodyText_(text)
    modal.popupAlertAnimated_(YES)
    actingThread = thread(self.onAllAppsDoAction_withModalView_, [action, modal])
@@ -80,12 +83,18 @@ class BackupAll(UIActionSheet):
    text4 = string("all_status_backup_corrupted")
    alldonetext = string("backup_done")
    allpartdonetext = string("backup_partially_done")
-  if action == string("restore"):
+  elif action == string("restore"):
    text2 = string("all_status_restore_done")
    text3 = string("all_status_restore_failed")
    text4 = string("all_status_restore_corrupted")
    alldonetext = string("restore_done")
    allpartdonetext = string("restore_partially_done")
+  elif action == string("delete"):
+   text2 = string("all_status_delete_done")
+   text3 = string("all_status_delete_failed")
+   text4 = string("all_status_delete_corrupted")
+   alldonetext = string("delete_done")
+   allpartdonetext = string("delete_partially_done")
   alldone = True
   failed = []
   corrupted = []
@@ -106,15 +115,24 @@ class BackupAll(UIActionSheet):
      if ret != True:
       alldone = False
       failed.append(app["friendly"])
+    elif action == string("delete") and app["bak_time"] != None:
+     ret = act_on_app(app, position, "Delete")
+     if ret != True:
+      alldone = False
+      failed.append(app["friendly"])
+     else:
+      update_backup_time(position, None, iterate=False)
+      shared.list.reloadData()
    else:
     any_corrupted = True
     corrupted.append(app["friendly"])
     failed.append(app["friendly"] + " (corrupted)")
    position += 1
-  if action == string("backup"):
+  if action == string("backup") or action == string("delete"):
    update_backup_time(iterateOnly=True)
    #find_apps()
    shared.list.reloadData()
+   time.sleep(1)
   if alldone == True and any_corrupted == False:
    donetext = alldonetext
    use = text2
