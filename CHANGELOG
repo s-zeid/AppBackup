@@ -4,7 +4,7 @@ Changes in 1.0.11 (2010-11-25):
 • Added proper error-checking when backing up or restoring/deleting a backup.
 • Added the ability to delete backups (only translated to English and Russian for now).
 • Permissions on /var/mobile/Library/Preferences/AppBackup are now fixed on startup to reduce crashes
-   · This is done with a setuid binary called FixPermissions and can be disabled by making an empty file at /Applications/AppBackup.app/NoFixPermissions
+   · This is done with a setuid root binary called FixPermissions and can be disabled by making an empty file at /Applications/AppBackup.app/NoFixPermissions
 • The modification time for the backup file is now used as a fallback if the file exists but the app is not in backuptimes.plist.
 • Added Retina images for the icon and splash screen.
    · The Retina icon is slightly different than the low-resolution icon.
@@ -14,7 +14,7 @@ Changes in 1.0.11 (2010-11-25):
 • Full changelog now shipped with AppBackup and shown in the About dialog.
 • Tweaked the debug.log format a tiny bit.
 • Source changes:
-   · Setuid binary called FixPermissions added to fix permissions on startup.
+   · Setuid root binary called FixPermissions added to fix permissions on startup.
    · PermissionsFix is now FixPermissions.old and is deprecated.
    · Changes related to Python naming conventions and docstrings in include/globals.py.
    · Source tree reorganized, changes and credits reorganized, and build process changed.
