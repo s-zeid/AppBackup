@@ -103,7 +103,6 @@ try:
  with open("%s/about.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
  shared.web_site = "http://pages.srwz.us/iphone/appbackup"
- shared.license_url = "file://" + os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "LICENSE.txt")
  shared.libroot = libroot
  shared.backups_moved = False
  shared.tarballs = os.path.join(shared.libroot, "tarballs")
