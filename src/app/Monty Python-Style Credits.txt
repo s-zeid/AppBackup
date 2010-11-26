@@ -26,5 +26,4 @@ Confusing UIKit framework documentation:  Apple
 BBC Colour
 
 Copyright 2008-2010 Scott Wallace.
-AppBackup is released under the terms of the GNU General Public
-License, either version 2 or any later version of your choice.
+AppBackup is released under the terms of the X11 License.

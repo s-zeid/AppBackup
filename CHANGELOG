@@ -4,6 +4,8 @@ Changes in 1.0.11 (2010-mm-dd):
 • Full changelog now shipped with AppBackup and shown in the About dialog.
 • Permissions on /var/mobile/Library/Preferences/AppBackup are now fixed on startup to reduce crashes
    · This is done with a setuid binary called FixPermissions and can be disabled by making an empty file at /Applications/AppBackup.app/NoFixPermissions
+• Now released under the X11 License.
+• The Web site's domain name is now pages.srwz.us.
 • Source changes:
    · Setuid binary called FixPermissions added to fix permissions on startup.
    · PermissionsFix is now FixPermissions.old and is deprecated.
@@ -11,7 +13,6 @@ Changes in 1.0.11 (2010-mm-dd):
    · Source tree reorganized, changes and credits reorganized, and build process changed.
    · README and LICENSE files added.
    · Trivial changes.
-TODO: Add license to UI
 TODO: Add Retina icon (and maybe Default.png too?)
 
 Changes in 1.0.10 (2010-08-03):
