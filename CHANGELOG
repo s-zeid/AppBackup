@@ -1,5 +1,6 @@
 Changes in 1.0.11 (2010-mm-dd):
 • Added a Dutch translation by Dennis Morren.
+• Added a Russian translation by Nikita "ZAY" Peshkov.
 • Full changelog now shipped with AppBackup and shown in the About dialog.
 • Permissions on /var/mobile/Library/Preferences/AppBackup are now fixed on startup to reduce crashes
    · This is done with a setuid binary called FixPermissions and can be disabled by making an empty file at /Applications/AppBackup.app/NoFixPermissions

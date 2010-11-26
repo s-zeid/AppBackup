@@ -3,7 +3,7 @@
 # preferences of App Store apps.
 #
 # Copyright (C) 2008-2010 Scott Wallace
-# http://www.scott-wallace.net/iphone/appbackup
+# http://pages.srwz.us/iphone/appbackup
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ try:
  # Credits are English only for now
  with open("%s/about.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
- shared.web_site = "http://www.scott-wallace.net/iphone/appbackup"
+ shared.web_site = "http://pages.srwz.us/iphone/appbackup"
  shared.libroot = libroot
  shared.backups_moved = False
  shared.tarballs = os.path.join(shared.libroot, "tarballs")

@@ -3,7 +3,7 @@
 # preferences of App Store apps.
 #
 # Copyright (C) 2008-2010 Scott Wallace
-# http://www.scott-wallace.net/iphone/appbackup
+# http://pages.srwz.us/iphone/appbackup
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
