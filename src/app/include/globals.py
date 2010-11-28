@@ -103,6 +103,7 @@ otherwise.
    log("Deleting backup of " + escape_utf8(logtext))
    if os.path.exists(tarpath) == True:
     os.remove(tarpath)
+    log("Finished deletion at " + str(time.mktime(time.localtime())))
     return True
   else:
    log(action + " is not a valid action")
