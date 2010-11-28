@@ -257,22 +257,144 @@ def find_apps(callback=None):
  """Finds all App Store apps installed on the iDevice.
 
 Makes a list where each item is a dict representing a given app.  Afterward,
+callback is called with no arguments if it is specified and not None.  This
+function gets its info by manually looking at each App Store app's Info.plist
+file.
+
+Each dict has these elements:
+ key:        Sort key.
+ name:       The basename of the .app folder.
+ bundle:     The app's bundle identifier or "invalid.appbackup.corrupted" if
+             the bundle identifier is unreadable.
+ path:       Path to the .app folder's parent directory.
+ tarpath:    Path to the backup file or "" if CFBundleIdentifier is unreadable.
+ guid:       GUID of app taken from the directory the .app folder is in.
+ friendly:   Friendly name of app, usually CFBundleDisplayName.
+ possessive: Possessive form of friendly.
+ bak:        Human-readable backup time or None if no backup.
+ bak_text:   Text displayed in the app list for the backup time.
+ bak_time:   struct_time of the last backup or None if no backup.
+ useable:    True if we can work with the app; False otherwise.
+
+The name of the key is the friendly name, converted to lowercase, with
+diacritics stripped using strip_latin_diacritics, an underscore, and the bundle
+name.  Example:  facebook_com.facebook.Facebook
+
+In effect, the list is sorted by friendly name, then by bundle ID.
+
+This used to be called find_apps_old and make_app_dict.
+
+"""
+ mobile = u"/var/mobile"
+ root = mobile+"/Applications"
+ applist = []; appdict = {}; apps = []
+ apps1 = os.listdir(root)
+ for i in apps1:
+  if os.path.isdir(root+"/"+i) == True:
+   apps.append(i)
+ shared.all_bak = True; shared.any_bak = False; shared.any_corrupted = False
+ if shared.apps_probed == False:
+  # Debug text; do not translate
+  log("Here are the app bundles and Info.plist's I found:")
+ for k in apps:
+  appdir = root+"/"+k
+  for j in os.listdir(appdir):
+   if j.endswith(u".app"):
+    plistfile = u"%s/%s/Info.plist" % (appdir, j)
+    if shared.apps_probed == False:
+     # More debug text
+     log(u"%s:  %s" % (escape_utf8(j), escape_utf8(plistfile.split(root+"/", 1)[1])))
+    if os.path.exists(plistfile) == True:
+     pl = FoundationPlist.read(plistfile)
+     bundle = pl["CFBundleIdentifier"]
+     tarpath = str("%s/%s.tar.gz" % (shared.tarballs, bundle))
+     if "CFBundleDisplayName" in pl:
+      friendly = pl["CFBundleDisplayName"]
+      if friendly == "":
+       friendly = j.rsplit(u".app", 1)[0]
+     else:
+      friendly = j.rsplit(u".app", 1)[0]
+     sortname = u"%s_%s" % (friendly.lower(), bundle)
+     useable = True
+     
+     if bundle in shared.times:
+      baksec = time.localtime(float(shared.times[bundle]))
+      bak = localized_date(baksec)
+      baktext = string("baktext_yes") % bak
+      shared.any_bak = True
+     elif os.path.isfile(tarpath) or os.path.islink(tarpath):
+      try:
+       baksec = time.localtime(float(os.stat(tarpath).st_mtime))
+      except (IOError, OSError):
+       baksec = time.localtime(0)
+      shared.times[bundle] = time.mktime(baksec)
+      save_backuptimes_plist()
+      bak = localized_date(baksec)
+      baktext = string("baktext_yes") % bak
+      shared.any_bak = True
+     else:
+      baksec = None
+      bak = None
+      baktext = string("baktext_no")
+      shared.all_bak = False
+    else:
+     shared.any_corrupted = True
+     friendly = j.rsplit(u".app", 1)[0]
+     bundle = "invalid.appbackup.corrupted"
+     tarpath = ""
+     sortname = u"%s_%s" % (friendly, bundle)
+     baksec = None
+     bak = None
+     baktext = string("app_corrupted_list")
+     useable = False
+    
+    if shared.plural_last != "" and friendly[-1] == shared.plural_last:
+     possessive = string("plural_possessive") % friendly
+    else:
+     possessive = string("singular_possessive") % friendly
+    
+    applist.append(sortname)
+    appdict[sortname] = {
+     "key": sortname,
+     "name": j,
+     "bundle": bundle,
+     "path": appdir,
+     "tarpath": tarpath,
+     "guid": k,
+     "friendly": friendly,
+     "possessive": possessive,
+     "bak": bak,
+     "bak_text": baktext,
+     "bak_time": baksec,
+     "useable": useable
+    }
+ log("Found all App Store apps; sorting...")
+ applist.sort()
+ log("done.  Now for the finishing touches...")
+ shared.apps = []
+ for i in applist:
+  shared.apps.append(appdict[i])
+ shared.apps_probed = True
+ log("done.  Now, back to our regularly scheduled programming, ")
+ log(callback.__repr__() + ".")
+ if callback != None:
+  callback()
+
+def find_apps_using_mic(callback=None):
+ """Finds all App Store apps installed on the iDevice.  (MobileInstallationCache\
+ method)
+
+Makes a list where each item is a dict representing a given app.  (See the
+documentation for find_apps for details about the list and dicts.)  Finally,
 callback is called with no arguments if it is specified and not None.
 
-Each dict has the name of a .app folder, a bundle ID (e.g. com.spam.app), the
-path to the .app folder's parent directory, the app's GUID, the display name of
-the app, the possessive form of the display name, the time of the last backup as
-a string, the text to display in the table that tells you when/if it was backed
-up, and whether the app is useable (not corrupted) or not.  It tries to get the
-info from the MobileInstallation cache, and falls back to find_apps_old if that
-doesn't work.
-
-The list is sorted by friendly name, then by bundle ID.
+This function tries to get the info from the MobileInstallation cache, and falls
+back to find_apps if that doesn't work.  This function is deprecated.
 
 """
  if not os.path.exists("/var/mobile/Library/Caches/com.apple.mobile.installation.plist"):
   log("MobileInstallation cache not found; reverting to old method of finding apps...")
-  find_apps_old(callback=callback)
+  find_apps(callback=callback)
   return
  try:
   mobileInstallationCache = FoundationPlist.read("/var/mobile/Library/Caches/com.apple.mobile.installation.plist")
@@ -378,119 +500,6 @@ The list is sorted by friendly name, then by bundle ID.
  shared.apps = []
  for i in applist:
   shared.apps.append(appdict[i])
- shared.apps_probed = True
- log("done.  Now, back to our regularly scheduled programming, ")
- log(callback.__repr__() + ".")
- if callback != None:
-  callback()
-
-def find_apps_old(callback=None):
- """Finds all App Store apps installed on the iDevice.  (Old method)
-
-Makes a list where each item is a dict representing a given app.  (See the
-documentation for find_apps for what data the dict has.)  Finally, callback is
-called with no arguments if it is specified and not None.
-
-This function gets its info by manually looking at each App Store app's
-Info.plist file.  It has been superseded by find_apps and is kept around in case
-the new find_apps fails to load the MobileInstallationCache file.  This used to
-be called make_app_dict.
-
-The list is sorted by friendly name, then by bundle ID.
-
-"""
- mobile = u"/var/mobile"
- root = mobile+"/Applications"
- applist = []; applist1 = []; appdict = {}; apps = []
- apps1 = os.listdir(root)
- for i in apps1:
-  if os.path.isdir(root+"/"+i) == True:
-   apps.append(i)
- shared.all_bak = True; shared.any_bak = False; shared.any_corrupted = False
- if shared.apps_probed == False:
-  # Debug text; do not translate
-  log("Here are the app bundles and Info.plist's I found:")
- for k in apps:
-  appdir = root+"/"+k
-  for j in os.listdir(appdir):
-   if j.endswith(u".app"):
-    plistfile = u"%s/%s/Info.plist" % (appdir, j)
-    if shared.apps_probed == False:
-     # More debug text
-     log(u"%s:  %s" % (escape_utf8(j), escape_utf8(plistfile.split(root+"/", 1)[1])))
-    if os.path.exists(plistfile) == True:
-     pl = FoundationPlist.read(plistfile)
-     bundle = pl["CFBundleIdentifier"]
-     tarpath = str("%s/%s.tar.gz" % (shared.tarballs, bundle))
-     if "CFBundleDisplayName" in pl:
-      friendly = pl["CFBundleDisplayName"]
-      if friendly == "":
-       friendly = j.rsplit(u".app", 1)[0]
-     else:
-      friendly = j.rsplit(u".app", 1)[0]
-     sortname = u"%s_%s" % (friendly.lower(), bundle)
-     useable = True
-     
-     if bundle in shared.times:
-      baksec = time.localtime(float(shared.times[bundle]))
-      bak = localized_date(baksec)
-      baktext = string("baktext_yes") % bak
-      shared.any_bak = True
-     elif os.path.isfile(tarpath) or os.path.islink(tarpath):
-      try:
-       baksec = time.localtime(float(os.stat(tarpath).st_mtime))
-      except (IOError, OSError):
-       baksec = time.localtime(0)
-      shared.times[bundle] = time.mktime(baksec)
-      save_backuptimes_plist()
-      bak = localized_date(baksec)
-      baktext = string("baktext_yes") % bak
-      shared.any_bak = True
-     else:
-      baksec = None
-      bak = None
-      baktext = string("baktext_no")
-      shared.all_bak = False
-    else:
-     shared.any_corrupted = True
-     friendly = j.rsplit(u".app", 1)[0]
-     bundle = "invalid.appbackup.corrupted"
-     tarpath = ""
-     sortname = u"%s_%s" % (friendly, bundle)
-     baksec = None
-     bak = None
-     baktext = string("app_corrupted_list")
-     useable = False
-    
-    if shared.plural_last != "" and friendly[-1] == shared.plural_last:
-     possessive = string("plural_possessive") % friendly
-    else:
-     possessive = string("singular_possessive") % friendly
-    
-    applist1.append(sortname)
-    appdict[sortname] = {
-     "key": sortname,
-     "name": j,
-     "bundle": bundle,
-     "path": appdir,
-     "tarpath": tarpath,
-     "guid": k,
-     "friendly": friendly,
-     "possessive": possessive,
-     "bak": bak,
-     "bak_text": baktext,
-     "bak_time": bacsec,
-     "useable": useable
-    }
- log("Found all App Store apps; sorting...")
- # wait for uca_init to finish
- while shared.ucaInitThread.isAlive():
-  time.sleep(0.125)
- applist1.sort(key=shared.ucaCollator.sort_key)
- log("done.  Now for the finishing touches...")
- for i in applist1:
-  applist.append(appdict[i])
- shared.apps = applist
  shared.apps_probed = True
  log("done.  Now, back to our regularly scheduled programming, ")
  log(callback.__repr__() + ".")
