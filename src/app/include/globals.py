@@ -321,8 +321,8 @@ The list is sorted by friendly name, then by bundle ID.
     try:
      baksec = time.localtime(float(os.stat(tarpath).st_mtime))
     except (IOError, OSError):
-     baksec = 1
-    shared.times[bundle] = baksec
+     baksec = time.localtime(0)
+    shared.times[bundle] = time.mktime(baksec)
     save_backuptimes_plist()
     bak = localized_date(baksec)
     baktext = string("baktext_yes") % bak
@@ -440,8 +440,8 @@ The list is sorted by friendly name, then by bundle ID.
       try:
        baksec = time.localtime(float(os.stat(tarpath).st_mtime))
       except (IOError, OSError):
-       baksec = 1
-      shared.times[bundle] = baksec
+       baksec = time.localtime(0)
+      shared.times[bundle] = time.mktime(baksec)
       save_backuptimes_plist()
       bak = localized_date(baksec)
       baktext = string("baktext_yes") % bak
