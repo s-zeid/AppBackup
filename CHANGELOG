@@ -1,3 +1,6 @@
+Changes in 1.0.12 (2010-11-27):
+• Fixed a bug where AppBackup would crash if the modification time of a backup file was used instead of a non-existent backuptimes.plist entry.
+
 Changes in 1.0.11 (2010-11-25):
 • Added a Dutch translation by Dennis Morren.
 • Added a Russian translation by Nikita "ZAY" Peshkov.
