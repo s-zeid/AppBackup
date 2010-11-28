@@ -1,7 +1,11 @@
 Changes in 1.0.12 (2010-11-27):
 • Fixed a bug where AppBackup would crash if the modification time of a backup file was used instead of a non-existent backuptimes.plist entry.
-• Fixed a bug in the old method of finding apps.
+• Fixed a couple of bugs in the old method of finding apps.
 • Reverted to the old method of finding apps because it is faster.
+• Fixed some problems with the English strings for deleting backups.
+• Fixed logging when deleting backups.
+• Simplified localization code in BackupAll/BackupOne.
+• The action argument of on(OneApp/AllApps)DoAction_withModalView_ takes an unlocalized string now.
 
 Changes in 1.0.11 (2010-11-25):
 • Added a Dutch translation by Dennis Morren.

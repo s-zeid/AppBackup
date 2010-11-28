@@ -64,22 +64,23 @@ class BackupOne(UIActionSheet):
  # what to do when you close the BackupOne prompt
  @objc.signature("v@:@i")
  def actionSheet_didDismissWithButtonIndex_(self, malert, index):
-  action = malert.buttonTitleAtIndex_(index)
+  action_localized = malert.buttonTitleAtIndex_(index)
   app = shared.apps[shared.current_app]
-  if action != string("cancel") and action != string("ok"):
+  if action_localized != string("cancel") and action_localized != string("ok"):
    # We're using a UIModalView so it doesn't show
    # the space where buttons go (we have no buttons)
    modal = UIModalView.alloc().init()
    modal.setTitle_(string("please_wait"))
-   if action == string("backup"):
+   if action_localized == string("backup"):
     log("I'm about to back up the data of app %s" % escape_utf8(app["friendly"]))
-    text = string("1_status_backup_doing") % app["possessive"]
-   elif action == string("restore"):
+    action = "backup"
+   elif action_localized == string("restore"):
     log("I'm about to restore the data of app %s" % escape_utf8(app["friendly"]))
-    text = string("1_status_restore_doing") % app["possessive"]
-   elif action == string("delete"):
+    action = "restore"
+   elif action_localized == string("delete"):
     log("I'm about to delete the backup of app %s" % escape_utf8(app["friendly"]))
-    text = string("1_status_delete_doing") % app["possessive"]
+    action = "delete"
+   text = string("1_status_%s_doing" % action) % app["possessive"]
    modal.setBodyText_(text)
    modal.popupAlertAnimated_(YES)
    log("Notified user of this.  Starting thread for this action.")
@@ -89,9 +90,11 @@ class BackupOne(UIActionSheet):
  
  def onOneAppDoAction_withModalView_(self, action, modal):
   app = shared.apps[shared.current_app]
-  if action == string("backup"):
-   text2 = string("1_status_backup_done") % app["possessive"]
-   text3 = string("1_status_backup_failed") % app["possessive"]
+  text2 = string("1_status_%s_done" % action) % app["possessive"]
+  text3 = string("1_status_%s_failed" % action) % app["possessive"]
+  donetext = string(action + "_done")
+  failtext = string(action + "_failed")
+  if action == "backup":
    log("Now backing up data of %s..." % app["friendly"])
    ret = act_on_app(app, shared.current_app, "Backup")
    if ret != False:
@@ -101,28 +104,24 @@ class BackupOne(UIActionSheet):
     #find_apps()
     shared.list.reloadData()
     time.sleep(1)
-    donetext = string("backup_done")
-    use = text2
+    title = donetext
+    body = text2
    else:
     log("Backup was NOT successful!")
-    donetext = string("backup_failed")
-    use = text3
-  elif action == string("restore"):
-   text2 = string("1_status_restore_done") % app["possessive"]
-   text3 = string("1_status_restore_failed") % app["possessive"]
+    title = failtext
+    body = text3
+  elif action == "restore":
    log("Now restoring data of %s..." % escape_utf8(app["friendly"]))
    ret = act_on_app(app, shared.current_app, "Restore")
    if ret == True:
     log("Restore was successful.")
-    donetext = string("restore_done")
-    use = text2
+    title = donetext
+    body = text2
    else:
     log("Restore was NOT successful!")
-    donetext = string("restore_failed")
-    use = text3
-  elif action == string("delete"):
-   text2 = string("1_status_delete_done") % app["possessive"]
-   text3 = string("1_status_delete_failed") % app["possessive"]
+    title = failtext
+    body = text3
+  elif action == "delete":
    log("Now deleting backup of %s..." % escape_utf8(app["friendly"]))
    ret = act_on_app(app, shared.current_app, "Delete")
    if ret == True:
@@ -130,17 +129,17 @@ class BackupOne(UIActionSheet):
     update_backup_time(shared.current_app, None)
     shared.list.reloadData()
     time.sleep(1)
-    donetext = string("delete_done")
-    use = text2
+    title = donetext
+    body = text2
    else:
     log("Deletion was NOT successful!")
-    donetext = string("delete_failed")
-    use = text3
+    title = failtext
+    body = text3
   modal.dismiss()
   log("Dismissed modal view.")
   alert = UIAlertView.alloc().init()
-  alert.setTitle_(donetext)
-  alert.setBodyText_(use)
+  alert.setTitle_(title)
+  alert.setBodyText_(body)
   alert.addButtonWithTitle_(string("ok"))
   log("Notifying user of results.")
   alert.show()

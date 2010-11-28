@@ -59,42 +59,30 @@ class BackupAll(UIActionSheet):
  # modal)
  @objc.signature("v@:@i")
  def actionSheet_didDismissWithButtonIndex_(self, malert, index):
-  action = malert.buttonTitleAtIndex_(index)
-  if action != string("cancel"):
+  action_localized = malert.buttonTitleAtIndex_(index)
+  if action_localized != string("cancel"):
    # We're using a UIModalView so it doesn't show
    # the space where buttons go (we have no buttons)
    modal = UIModalView.alloc().init()
    modal.setTitle_(string("please_wait"))
-   if action == string("backup"):
-    text = string("all_status_backup_doing")
-   elif action == string("restore"):
-    text = string("all_status_restore_doing")
-   elif action == string("delete"):
-    text = string("all_status_delete_doing")
+   if action_localized == string("backup"):
+    action = "backup"
+   elif action_localized == string("restore"):
+    action = "restore"
+   elif action_localized == string("delete"):
+    action = "delete"
+   text = string("all_status_%s_doing" % action)
    modal.setBodyText_(text)
    modal.popupAlertAnimated_(YES)
    actingThread = thread(self.onAllAppsDoAction_withModalView_, [action, modal])
  
  # act on all apps, close the given modal, and tell the user about the results
  def onAllAppsDoAction_withModalView_(self, action, modal):
-  if action == string("backup"):
-   text2 = string("all_status_backup_done")
-   text3 = string("all_status_backup_failed")
-   text4 = string("all_status_backup_corrupted")
-   alldonetext = string("backup_done")
-   allpartdonetext = string("backup_partially_done")
-  elif action == string("restore"):
-   text2 = string("all_status_restore_done")
-   text3 = string("all_status_restore_failed")
-   text4 = string("all_status_restore_corrupted")
-   alldonetext = string("restore_done")
-   allpartdonetext = string("restore_partially_done")
-  elif action == string("delete"):
-   text2 = string("all_status_delete_done")
-   text3 = string("all_status_delete_failed")
-   text4 = string("all_status_delete_corrupted")
-   alldonetext = string("delete_done")
-   allpartdonetext = string("delete_partially_done")
+  text2 = string("all_status_%s_done" % action)
+  text3 = string("all_status_%s_failed" % action)
+  text4 = string("all_status_%s_corrupted" % action)
+  alldonetext = string(action + "_done")
+  allpartdonetext = string(action + "_partially_done")
   alldone = True
   failed = []
   corrupted = []
@@ -102,7 +90,7 @@ class BackupAll(UIActionSheet):
   position = 0
   for app in shared.apps:
    if app["useable"] == True:
-    if action == string("backup"):
+    if action == "backup":
      ret = act_on_app(app, position, "Backup")
      if ret == False:
       alldone = False
@@ -110,12 +98,12 @@ class BackupAll(UIActionSheet):
      else:
       update_backup_time(position, ret, iterate=False)
       shared.list.reloadData()
-    elif action == string("restore") and app["bak_time"] != None:
+    elif action == "restore" and app["bak_time"] != None:
      ret = act_on_app(app, position, "Restore")
      if ret != True:
       alldone = False
       failed.append(app["friendly"])
-    elif action == string("delete") and app["bak_time"] != None:
+    elif action == "delete" and app["bak_time"] != None:
      ret = act_on_app(app, position, "Delete")
      if ret != True:
       alldone = False
@@ -128,25 +116,25 @@ class BackupAll(UIActionSheet):
     corrupted.append(app["friendly"])
     failed.append(app["friendly"] + " (corrupted)")
    position += 1
-  if action == string("backup") or action == string("delete"):
+  if action == "backup" or action == "delete":
    update_backup_time(iterateOnly=True)
    #find_apps()
    shared.list.reloadData()
    time.sleep(1)
   if alldone == True and any_corrupted == False:
-   donetext = alldonetext
-   use = text2
+   title = alldonetext
+   body = text2
   elif alldone == True and any_corrupted == True:
-   donetext = allpartdonetext
+   title = allpartdonetext
    corruptedstring = "\n".join(corrupted)
-   use = "%s\n\n%s" % (text4, corruptedstring)
+   body = "%s\n\n%s" % (text4, corruptedstring)
   else:
-   donetext = allpartdonetext
+   title = allpartdonetext
    failedstring = "\n".join(failed)
-   use = "%s\n\n%s" % (text3, failedstring)
+   body = "%s\n\n%s" % (text3, failedstring)
   modal.dismiss()
   alert = UIAlertView.alloc().init()
-  alert.setTitle_(donetext)
-  alert.setBodyText_(use)
+  alert.setTitle_(title)
+  alert.setBodyText_(body)
   alert.addButtonWithTitle_(string("ok"))
   alert.show()

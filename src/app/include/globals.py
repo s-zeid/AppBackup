@@ -249,10 +249,13 @@ backuptimes.plist will also be updated if iterateOnly is False.
    shared.apps[index]["bak_text"] = string("baktext_no")
    shared.apps[index]["bak_time"] = None
  if iterate:
-  shared.any_bak = True; shared.all_bak = True
+  shared.all_bak = True; shared.any_bak = False
   for i in shared.apps:
-   if i["bundle"] not in shared.times:
+   if i["bundle"] in shared.times:
+    shared.any_bak = True
+   else:
     shared.all_bak = False
+ return True
 
 def find_apps(callback=None):
  """Finds all App Store apps installed on the iDevice.

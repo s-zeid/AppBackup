@@ -44,7 +44,7 @@
 "restore_done" = "Restore done!";
 "restore_partially_done" = "Restore partially done";
 "restore_failed" = "Restore failed";
-"delete_done" = "Deleted backup!";
+"delete_done" = "Deleted backup(s)!";
 "delete_partially_done" = "Some backups deleted";
 "delete_failed" = "Delete failed";
 "all_status_backup_doing" = "Backing up all apps' saved data...";
@@ -56,7 +56,7 @@
 "all_status_restore_failed" = "The following apps' data could not be restored:";
 "all_status_restore_corrupted" = "The following apps' data were not restored because they are corrupted:";
 "all_status_delete_doing" = "Deleting all apps' backups...";
-"all_status_delete_done" = "Deleting all apps' backups!";
+"all_status_delete_done" = "Deleted all apps' backups!";
 "all_status_delete_failed" = "The following apps' backups could not be deleted:";
 "all_status_delete_corrupted" = "The following apps' backups were not deleted because they are corrupted:";
 "1_status_backup_doing" = "Backing up %s saved data..."; /* %s = app name */
