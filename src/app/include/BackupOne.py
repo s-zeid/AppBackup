@@ -90,7 +90,8 @@ class BackupOne(UIActionSheet):
    elif action_localized == string("delete"):
     log("I'm about to delete the backup of app %s" % escape_utf8(app["friendly"]))
     action = "delete"
-   text = string("1_status_%s_doing" % action) % app["possessive"]
+   app_name = app["friendly"] if action in ("ignore", "unignore") else app["possessive"]
+   text = string("1_status_%s_doing" % action) % app_name
    modal.setBodyText_(text)
    modal.popupAlertAnimated_(YES)
    log("Notified user of this.  Starting thread for this action.")
