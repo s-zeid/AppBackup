@@ -89,7 +89,7 @@ class BackupAll(UIActionSheet):
   any_corrupted = False
   position = 0
   for app in shared.apps:
-   if app["useable"] == True:
+   if app["useable"] == True and app["ignore"] == False:
     if action == "backup":
      ret = act_on_app(app, position, "Backup")
      if ret == False:
@@ -111,7 +111,7 @@ class BackupAll(UIActionSheet):
      else:
       update_backup_time(position, None, iterate=False)
       shared.list.reloadData()
-   else:
+   elif app["useable"] == False:
     any_corrupted = True
     corrupted.append(app["friendly"])
     failed.append(app["friendly"] + " (corrupted)")

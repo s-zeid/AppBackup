@@ -171,7 +171,7 @@ def save_backuptimes_plist(init=False):
   thedict = shared.times
  FoundationPlist.write(thedict, shared.backuptimesfile)
 
-def save_ignore_file(init=False):
+def save_ignore_list(init=False):
  """Writes the ignore list to ~mobile/Library/AppBackup/ignore.txt"""
  if init == True:
   data = ""
@@ -261,7 +261,7 @@ ignore.txt will also be updated if iterateOnly is False.
    self.ignore.sort()
   else:
    self.ignore.remove(bundle)
-  save_ignore_file()
+  save_ignore_list()
   shared.apps[index]["ignore"] = state
  if iterate:
   iterate_backups()

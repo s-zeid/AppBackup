@@ -16,6 +16,7 @@
 "baktext_ignored" = "You are ignoring this app.";
 "app_corrupted_list" = "This app is corrupted.";
 "app_corrupted_prompt" = "This app is corrupted and therefore cannot be backed up or restored.";
+"app_ignored_prompt" = "You are ignoring this app, so it will not be backed up or restored.";
 "all_button" = "All";
 "all_apps" = "All Applications";
 "about_button" = "About";
