@@ -114,12 +114,15 @@ try:
  shared.backups_moved = False
  shared.tarballs = os.path.join(shared.libroot, "tarballs")
  shared.backuptimesfile = os.path.join(shared.libroot, "backuptimes.plist")
+ shared.ignorefile = os.path.join(shared.libroot, "ignore.txt")
  if os.path.exists(shared.libroot) != True:
   os.mkdir(shared.libroot)
  if os.path.exists(shared.tarballs) != True:
   os.mkdir(shared.tarballs)
  if os.path.exists(shared.backuptimesfile) != True:
   save_backuptimes_plist(True)
+ if os.path.exists(shared.ignorefile) != True:
+  save_ignore_list(True)
  
  # and let's start 'er up!
  UIApplicationMain(sys.argv, MainWindow)

@@ -123,8 +123,16 @@ def escape_utf8(s):
    return r[1:-1]
  return r
 
-# find_apps and find_apps_old are defined at the bottom of this file because
-# they're very long.
+# find_apps and find_apps_using_mic are defined at the bottom of this file
+# because they're very long.
+
+def iterate_backups():
+ shared.all_bak = True; shared.any_bak = False
+ for i in shared.apps:
+  if i["bundle"] in shared.times and i["bundle"] not in shared.ignore:
+   shared.any_bak = True
+  else:
+   shared.all_bak = False
 
 def localized_date(d):
  """Returns a localized date string.
@@ -162,6 +170,15 @@ def save_backuptimes_plist(init=False):
  else:
   thedict = shared.times
  FoundationPlist.write(thedict, shared.backuptimesfile)
+
+def save_ignore_file(init=False):
+ """Writes the ignore list to ~mobile/Library/AppBackup/ignore.txt"""
+ if init == True:
+  data = ""
+ else:
+  data = "\n".join(shared.ignore)
+ with open(shared.ignorefile, "w") as f:
+  f.write(data)
 
 def string(s):
  """Gets a localizable string from LANGUAGE.lproj/Localizable.strings."""
@@ -220,7 +237,37 @@ def _thread_meta(function, args = [], kwargs = {}):
   atexit._run_exitfuncs()
   os._exit(127)
 
-def update_backup_time(index = None, backupTime = None, iterate = True, iterateOnly = False):
+def toggle_ignore(index=None, state=None, iterate=True, iterateOnly=False):
+ """Toggles the ignore key for a given app at shared.apps[index].
+
+If state is not None, then the ignore key is set to state, which should be True
+or False in this case.
+
+If iterate is True (default), we also make sure all apps have backups and set
+shared.all_bak to False if they don't.  If iterateOnly is True, then this is the
+only thing we do.
+
+ignore.txt will also be updated if iterateOnly is False.
+
+"""
+ if not iterateOnly:
+  if index == None:
+   return False
+  bundle = shared.apps[index]["bundle"]
+  if state not in (True, False):
+   state = not shared.apps[index]["ignore"]
+  if state:
+   self.ignore.append(bundle)
+   self.ignore.sort()
+  else:
+   self.ignore.remove(bundle)
+  save_ignore_file()
+  shared.apps[index]["ignore"] = state
+ if iterate:
+  iterate_backups()
+ return True
+
+def update_backup_time(index=None, backupTime=None, iterate=True, iterateOnly=False):
  """Updates the backup time for a given app at shared.apps[index].
 
 If iterate is True (default), we also make sure all apps have backups and set
@@ -249,12 +296,7 @@ backuptimes.plist will also be updated if iterateOnly is False.
    shared.apps[index]["bak_text"] = string("baktext_no")
    shared.apps[index]["bak_time"] = None
  if iterate:
-  shared.all_bak = True; shared.any_bak = False
-  for i in shared.apps:
-   if i["bundle"] in shared.times:
-    shared.any_bak = True
-   else:
-    shared.all_bak = False
+  iterate_backups()
  return True
 
 def find_apps(callback=None):
@@ -279,6 +321,7 @@ Each dict has these elements:
  bak_text:   Text displayed in the app list for the backup time.
  bak_time:   struct_time of the last backup or None if no backup.
  useable:    True if we can work with the app; False otherwise.
+ ignore:     True if the app has been ignored by the user; False otherwise.
 
 The name of the key is the friendly name, converted to lowercase, with
 diacritics stripped using strip_latin_diacritics, an underscore, and the bundle
@@ -325,7 +368,8 @@ This used to be called find_apps_old and make_app_dict.
       baksec = time.localtime(float(shared.times[bundle]))
       bak = localized_date(baksec)
       baktext = string("baktext_yes") % bak
-      shared.any_bak = True
+      if bundle not in shared.ignore:
+       shared.any_bak = True
      elif os.path.isfile(tarpath) or os.path.islink(tarpath):
       try:
        baksec = time.localtime(float(os.stat(tarpath).st_mtime))
@@ -341,6 +385,13 @@ This used to be called find_apps_old and make_app_dict.
       bak = None
       baktext = string("baktext_no")
       shared.all_bak = False
+     
+     if bundle in shared.ignore:
+      ignore = True
+      baktext = string("baktext_ignored")
+      shared.all_bak = False
+     else:
+      ignore = False
     else:
      shared.any_corrupted = True
      friendly = j.rsplit(u".app", 1)[0]
@@ -351,6 +402,7 @@ This used to be called find_apps_old and make_app_dict.
      bak = None
      baktext = string("app_corrupted_list")
      useable = False
+     ignore = False
     
     if shared.plural_last != "" and friendly[-1] == shared.plural_last:
      possessive = string("plural_possessive") % friendly
@@ -370,7 +422,8 @@ This used to be called find_apps_old and make_app_dict.
      "bak": bak,
      "bak_text": baktext,
      "bak_time": baksec,
-     "useable": useable
+     "useable": useable,
+     "ignore": ignore
     }
  log("Found all App Store apps; sorting...")
  applist.sort()
@@ -452,14 +505,23 @@ back to find_apps if that doesn't work.  This function is deprecated.
     save_backuptimes_plist()
     bak = localized_date(baksec)
     baktext = string("baktext_yes") % bak
-    shared.any_bak = True
+    if bundle not in shared.ignore:
+     shared.any_bak = True
    else:
     baksec = None
     bak = None
     baktext = string("baktext_no")
     shared.all_bak = False
+   
+   if bundle in shared.ignore:
+    ignore = True
+    baktext = string("baktext_ignored")
+    shared.all_bak = False
+   else:
+    ignore = False
   else:
    useable = False
+   ignore = False
    shared.any_corrupted = True
    if "CFBundleDisplayName" in i:
     friendly = i["CFBundleDisplayName"]

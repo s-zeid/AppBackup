@@ -43,19 +43,23 @@ class BackupOne(UIActionSheet):
   app = shared.apps[shared.current_app]
   self.setTitle_(app["friendly"])
   self.setDelegate_(self)
+  canceltext = string("cancel")
   if app["useable"] == False:
    prompt = string("app_corrupted_prompt")
    canceltext = string("ok")
+  elif app["ignore"] == True:
+   unignore = self.addButtonWithTitle_(string("unignore"))
+   prompt = string("app_ignored_prompt")
   elif app["bak_time"] != None:
    backup = self.addButtonWithTitle_(string("backup"))
    restore = self.addButtonWithTitle_(string("restore"))
+   ignore = self.addButtonWithTitle_(string("ignore"))
    delete = self.addButtonWithTitle_(string("delete"))
    prompt = string("backup_restore_1_app")
-   canceltext = string("cancel")
   else:
    backup = self.addButtonWithTitle_(string("backup"))
+   ignore = self.addButtonWithTitle_(string("ignore"))
    prompt = string("backup_1_app")
-   canceltext = string("cancel")
   cancel = self.addButtonWithTitle_(canceltext)
   self.setCancelButtonIndex_(cancel)
   self.setBodyText_(prompt)
@@ -77,6 +81,12 @@ class BackupOne(UIActionSheet):
    elif action_localized == string("restore"):
     log("I'm about to restore the data of app %s" % escape_utf8(app["friendly"]))
     action = "restore"
+   elif action_localized == string("ignore"):
+    log("I'm about to ignore app %s" % escape_utf8(app["friendly"]))
+    action = "ignore"
+   elif action_localized == string("unignore"):
+    log("I'm about to unignore app %s" % escape_utf8(app["friendly"]))
+    action = "unignore"
    elif action_localized == string("delete"):
     log("I'm about to delete the backup of app %s" % escape_utf8(app["friendly"]))
     action = "delete"
@@ -90,10 +100,12 @@ class BackupOne(UIActionSheet):
  
  def onOneAppDoAction_withModalView_(self, action, modal):
   app = shared.apps[shared.current_app]
-  text2 = string("1_status_%s_done" % action) % app["possessive"]
-  text3 = string("1_status_%s_failed" % action) % app["possessive"]
+  app_name = app["friendly"] if action in ("ignore", "unignore") else app["possessive"]
+  text2 = string("1_status_%s_done" % action) % app_name
+  text3 = string("1_status_%s_failed" % action) % app_name
   donetext = string(action + "_done")
   failtext = string(action + "_failed")
+  results_box = True
   if action == "backup":
    log("Now backing up data of %s..." % app["friendly"])
    ret = act_on_app(app, shared.current_app, "Backup")
@@ -121,6 +133,19 @@ class BackupOne(UIActionSheet):
     log("Restore was NOT successful!")
     title = failtext
     body = text3
+  elif action in ("ignore", "unignore"):
+   log("Now %signoring data of %s..." % ("un" if action == "unignore" else "",
+                                         escape_utf8(app["friendly"])))
+   ret = toggle_ignore(shared.current_app)
+   if ret == True:
+    log("(Un)ignoring was successful.")
+    results_box = False
+   else:
+    log("(Un)ignoring was NOT successful!")
+    title = failtext
+    body = text3
+   shared.list.reloadData()
+   time.sleep(1)
   elif action == "delete":
    log("Now deleting backup of %s..." % escape_utf8(app["friendly"]))
    ret = act_on_app(app, shared.current_app, "Delete")
@@ -137,10 +162,11 @@ class BackupOne(UIActionSheet):
     body = text3
   modal.dismiss()
   log("Dismissed modal view.")
-  alert = UIAlertView.alloc().init()
-  alert.setTitle_(title)
-  alert.setBodyText_(body)
-  alert.addButtonWithTitle_(string("ok"))
-  log("Notifying user of results.")
-  alert.show()
   shared.current_app = None
+  if results_box:
+   alert = UIAlertView.alloc().init()
+   alert.setTitle_(title)
+   alert.setBodyText_(body)
+   alert.addButtonWithTitle_(string("ok"))
+   log("Notifying user of results.")
+   alert.show()

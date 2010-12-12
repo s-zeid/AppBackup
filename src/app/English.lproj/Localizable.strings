@@ -13,6 +13,7 @@
 
 "baktext_yes" = "Last backed up:  %s"; /* %s = last backup time */
 "baktext_no" = "Never backed up.";
+"baktext_ignored" = "You are ignoring this app.";
 "app_corrupted_list" = "This app is corrupted.";
 "app_corrupted_prompt" = "This app is corrupted and therefore cannot be backed up or restored.";
 "all_button" = "All";
@@ -29,6 +30,8 @@
 "backup" = "Backup";
 "restore" = "Restore";
 "delete" = "Delete";
+"ignore" = "Ignore";
+"unignore" = "Un-ignore";
 "backup_1_app" = "Do you want to backup this app's saved data?";
 "backup_restore_1_app" = "Do you want to backup or restore this app's saved data?";
 "backup_all_apps" = "Do you want to backup all apps' saved data?";
@@ -65,6 +68,12 @@
 "1_status_restore_doing" = "Restoring %s saved data..."; /* %s = app name */
 "1_status_restore_done" = "Restored %s data!"; /* %s = app name */
 "1_status_restore_failed" = "The app %s data could not be restored."; /* %s = app name */
+"1_status_ignore_doing" = "Ignoring %s..."; /* %s = app name */
+"1_status_ignore_done" = "Ignored %s!"; /* %s = app name */
+"1_status_ignore_failed" = "The app %s data could not be ignored."; /* %s = app name */
+"1_status_unignore_doing" = "Un-ignoring %s..."; /* %s = app name */
+"1_status_unignore_done" = "Un-ignored %s!"; /* %s = app name */
+"1_status_unignore_failed" = "The app %s data could not be un-ignored."; /* %s = app name */
 "1_status_delete_doing" = "Deleting %s backup..."; /* %s = app name */
 "1_status_delete_done" = "Deleted %s backup!"; /* %s = app name */
 "1_status_delete_failed" = "The app %s backup could not be deleted."; /* %s = app name */

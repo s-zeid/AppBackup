@@ -71,7 +71,7 @@ class MainWindow(UIApplication):
   font1 = UIFont.boldSystemFontOfSize_(20)
   label1 = UITextLabel.alloc().initWithFrame_(label1rect)
   label1.setFont_(font1)
-  if app["useable"] == True:
+  if app["useable"] == True and app["ignore"] == False:
    label1.setColor_(UIColor.blackColor())
   else:
    label1.setColor_(UIColor.grayColor())
@@ -177,6 +177,8 @@ class MainWindow(UIApplication):
  def launchPart2(self):
   # find AppStore apps for the 1st time
   shared.times = dict(FoundationPlist.read(shared.backuptimesfile))
+  with open(shared.ignorefile) as f:
+   shared.ignore = f.read().splitlines()
   find_apps()
   
   # set up the about box
@@ -208,6 +210,7 @@ class MainWindow(UIApplication):
    shared.libroot = "/var/mobile/Library/Preferences/AppBackup"
    shared.tarballs = shared.libroot+"/tarballs"
    shared.backuptimesfile = shared.libroot+"/backuptimes.plist"
+   shared.ignorefile = shared.libroot+"/ignore.txt"
 
   # hide the HUD
   self.hud.show_(NO)
