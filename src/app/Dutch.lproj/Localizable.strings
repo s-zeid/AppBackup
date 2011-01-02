@@ -7,7 +7,7 @@
  * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
  * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
  *
- * Thanks to Dennis Morren for this translation!
+ * Thanks to Dennis Morren and Tim van Neerbos for this translation!
  *
  */
 
@@ -53,5 +53,5 @@
 "1_status_backup_done" = "De applicatie %s is gebackupped!"; /* %s = app name */
 "1_status_backup_failed" = "De applicatie %s kan niet worden gebackupped."; /* %s = app name */
 "1_status_restore_doing" = "Bezig met terugzetten met de data van %s ..."; /* %s = app name */
-"1_status_restore_done" = "Alle data is teruggezet!"; /* %s = app name */
+"1_status_restore_done" = "Alle data van %s is teruggezet!"; /* %s = app name */
 "1_status_restore_failed" = "De applicatie %s kan niet worden teruggezet."; /* %s = app name */

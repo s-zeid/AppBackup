@@ -1,5 +1,6 @@
 Changes in 1.0.13 (2010-12-dd):
 • Added the ability to ignore and un-ignore apps in the backup list and when using the All button.
+• Fixed a crash caused by an error in the Dutch translation.  (Tim van Neerbos was consulted about the problem string.  This bug only affected users who have their language set to Dutch.)
 
 Changes in 1.0.12 (2010-11-27):
 • Fixed a bug where AppBackup would crash if the modification time of a backup file was used instead of a non-existent backuptimes.plist entry.
