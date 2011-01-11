@@ -4,8 +4,8 @@ chown -R root:wheel /Applications/AppBackup.app
 chmod u+s /Applications/AppBackup.app/FixPermissions
 
 echo ""
-echo "If you have any problems with AppBackup, please contact the author, Scott Wallace, by going to"
-echo "  <http://pages.srwz.us/contact>"
+echo "If you have any problems with AppBackup, please contact the author, Scott Zeid, by going to"
+echo "  <http://me.srwz.us/contact>"
 echo "on your computer.  Please be sure to attach this file:"
 echo "  /var/mobile/Library/Preferences/AppBackup/debug.log"
 echo "and the last crash log starting with \"AppBackupPython\" in:"

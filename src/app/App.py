@@ -2,8 +2,8 @@
 # An iPhoneOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
-# Copyright (C) 2008-2010 Scott Wallace
-# http://pages.srwz.us/iphone/appbackup
+# Copyright (C) 2008-2011 Scott Zeid
+# http://me.srwz.us/iphone/appbackup
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -109,7 +109,7 @@ try:
  # Credits are English only for now
  with open("%s/about.txt" % os.path.dirname(shared.script)) as textfo:
   shared.about_text = unicode(textfo.read(), encoding="utf_8_sig")
- shared.web_site = "http://pages.srwz.us/iphone/appbackup"
+ shared.web_site = "http://me.srwz.us/iphone/appbackup"
  shared.libroot = libroot
  shared.backups_moved = False
  shared.tarballs = os.path.join(shared.libroot, "tarballs")

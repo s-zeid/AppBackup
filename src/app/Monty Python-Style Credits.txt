@@ -1,4 +1,4 @@
-AppBackup was conceived, written, and performed by Scott Wallace,
+AppBackup was conceived, written, and performed by Scott Zeid,
 with the help of:
 
 Dave Arter
@@ -25,5 +25,5 @@ Confusing UIKit framework documentation:  Apple
 
 BBC Colour
 
-Copyright 2008-2010 Scott Wallace.
+Copyright 2008-2011 Scott Zeid.
 AppBackup is released under the terms of the X11 License.

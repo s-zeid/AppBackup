@@ -5,9 +5,9 @@ Architecture: iphoneos-arm
 Description: Back up and restore App Store apps' saved data
  An iPhoneOS application that backs up and restores the saved data and preferences of App Store apps.
 Depiction: http://iphone.srwz.us/depiction/net.scott-wallace.iphone.appbackup
-Homepage: http://pages.srwz.us/iphone/appbackup
-Icon: http://pages.srwz.us/uploads/images/AppBackup/icon.png
-Maintainer: Scott Wallace <iphone@srwz.us>
-Author: Scott Wallace <iphone@srwz.us>
+Homepage: http://me.srwz.us/iphone/appbackup
+Icon: http://uploads.srwz.us/AppBackup/icon.png
+Maintainer: Scott Zeid <iphone@srwz.us>
+Author: Scott Zeid <iphone@srwz.us>
 Section: Utilities
 Depends: bash, coreutils-bin, python, pyobjc, uicaboodle.py
