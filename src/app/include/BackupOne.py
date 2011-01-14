@@ -41,28 +41,32 @@ class BackupOne(UIActionSheet):
   if self == None: return None
   shared.current_app = index
   app = shared.apps[shared.current_app]
+  bundle = app["bundle"]
+  if len(bundle) > 30:
+   bundle = bundle[0:30] + "..."
   self.setTitle_(app["friendly"])
   self.setDelegate_(self)
   canceltext = string("cancel")
+  prompt = ["(%s)" % bundle]
   if app["useable"] == False:
-   prompt = string("app_corrupted_prompt")
+   prompt.append(string("app_corrupted_prompt"))
    canceltext = string("ok")
   elif app["ignore"] == True:
    unignore = self.addButtonWithTitle_(string("unignore"))
-   prompt = string("app_ignored_prompt")
+   prompt.append(string("app_ignored_prompt"))
   elif app["bak_time"] != None:
    backup = self.addButtonWithTitle_(string("backup"))
    restore = self.addButtonWithTitle_(string("restore"))
    ignore = self.addButtonWithTitle_(string("ignore"))
    delete = self.addButtonWithTitle_(string("delete"))
-   prompt = string("backup_restore_1_app")
+   #prompt.append(string("backup_restore_1_app"))
   else:
    backup = self.addButtonWithTitle_(string("backup"))
    ignore = self.addButtonWithTitle_(string("ignore"))
-   prompt = string("backup_1_app")
+   #prompt.append(string("backup_1_app"))
   cancel = self.addButtonWithTitle_(canceltext)
   self.setCancelButtonIndex_(cancel)
-  self.setBodyText_(prompt)
+  self.setBodyText_("\n\n".join(prompt))
   return self
  
  # what to do when you close the BackupOne prompt
@@ -92,8 +96,11 @@ class BackupOne(UIActionSheet):
     action = "delete"
    app_name = app["friendly"] if action in ("ignore", "unignore") else app["possessive"]
    text = string("1_status_%s_doing" % action) % app_name
-   modal.setBodyText_(text)
-   modal.popupAlertAnimated_(YES)
+   if action not in ("ignore", "unignore"):
+    modal.setBodyText_(text)
+    modal.popupAlertAnimated_(YES)
+   else:
+    modal = None
    log("Notified user of this.  Starting thread for this action.")
    actingThread = thread(self.onOneAppDoAction_withModalView_, [action, modal])
   else:
@@ -146,7 +153,7 @@ class BackupOne(UIActionSheet):
     title = failtext
     body = text3
    shared.list.reloadData()
-   time.sleep(1)
+   #time.sleep(1)
   elif action == "delete":
    log("Now deleting backup of %s..." % escape_utf8(app["friendly"]))
    ret = act_on_app(app, shared.current_app, "Delete")
@@ -161,8 +168,9 @@ class BackupOne(UIActionSheet):
     log("Deletion was NOT successful!")
     title = failtext
     body = text3
-  modal.dismiss()
-  log("Dismissed modal view.")
+  if modal != None:
+   modal.dismiss()
+   log("Dismissed modal view.")
   shared.current_app = None
   if results_box:
    alert = UIAlertView.alloc().init()

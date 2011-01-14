@@ -257,10 +257,12 @@ ignore.txt will also be updated if iterateOnly is False.
   if state not in (True, False):
    state = not shared.apps[index]["ignore"]
   if state:
-   self.ignore.append(bundle)
-   self.ignore.sort()
+   shared.ignore.append(bundle)
+   shared.ignore.sort()
+   shared.apps[index]["bak_text"] = string("baktext_ignored")
   else:
-   self.ignore.remove(bundle)
+   shared.ignore.remove(bundle)
+   shared.apps[index]["bak_text"] = shared.apps[index]["bak_text_real"]
   save_ignore_list()
   shared.apps[index]["ignore"] = state
  if iterate:
@@ -295,6 +297,9 @@ backuptimes.plist will also be updated if iterateOnly is False.
    shared.apps[index]["bak"] = None
    shared.apps[index]["bak_text"] = string("baktext_no")
    shared.apps[index]["bak_time"] = None
+  if shared.apps[index]["ignore"]:
+   shared.apps[index]["bak_text"] = string("baktext_ignored")
+  shared.apps[index]["bak_text_real"] = shared.apps[index]["bak_text"]
  if iterate:
   iterate_backups()
  return True
@@ -308,20 +313,22 @@ function gets its info by manually looking at each App Store app's Info.plist
 file.
 
 Each dict has these elements:
- key:        Sort key.
- name:       The basename of the .app folder.
- bundle:     The app's bundle identifier or "invalid.appbackup.corrupted" if
-             the bundle identifier is unreadable.
- path:       Path to the .app folder's parent directory.
- tarpath:    Path to the backup file or "" if CFBundleIdentifier is unreadable.
- guid:       GUID of app taken from the directory the .app folder is in.
- friendly:   Friendly name of app, usually CFBundleDisplayName.
- possessive: Possessive form of friendly.
- bak:        Human-readable backup time or None if no backup.
- bak_text:   Text displayed in the app list for the backup time.
- bak_time:   struct_time of the last backup or None if no backup.
- useable:    True if we can work with the app; False otherwise.
- ignore:     True if the app has been ignored by the user; False otherwise.
+ key:           Sort key.
+ name:          The basename of the .app folder.
+ bundle:        The app's bundle identifier or "invalid.appbackup.corrupted" if
+                the bundle identifier is unreadable.
+ path:          Path to the .app folder's parent directory.
+ tarpath:       Path to the backup file or "" if CFBundleIdentifier is
+                unreadable.
+ guid:          GUID of app taken from the directory the .app folder is in.
+ friendly:      Friendly name of app, usually CFBundleDisplayName.
+ possessive:    Possessive form of friendly.
+ bak:           Human-readable backup time or None if no backup.
+ bak_text:      Text displayed in the app list for the backup time.
+ bak_text_real: Backup time to display when an app is un-ignored.
+ bak_time:      struct_time of the last backup or None if no backup.
+ useable:       True if we can work with the app; False otherwise.
+ ignore:        True if the app has been ignored by the user; False otherwise.
 
 The name of the key is the friendly name, converted to lowercase, with
 diacritics stripped using strip_latin_diacritics, an underscore, and the bundle
@@ -367,7 +374,7 @@ This used to be called find_apps_old and make_app_dict.
      if bundle in shared.times:
       baksec = time.localtime(float(shared.times[bundle]))
       bak = localized_date(baksec)
-      baktext = string("baktext_yes") % bak
+      baktext = baktext_real = string("baktext_yes") % bak
       if bundle not in shared.ignore:
        shared.any_bak = True
      elif os.path.isfile(tarpath) or os.path.islink(tarpath):
@@ -378,12 +385,12 @@ This used to be called find_apps_old and make_app_dict.
       shared.times[bundle] = time.mktime(baksec)
       save_backuptimes_plist()
       bak = localized_date(baksec)
-      baktext = string("baktext_yes") % bak
+      baktext = baktext_real = string("baktext_yes") % bak
       shared.any_bak = True
      else:
       baksec = None
       bak = None
-      baktext = string("baktext_no")
+      baktext = baktext_real = string("baktext_no")
       shared.all_bak = False
      
      if bundle in shared.ignore:
@@ -400,7 +407,7 @@ This used to be called find_apps_old and make_app_dict.
      sortname = u"%s_%s" % (friendly, bundle)
      baksec = None
      bak = None
-     baktext = string("app_corrupted_list")
+     baktext = baktext_real = string("app_corrupted_list")
      useable = False
      ignore = False
     
@@ -421,6 +428,7 @@ This used to be called find_apps_old and make_app_dict.
      "possessive": possessive,
      "bak": bak,
      "bak_text": baktext,
+     "bak_text_real": baktext_real,
      "bak_time": baksec,
      "useable": useable,
      "ignore": ignore
@@ -494,7 +502,7 @@ back to find_apps if that doesn't work.  This function is deprecated.
    if bundle in shared.times:
     baksec = time.localtime(float(shared.times[bundle]))
     bak = localized_date(baksec)
-    baktext = string("baktext_yes") % bak
+    baktext = baktext_real = string("baktext_yes") % bak
     shared.any_bak = True
    elif os.path.isfile(tarpath) or os.path.islink(tarpath):
     try:
@@ -504,13 +512,13 @@ back to find_apps if that doesn't work.  This function is deprecated.
     shared.times[bundle] = time.mktime(baksec)
     save_backuptimes_plist()
     bak = localized_date(baksec)
-    baktext = string("baktext_yes") % bak
+    baktext = baktext_real = string("baktext_yes") % bak
     if bundle not in shared.ignore:
      shared.any_bak = True
    else:
     baksec = None
     bak = None
-    baktext = string("baktext_no")
+    baktext = baktext_real = string("baktext_no")
     shared.all_bak = False
    
    if bundle in shared.ignore:
@@ -538,7 +546,7 @@ back to find_apps if that doesn't work.  This function is deprecated.
    sortname = u"%s_%s" % (strip_latin_diacritics(friendly).lower(), bundle)
    baksec = None
    bak = None
-   baktext = string("app_corrupted_list")
+   baktext = baktext_real = string("app_corrupted_list")
   
   if shared.plural_last != "" and friendly[-1] == shared.plural_last:
    possessive = string("plural_possessive") % friendly
@@ -557,6 +565,7 @@ back to find_apps if that doesn't work.  This function is deprecated.
    "possessive": possessive,
    "bak": bak,
    "bak_text": baktext,
+   "bak_text_real": baktext_real,
    "bak_time": baksec,
    "useable": useable
   }
