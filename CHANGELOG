@@ -1,3 +1,6 @@
+Changes in 1.0.14 (YYYY-MM-DD):
+• Added the German ß/Eszett to the diacritical mappings used for sorting.
+
 Changes in 1.0.13 (2011-01-13):
 • Added the ability to ignore and un-ignore apps in the backup list and when using the All button.
 • Fixed a crash caused by an error in the Dutch translation.  (Tim van Neerbos was consulted about the problem string.  This bug only affected users who have their language set to Dutch.)
