@@ -1,12 +1,8 @@
 #!/bin/bash
 
 chown -R root:wheel /Applications/AppBackup.app
-chmod u+s /Applications/AppBackup.app/FixPermissions
+chown root:wheel /usr/bin/appbackup{,-fix-permissions}
+chmod u+s /usr/bin/appbackup-fix-permissions
 
-echo ""
-echo "If you have any problems with AppBackup, please contact the author, Scott Zeid, by going to"
-echo "  <http://me.srwz.us/contact>"
-echo "on your computer.  Please be sure to attach this file:"
-echo "  /var/mobile/Library/Preferences/AppBackup/debug.log"
-echo "and the last crash log starting with \"AppBackupPython\" in:"
-echo "  /var/mobile/Library/Logs/CrashReporter"
+rm /Applications/AppBackup.app/python/{,appbackup,CFPropertyList,simplejson}/*.py[co] &>/dev/null
+python -Om compileall /Applications/AppBackup.app/python

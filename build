@@ -67,12 +67,17 @@ mkdir debtmp &>/dev/null
 cd debtmp
 rm ./*.deb &>/dev/null
 
-# Copying and symlinking
+# Copying and symlinking and stuff
 mkdir -p files/Applications/AppBackup.app
 mkdir -p files/DEBIAN
+mkdir -p files/usr
 cp -a ../DEBIAN/* files/DEBIAN/
 cp -a ../src/app/* files/Applications/AppBackup.app/
-ln -s /usr/bin/python files/Applications/AppBackup.app/AppBackupPython
+cp -a ../src/usr/* files/usr/
+rm files/Applications/AppBackup.app/python/{,appbackup,CFPropertyList,simplejson}/*.py[co] &>/dev/null
+ln -s -f /usr/bin/cycript files/Applications/AppBackup.app/AppBackupCycript
+chmod +x files/Applications/AppBackup.app/{AppBackup,appbackup-cli}
+chmod +x files/usr/bin/appbackup{,-fix-permissions}
 touch files/Applications/AppBackup.app/about.txt
 echo | cat ../CREDITS - ../CHANGELOG > files/Applications/AppBackup.app/about.txt
 

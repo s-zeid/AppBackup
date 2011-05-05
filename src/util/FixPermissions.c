@@ -29,7 +29,9 @@
  * 
  */
 
-#define AB_STORAGE_ROOT "/var/mobile/Library/Preferences/AppBackup"
+// Please excuse my shitty C code :)
+
+#define APPBACKUP_CONFIG_DIR "/var/mobile/Library/Preferences/AppBackup"
 
 #include <dirent.h>
 #include <fcntl.h>
@@ -42,6 +44,55 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+void exit_if_not_dir(char *path) {
+ if (!isdir(path)) {
+  printf("error: %s is not a directory\n", path);
+  exit(EXIT_FAILURE);
+ }
+}
+
+int isdir(char *path) {
+ struct stat sb;
+ if (lstat(path, &sb) == -1) {
+  perror("stat");
+  exit(EXIT_FAILURE);
+ }
+ if (S_ISDIR(sb.st_mode)) {
+  return 1;
+ }
+ return 0;
+}
+
+int main(int argc, char **argv) {
+ struct passwd *mobile_pwnam;
+ struct group  *mobile_group;
+ uid_t          mobile_uid;
+ gid_t          mobile_gid;
+ int            dirfd, ret;
+ 
+ mobile_pwnam = getpwnam("mobile");
+ mobile_group = getgrnam("mobile");
+ if (mobile_pwnam == NULL || mobile_group == NULL) {
+  return 2;
+ }
+ mobile_uid   = mobile_pwnam->pw_uid;
+ mobile_gid   = mobile_group->gr_gid;
+ 
+ exit_if_not_dir("/var/mobile");
+ exit_if_not_dir("/var/mobile/Library");
+ exit_if_not_dir("/var/mobile/Library/Preferences");
+ if ((dirfd = open(APPBACKUP_CONFIG_DIR, O_RDONLY)) == -1) {
+  mkdir(APPBACKUP_CONFIG_DIR, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP |
+                              S_IROTH | S_IXOTH);
+ } else {
+  close(dirfd);
+ }
+ exit_if_not_dir(APPBACKUP_CONFIG_DIR);
+ 
+ ret = walk(APPBACKUP_CONFIG_DIR, mobile_uid, mobile_gid);
+ return ret;
+}
 
 int walk(char *name, uid_t uid, gid_t gid) {
  DIR           *d;
@@ -67,6 +118,7 @@ int walk(char *name, uid_t uid, gid_t gid) {
   }
   if (dir->d_type == DT_DIR) {
    abspath = malloc(PATH_MAX + 1);
+   exit_if_not_dir(dir->d_name);
    realpath(dir->d_name, abspath);
    walk(abspath, uid, gid);
    free(abspath);
@@ -80,30 +132,4 @@ int walk(char *name, uid_t uid, gid_t gid) {
  chdir(cwd);
  free(cwd);
  return 0;
-}
-
-int main(int argc, char **argv) {
- struct passwd *mobile_pwnam;
- struct group  *mobile_group;
- uid_t          mobile_uid;
- gid_t          mobile_gid;
- int            dirfd, ret;
- 
- mobile_pwnam = getpwnam("mobile");
- mobile_group = getgrnam("mobile");
- if (mobile_pwnam == NULL || mobile_group == NULL) {
-  return 2;
- }
- mobile_uid   = mobile_pwnam->pw_uid;
- mobile_gid   = mobile_group->gr_gid;
- 
- if ((dirfd = open(AB_STORAGE_ROOT, O_RDONLY)) == -1) {
-  mkdir(AB_STORAGE_ROOT, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP |
-                         S_IROTH | S_IXOTH);
- } else {
-  close(dirfd);
- }
- 
- ret = walk(AB_STORAGE_ROOT, mobile_uid, mobile_gid);
- return ret;
 }

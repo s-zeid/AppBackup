@@ -44,5 +44,5 @@ DEBFILE=`ls | grep "^test_.*\.deb$"`
 # Test on device
 scp "$DEBFILE" mobile@$DEVICE:/tmp
 ssh root@$DEVICE "dpkg -i /tmp/$DEBFILE && rm /tmp/$DEBFILE"
-ssh mobile@$DEVICE "tail -fn0 ~/Library/Preferences/AppBackup/debug.log"
+#ssh mobile@$DEVICE "tail -fn0 ~/Library/Preferences/AppBackup/debug.log"
 ssh mobile@$DEVICE

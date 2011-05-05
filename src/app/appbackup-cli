@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export PYTHONPATH="$(dirname "$0")/python:"
+
+cd "$(dirname "$0")/python"
+python -O appbackup/cli.py "$@"

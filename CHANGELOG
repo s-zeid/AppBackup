@@ -1,5 +1,12 @@
-Changes in 1.0.14 (YYYY-MM-DD):
+Changes in 2.0 (2011-05-DD):
+• SECURITY UPDATE:  FixPermissions now ensures that no directory other than /var is a link.
+• AppBackup now works on iOS versions 4.3.1 and later (and it still works with older versions).
+• App split into two parts:
+   · A GUI written in Cycript
+   · A command-line interface in the form of a Python package.  (Just type appbackup at the terminal to use it.)
+• As a result, the back-end code has been completely rewritten and is much cleaner and object-oriented.
 • Added the German ß/Eszett to the diacritical mappings used for sorting.
+• The FixPermissions utility can now be used by typing appbackup-fix-permissions at the terminal.  It is still run automatically in the GUI mode only.
 
 Changes in 1.0.13 (2011-01-13):
 • Added the ability to ignore and un-ignore apps in the backup list and when using the All button.

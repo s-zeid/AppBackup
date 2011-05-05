@@ -26,32 +26,33 @@
 # Except as contained in this notice, the name(s) of the above copyright holders
 # shall not be used in advertising or otherwise to promote the sale, use or
 # other dealings in this Software without prior written authorization.
-#
-# Loosely based on Dave Arter's (dave@minus-zero.org) sample code from the
-# iPhone/Python package.
 
-# Code related to the about box
+# Justified Boolean type
 
-# This is an Objective-C class.  You must do AboutBox.alloc().init() to get a
-# new instance.
-class AboutBox(UIActionSheet):
- # what to do when you click the "About" button
- def init(self):
-  self = super(AboutBox, self).init()
-  if self == None: return None
-  self.setTitle_(shared.about_title)
-  self.setDelegate_(self)
-  self.setBodyText_(shared.about_text)
-  web = self.addButtonWithTitle_(string("web_site"))
-  ok = self.addButtonWithTitle_(string("ok"))
-  self.setCancelButtonIndex_(ok)
-  return self
- 
- # what to do when you close the about box
- @objc.signature("v@:@i")
- def actionSheet_didDismissWithButtonIndex_(self, malert, index):
-  action = malert.buttonTitleAtIndex_(index)
-  if action == string("web_site"):
-   url = NSURL.alloc().initWithString_(shared.web_site)
-   UIApplication.sharedApplication().openURL_(url)
-   sys.exit()
+__all__ = ["JustifiedBool", "JB"]
+
+from util import to_unicode
+
+class JustifiedBool(object):
+ def __init__(self, value=False, reason=None):
+  self.__bool = bool(value)
+  self.__reason = to_unicode(reason) if reason else ""
+ def __int__(self):
+  return int(self.__bool)
+ def __nonzero__(self):
+  return self.__bool
+ def __repr__(self):
+  return "JustifiedBool(%s, %s)" % (repr(self.__bool), repr(self.__reason))
+ def __str__(self):
+  return unicode(self).encode("utf8")
+ def __unicode__(self):
+  return "%s %s" % (str(self.__bool), "because %s" % self.__reason
+                                      if self.__reason else "for no reason")
+ @property
+ def bool(self):
+  return self.__bool
+ @property
+ def reason(self):
+  return self.__reason
+
+JB = JustifiedBool

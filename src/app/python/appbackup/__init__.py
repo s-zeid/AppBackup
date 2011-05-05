@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # AppBackup
 # An iPhoneOS application that backs up and restores the saved data and
 # preferences of App Store apps.
@@ -28,16 +26,16 @@
 # Except as contained in this notice, the name(s) of the above copyright holders
 # shall not be used in advertising or otherwise to promote the sale, use or
 # other dealings in this Software without prior written authorization.
-#
-# Loosely based on Dave Arter's (dave@minus-zero.org) sample code from the
-# iPhone/Python package.
 
-APPBACKUP_SETTINGS=/var/mobile/Library/Preferences/AppBackup
+# __init__.py file
+# (No shit, Sherlock.)
 
-# Make ~mobile/Library/Preferences/AppBackup if it doesn't exist
-mkdir -p $APPBACKUP_SETTINGS
+from __future__ import with_statement
 
-chown -R mobile:mobile $APPBACKUP_SETTINGS
-chmod -R 644 $APPBACKUP_SETTINGS
-chmod 755 $APPBACKUP_SETTINGS
-chmod 755 $APPBACKUP_SETTINGS/tarballs
+__author__  = "Scott Zeid <s@srwz.us>"
+__version__ = "2.0"
+
+from appbackup import AppBackup
+from cli import main
+
+__all__     = ["AppBackup", "main"]
