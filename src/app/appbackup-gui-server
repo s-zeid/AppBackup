@@ -29,6 +29,9 @@
 # shall not be used in advertising or otherwise to promote the sale, use or
 # other dealings in this Software without prior written authorization.
 
-# Alias for CLI runner
+# GUI server runner
 
-exec /Applications/AppBackup.app/appbackup-cli "$@"
+export PYTHONPATH="$(dirname "$0")/python:"
+
+cd "$(dirname "$0")/python"
+python -O appbackup/gui_server.py "$@"

@@ -1,0 +1,55 @@
+# Localization file for AppBackup
+# Italian; localization by Pietropaolo Mastromarco
+# 
+# Strings containing %s mean that the %s is replaced by something.  This
+# something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
+# THE %s IF YOU WANT IT TO WORK RIGHT!!!
+# 
+# This file should be encoded in UTF-8.
+
+%YAML 1.2
+---
+baktext_yes: "Ultimo backup:  %s" # %s = last backup time
+baktext_no: "Nessun backup."
+app_corrupted_list: "Questa app è corrtta."
+app_corrupted_prompt: "Questa app è corrotta e non è possibile fare un backup o ripristinarla."
+all_button: "Tutte"
+all_apps: "Tutte le Applicazioni"
+about_button: "About"
+about_title: "About %s" # %s = AppBackup
+main_window_title: "App Store Apps"
+plural_last_letter: "" # Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. ""))
+singular_possessive: "%s" # %s = app name
+plural_possessive: "%s" # %s = app name
+please_wait: "Attendere Prego..."
+ok: "OK"
+cancel: "Annulla"
+backup: "Backup"
+restore: "Ripristina"
+backup_1_app: "Vuoi fare un backup dei dati salvati dall'app?"
+backup_restore_1_app: "Vuoi fare un backup o ripristinare i dati salvati dall'app?"
+backup_all_apps: "Vuoi fare un backup dei dati salvati da tutte le app?"
+backup_restore_all_apps: "Vuoi fare un backup o ripristinare i dati salvati da tutte le app?"
+web_site: "Web Site"
+done: "%s eseguito!" # %s = action
+partially_done: "%s parzialmente eseguito" # %s = action
+backup_done: "Backup eseguito!"
+backup_partially_done: "Backup parzialmente eseguito"
+backup_failed: "Backup fallito"
+restore_done: "Ripristino eseguito!"
+restore_partially_done: "Ripristino parzialmente eseguito"
+restore_failed: "Restore fallito"
+all_status_backup_doing: "Backup dei dati di tutte le app in corso..."
+all_status_backup_done: "Backup dei dati di tutte le app eseguito!"
+all_status_backup_failed: "I dati delle seguenti applicazioni non possono essere salvati:"
+all_status_backup_corrupted: "I dati delle seguenti applicazioni non sono stati salvati perchè corrotti:"
+all_status_restore_doing: "Ripristino dei dati di tutte le app..."
+all_status_restore_done: "Ripristino dei dati di tutte la app eseguito!"
+all_status_restore_failed: "I dati delle seguenti applicazioni non possono essere ripristinati:"
+all_status_restore_corrupted: "I dati delle seguenti applicazioni non stati ripristinati perché corrotti:"
+1_status_backup_doing: "Backup dei dati di %s in corso..." # %s = app name
+1_status_backup_done: "Backup dei dati di %s eseguito!" # %s = app name
+1_status_backup_failed: "Il backup dei dati di %s non può essere eseguito." # %s = app name
+1_status_restore_doing: "Rispristino dei dati di %s in corso..." # %s = app name
+1_status_restore_done: "Ripristino dei dati di %s eseguito!" # %s = app name
+1_status_restore_failed: "I dati di %s non possono essere ripristinati." # %s = app name

@@ -2,7 +2,7 @@
 
 chown -R root:wheel /Applications/AppBackup.app
 chown root:wheel /usr/bin/appbackup{,-fix-permissions}
-chmod u+s /usr/bin/appbackup-fix-permissions
+chmod u+s /Applications/AppBackup.app/FixPermissions
 
 rm /Applications/AppBackup.app/python/{,appbackup,CFPropertyList,simplejson}/*.py[co] &>/dev/null
 python -Om compileall /Applications/AppBackup.app/python

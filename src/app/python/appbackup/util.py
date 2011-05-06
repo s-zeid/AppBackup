@@ -72,10 +72,8 @@ def escape_utf8(s):
 
 def safe_print(s):
  """Prints the given string, compensating for Unicode errors."""
- try:
-  print s
- except UnicodeError:
-  print util.strip_latin_diacritics(s).encode("ascii", "replace")
+ try: print s
+ except UnicodeError: print strip_latin_diacritics(s).encode("ascii", "replace")
 
 def strip_latin_diacritics(s):
  """Strip diacritical marks from Latin letters.

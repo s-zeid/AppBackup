@@ -63,7 +63,7 @@ Example:  facebook_com.facebook.Facebook
  def __init__(self, path):
   """Loads the app's info.
 
-plist_file is the full path to the app's Info.propertylist.
+path is the directory which the app's .app folder is contained in.
 
 """
   self.path = path
