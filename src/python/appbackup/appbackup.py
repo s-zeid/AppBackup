@@ -137,6 +137,9 @@ See App.sorted for information about key.
 """
   self.find_apps()
   return AppBackupApp.sorted(self.apps, key)
+ def starbucks(self):
+  """STARBUCKS!!!!!111!11!!!one!!1!"""
+  return u"STARBUCKS!!!!!111!11!!!one!!1!"
  def unignore_all(self):
   """Tells AppBackup to quit ignoring all apps."""
   return self._do_on_all("unignore")

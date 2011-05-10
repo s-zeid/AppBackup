@@ -19,24 +19,20 @@ Directory structure with descriptions for some files
 /
   DEBIAN/ - Debian package control files
   src/
-    app/  - Main app source code
-      *.lproj/ - Localizations
-      include/ - Various Python files included by App.py using execfile
-      about.txt - Generated from /CREDITS and /CHANGELOG
-      App.py - The app itself (along with include/*)
-      AppBackup - Launcher shell script
-      FixPermissions - compiled binary to fix user directory permissions*
-      ...
-    util/ - FixPermissions source code
-      FixPermissions.c - source code to fix user directory permissions
-      Makefile
+    bundle/         - Files included in .app bundle, excluding subdirectories
+    i18n/           - Localizations / .lproj folders
+    FixPermissions/ - FixPermissions C code (fixes user directory permissions)*
+    images/         - GIMP source files for image resources
+    js/             - GUI source code and JavaScript libraries
+    python/         - AppBackup CLI and Python package; other Python stuff
+    usr/            - /usr/bin/appbackup{,-fix-permissions} launcher scripts
   AppBackup.geany - Geany project file; I don't use this (but I do use Geany)
   build - Build a Debian package (./build [device-hostname] [deb-file-prefix])**
   config - Configuration (path to arm-apple-darwin9-gcc) for build and test
   test - Script to test AppBackup on your own device (./test device-address)
   ...
 
-* FixPermissions is not setuid root until after the package is installed.
+ * FixPermissions is changed to setuid root after the package is installed.
 ** See Building AppBackup for details.  FixPermissions is not re-compiled by
    default.
 
@@ -62,16 +58,16 @@ prefix for your .deb's file name as an argument (e.g.
 ./build 192.168.7.16 test_).
 
 You can choose whether or not to build the FixPermissions binary; a pre-built
-version is in src/app.  If you want to compile it, edit config and change the CC
-variable to point to arm-apple-darwin9-gcc in your toolchain.  Then run build
-with your device's hostname or IP address as THE FIRST argument.  You will need
-SSH to sign FixPermissions using ldid; make sure you have SSH on your device,
-YOUR ROOT AND MOBILE PASSWORDS ARE NOT THE DEFAULT ONES, and you have ldid
-installed.
+version is in src/FixPermissions.  If you want to compile it, edit config and
+and change the CC variable to point to arm-apple-darwin9-gcc in your toolchain.
+Then run build with your device's hostname or IP address as THE FIRST argument.
+You will need SSH to sign FixPermissions using ldid; make sure you have SSH on
+your device, YOUR ROOT AND MOBILE PASSWORDS ARE NOT THE DEFAULT ONES, and you
+have ldid installed.
 
 To disable compiling FixPermissions, you don't need to do anything unless the
-default value exists as an executable file on your system.  You can edit config
-so that the CC variable is empty; e.g.:
+default value of CC exists as an executable file on your system.  You can edit
+config so that the CC variable is empty; e.g.:
   CC=
 or
   CC= #/home/scottywz/opt/iphone-toolchain/pre/bin/arm-apple-darwin9-gcc
@@ -88,7 +84,7 @@ with test_, install that package onto your device, show the debug log using
 tail -fn0, and then give you a shell as mobile when you press ^C while tail is
 running.
 
-This process has been tested on Ubuntu 10.10 with an iPhone 3.1.2 toolchain,
+This process has been tested on Ubuntu 11.04 with an iPhone 3.1.2 toolchain,
 and an iPhone 2G running iOS 3.1.2.
 
 License

@@ -1,0 +1,70 @@
+/*
+ * Localizable strings for AppBackup (Russian)
+ * This is a standard *.lproj/Localizable.strings file; see Apple's docs for
+ *   more info.
+ *
+ * Strings containing %s mean that the %s is replaced by something.  This
+ * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
+ * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
+ *
+ * Thanks to Nikita "ZAY" Peshkov for this translation!
+ *
+ */
+
+"baktext_yes" = "Last backed up:  %s"; /* %s = Последний BackUp сделан в */
+"baktext_no" = "BackUp еще не сделан.";
+"app_corrupted_list" = "Это приложение поврежденно.";
+"app_corrupted_prompt" = "Это приложение поврежденно,по-этому вы не можете сделать BackUp или восстановить его.";
+"all_button" = "Все";
+"all_apps" = "Все приложения";
+"about_button" = "Инфо";
+"about_title" = "Инфо о %s"; /* %s = AppBackup */
+"main_window_title" = "Приложения AppStore";
+"plural_last_letter" = "i.e. """; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
+"singular_possessive" = "%s's"; /* %s = app name */
+"plural_possessive" = "%s'"; /* %s = app name */
+"please_wait" = "Пожалуйста подождите...";
+"ok" = "OK";
+"cancel" = "Отменить";
+"backup" = "Backup";
+"restore" = "Восстановить";
+"delete" = "Удалить";
+"backup_1_app" = "Вы точно хотите сделать BackUp этого приложения?";
+"backup_restore_1_app" = "Вы точно хотите сделать BackUp или восстановить это приложение?";
+"backup_all_apps" = "Вы точно хотите сделать BackUp всех приложений?";
+"backup_restore_all_apps" = "Вы точно хотите сделать BackUp или восстановить все приложения?";
+"delete_1_app" = "Вы точно хотитие удалит BackUp этого приложения?";
+"delete_all_apps" = "Вы точно хотитие удалить BackUp всех приложений?";
+"web_site" = "Интернет сайт";
+"done" = "%s сделанно!"; /* %s = action */
+"partially_done" = "%s сделанно, но не до конца"; /* %s = action */
+"backup_done" = "BackUp сделан!";
+"backup_partially_done" = "BackUp сделан, но не до конца";
+"backup_failed" = "Сделать BackUp не удалось";
+"restore_done" = "Восстановление сделанно!";
+"restore_partially_done" = "Восстановление сделанно, но не до конца";
+"restore_failed" = "Восстановление не удалось";
+"delete_done" = "Удаление завершено!";
+"delete_partially_done" = "Удалени некоторых BackUp завершенно";
+"delete_failed" = "Удаление не получилось";
+"all_status_backup_doing" = "Backing Up всех приложений...";
+"all_status_backup_done" = "BackUp сделан для всех приложений!";
+"all_status_backup_failed" = "BackUp этих приложений не может быть сделан:";
+"all_status_backup_corrupted" = "BackUp не может быть сделан, т.к. файл поврежден:";
+"all_status_restore_doing" = "Восстанавливаем все приложения...";
+"all_status_restore_done" = "Восстановление завершено!";
+"all_status_restore_failed" = "Эти приложения не могут быть восстановлены:";
+"all_status_restore_corrupted" = "Эти приложения не были восстановлены, т.к. они повреждены:";
+"all_status_delete_doing" = "Удаления BackUp всех приложений...";
+"all_status_delete_done" = "Удаление всех BackUp завершено!";
+"all_status_delete_failed" = "Эти BackUp не могут быть удалены:";
+"all_status_delete_corrupted" = "Эти BackUp не могут быть удалены, т.к. они повреждены:";
+"1_status_backup_doing" = "Backing Up %s..."; /* %s = app name */
+"1_status_backup_done" = "BackUp %s Завершен!"; /* %s = app name */
+"1_status_backup_failed" = "BackUp %s не может быть завершен."; /* %s = app name */
+"1_status_restore_doing" = "Восстаналиваем %s..."; /* %s = app name */
+"1_status_restore_done" = "Восстановление %s завершено!"; /* %s = app name */
+"1_status_restore_failed" = "Восстановление %s не может быть завершено."; /* %s = app name */
+"1_status_delete_doing" = "Удаление %s BackUp..."; /* %s = app name */
+"1_status_delete_done" = "BackUp %s удален!"; /* %s = app name */
+"1_status_delete_failed" = "BackUp %s не может быть удален."; /* %s = app name */

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # AppBackup
 # An iPhoneOS application that backs up and restores the saved data and
 # preferences of App Store apps.
@@ -27,48 +29,7 @@
 # shall not be used in advertising or otherwise to promote the sale, use or
 # other dealings in this Software without prior written authorization.
 
-# Command-line interface
+# GUI runner
 
-"""A command-line interface to AppBackup."""
-
-usage = """Usage: appbackup [options] command [args]
-
-Backs up and restores saved data and settings from iOS App Store apps.
-
-Options:
- -j / --json     Output should be in JSON format.
-
-Commands:
- -h / --help     Display this help information and exit.
- list [<app>]    Shows information about one or more App Store apps (all apps
-                 if <app> is omitted).
- backup <app>    Back up the specified app's data.
- restore <app>   Restore the specified app's data.
- delete <app>    Delete the specified app's backup.
- ignore <app>    Ignore the specified app.
- unignore <app>  Stop ignoring the specified app.
-
-Arguments for all commands:
- -a / --all      Perform the specified action on all App Store apps (not needed
-                 for list).
- -g / --guid     A GUID is given as <app> instead of a bundle ID.
- <app>           The bundle IDs (or GUIDs if -g / --guid is set) for each app
-                 you want to work with.
-
-Arguments specific to list:
- -v / --verbose  Show more information for each app (implied when <app> is
-                 given.)"""
-
-import os
-import sys
-
-from string import Template
-
-try:
- import json
-except ImportError:
- import simplejson as json
-
-from appbackup import *
-from justifiedbool import *
-from util import *
+cd "$(dirname "$0")"
+./AppBackupCycript js/main.js "$@"

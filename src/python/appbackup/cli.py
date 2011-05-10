@@ -73,10 +73,13 @@ from appbackup import *
 from justifiedbool import *
 from util import *
 
-def app_info(app, human_readable=False):
+def app_info(app, human_readable=False, sverbose=True):
  info = dict(name=app.friendly, found=True, bundle=app.bundle, guid=app.guid,
              ignored=app.ignored, backup_time=app.backup_time_str,
              path=app.path, useable=app.useable)
+ if not verbose:
+  del info["bundle"]
+  del info["path"]
  if human_readable:
   if not info["backup_time"]: info["backup_time"] = "(not backed up)"
   info["ignored"] = "Yes" if info["ignored"] else "No"
@@ -128,6 +131,7 @@ def main(argv):
   # Show verbose app info
   use_guid = "g" in args or "guid" in args
   all_apps = not len(args[""]) or "a" in args or "all" in args
+  verbose  = "v" in args or "verbose" in args
   apps = args[""]
   success = True
   data = []
@@ -135,7 +139,7 @@ def main(argv):
    # All apps
    apps = appbackup.sort_apps()
    for app in apps:
-    if use_json: data += [app_info(app)]
+    if use_json: data += [app_info(app, verbose=verbose)]
     else: safe_print(app_info(app, True) + "\n")
   else:
    # Not all apps
@@ -143,7 +147,7 @@ def main(argv):
    for i in apps:
     app = appbackup.find_app(i, mode)
     if app:
-     if use_json: data += [app_info(app)]
+     if use_json: data += [app_info(app, verbose=verbose)]
      else: safe_print(app_info(app, True) + "\n")
     else:
      success = False
@@ -196,7 +200,7 @@ def main(argv):
   return exit_code
  elif cmd == "starbucks":
   # STARBUCKS!!!!!111!11!!!one!!1!
-  starbucks = u"STARBUCKS!!!!!111!11!!!one!!1!"
+  starbucks = appbackup.starbucks()
   if use_json: print json_result(cmd, True, 0, starbucks)
   else: safe_print(starbucks)
   return 0
