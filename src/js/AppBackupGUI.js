@@ -31,7 +31,7 @@
 
 // Main screen
 
-@class AppBackupGUI : UIApplication {}
+@class _AppBackupGUI : UIApplication {}
  - applicationDidFinishLaunching:notification {
   // Make the window
   var frame = [UIHardware fullScreenApplicationContentRect];
@@ -73,16 +73,17 @@
   [self.table setDelegate:self];
   [self.view addSubview:self.table];
   // Start up the AppBackup CLI Bridge
-  self.appbackup = [new AppBackup init];
+  self.appbackup = new AppBackup();
   [self.table reloadData];
   [self.window makeKeyAndVisible];
  }
  - applicationWillTerminate:notification {}
  - navigationBar:bar buttonClicked:index {
   // About button
-  if (button == 0) [[new AboutScreen initWithGUI:self] popupAlertAnimated:true];
+  if (button == 0) var screen = [new AboutScreen init].setup(gui);
   // All button
-  else [[new BackupAllScreen initWithGUI:self] popupAlertAnimated:true];
+  else screen = [new BackupAllScreen init].setup(gui);
+  [screen popupAlertAnimated:true];
  }
  - numberOfRowsInTable:table {
   return self.appbackup.apps.length;
@@ -121,7 +122,7 @@
   [label setBackgroundColor:[UIColor clearColor]];
   [label setFont:[UIFont systemFontOfSize:14]];
   [label setColor:[UIColor grayColor]];
-  [label setText:[self.appbackup getBackupTimeTextForApp:app]];
+  [label setText:[self.appbackup.get_backup_time_text(app)]];
   [root_label addSubview:label];
   return cell;
  }
@@ -130,21 +131,23 @@
   var row  = [obj selectedRow];
   var cell = [obj cellAtRow:row column:0];
   [cell setSelected:false withFade:true];
-  [[new BackupOneScreen initWithGUI:self appAtIndex:row]
-   popupAlertAnimated:true];
- }
- - updateAppList {
-  // show a HUD while we load the app list
-  var hud = [new UIProgressHUD initWithWindow:self.window];
-  [hud setText:_("please_wait")];
-  [hud show:true];
-  [self.view addSubview:hud];
-  [self.appbackup findApps];
-  [self.table reloadData];
-  [hud show:false];
- }
- - updateAppAtIndex:index {
-  [self.appbackup updateAppAtIndex:index];
-  [self.table reloadData];
+  [[new BackupOneScreen init].setup(self, row) popupAlertAnimated:true];
  }
 @end
+
+_AppBackupGUI.prototype.update_gui_app_list = function() {
+ // show a HUD while we load the app list
+ var hud = [new UIProgressHUD initWithWindow:this.window];
+ [hud setText:_("please_wait")];
+ [hud show:true];
+ [this.view addSubview:hud];
+ this.appbackup.find_apps();
+ [this.table reloadData];
+ [hud show:false];
+}
+_AppBackupGUI.prototype.update_gui_app_at_index = function(index) {
+ this.appbackup.update_app_at_index(index);
+ [this.table reloadData];
+}
+
+var AppBackupGUI = _AppBackupGUI;

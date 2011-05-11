@@ -31,20 +31,24 @@
 
 // About screen
 
-@class AboutScreen : UIActionSheet {}
+@class _AboutScreen : UIActionSheet {}
  // What to do when you click the "About" button
- - initWithGUI:gui {
-  self = [super init];
-  if (self) {
-   self.gui = gui;
-   [self setTitle:sprintf(_("about_title"), PRODUCT.name)];
-   [self setDelegate:self];
-   [self setBodyText:read(bundled_file_path("about.txt"))];
-   [self addButtonWithTitle:_("web_site")];
-   [self setCancelButtonIndex:[self addButtonWithTitle:_("ok")]];
-  }
-  return self;
+ - init {
+  return [super init];
  }
+@end
+_AboutScreen.prototype.setup = function(gui) {
+ if (this) {
+  [this setTitle:sprintf(_("about_title"), PRODUCT.name)];
+  [this setDelegate:[new _AboutScreenDelegate init].setup(gui)];
+  [this setBodyText:read(bundled_file_path("about.txt"))];
+  [this addButtonWithTitle:_("web_site")];
+  [this setCancelButtonIndex:[this addButtonWithTitle:_("ok")]];
+ }
+ return this;
+}
+
+@class _AboutScreenDelegate : NSObject <UIActionSheetDelegate> {}
  // What to do when you close the about box
  - actionSheet:sheet didDismissWithButtonIndex:index {
   var action = [sheet buttonTitleAtIndex:index];
@@ -54,3 +58,9 @@
   }
  }
 @end
+_AboutScreenDelegate.prototype.setup = function(gui) {
+ if (this) this.gui = gui;
+ return this;
+}
+
+var AboutScreen = _AboutScreen;

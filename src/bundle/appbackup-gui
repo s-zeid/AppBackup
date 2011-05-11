@@ -31,5 +31,12 @@
 
 # GUI runner
 
+FILE=js/main.js
+DEBUG_FILE=/var/mobile/Library/Preferences/AppBackup/debug.log
+
 cd "$(dirname "$0")"
-./AppBackupCycript js/main.js "$@"
+if [ "$USER" = "mobile" ]; then
+ ./AppBackupCycript "$FILE" "$@" &>"$DEBUG_FILE"
+else
+ ./AppBackupCycript "$FILE" "$@"
+fi

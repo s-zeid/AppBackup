@@ -31,31 +31,36 @@
 
 // Backup All Apps screen
 
-@class BackupAllScreen : UIActionSheet {}
+@class _BackupAllScreen : UIActionSheet {}
  // What to do when a table row is selected
- - initWithGUI:gui {
-  self = [super init];
-  if (self) {
-   self.gui = gui;
-   [self setTitle:_("all_apps")];
-   [self setDelegate:self];
-   [self addButtonWithTitle:_("backup")];
-   if (gui.appbackup.any_backed_up) {
-    var prompt = _("backup_restore_all_apps");
-    [self addButtonWithTitle:_("restore")];
-    [self addButtonWithTitle:_("delete")];
-   } else var prompt = _("backup_all_apps");
-   [self setBodyText:prompt];
-   [self setCancelButtonIndex:[self addButtonWithTitle:_("cancel")]];
-  }
-  return self;
+ - init {
+  return [super init];
  }
+@end
+_BackupAllScreen.prototype.setup = function(gui) {
+ if (this) {
+  this.gui = gui;
+  [this setTitle:_("all_apps")];
+  [this setDelegate:[new BackupAllScreenDelegate init].setup(gui)];
+  [this addButtonWithTitle:_("backup")];
+  if (gui.appbackup.any_backed_up) {
+   var prompt = _("backup_restore_all_apps");
+   [this addButtonWithTitle:_("restore")];
+   [this addButtonWithTitle:_("delete")];
+  } else var prompt = _("backup_all_apps");
+  [this setBodyText:prompt];
+  [this setCancelButtonIndex:[this addButtonWithTitle:_("cancel")]];
+ }
+ return this;
+}
+
+@class _BackupAllScreenDelegate : NSObject <UIActionSheetDelegate> {}
  // What to do when you close the backup all apps prompt
  - actionSheet:sheet didDismissWithButtonIndex:index {
   var button_text = [sheet buttonTitleAtIndex:index];
   if (button_text == _("cancel") || button_text == _("ok")) return;
-  modal = [new UIModalView init];
-  [modal setTitle:_("please_wait")];
+  self.modal = [new UIModalView init];
+  [self.modal setTitle:_("please_wait")];
   for (i in ["backup", "delete", "ignore", "restore", "unignore"]) {
    if (button_text == _(i)) {
     self.action = i;
@@ -64,38 +69,45 @@
   }
   self.str_prefix = "all_status_" + self.action + "_";
   var text = _(self.string_prefix + "doing");
-  [modal setBodyText:text];
-  [modal popupAlertAnimated:true];
- }
- - doAction:action withModalView:modal {
-  var done_title           = _(action + "done");
-  var partially_done_title = _(action + "partially_done");
-  var done_text            = _(self.str_prefix + "done");
-  var failed_title         = _(action + "failed");
-  var failed_text          = _(self.str_prefix + "failed");
-  var corrupted_text       = _(self.str_prefix + "corrupted");
-  var results_box          = true;
-  var r = [self.gui.appbackup doActionOnAllApps:action];
-  [self.gui updateAppList];
-  if (r.success) {
-   var title = done_title;
-   var text  = done_text;
-   //if (action == "ignore" || action == "unignore")
-   // resutls_box = false;
-  } else {
-   // TODO: fix this to adjust to all apps failing or apps being unuseable
-   // (requires changes in the CLI but it's 1:30 AM and I don't want to do it
-   //  right now so instead I'm writing this silly TODO comment)
-   var title = partially_done_title;
-   var text  = failed_text + "\n\n" + r.data;
-  }
-  [modal dismiss];
-  if (results_box) {
-   var alert = [new UIAlertView init];
-   [alert setTitle:title];
-   [alert setBodyText:text];
-   [alert addButtonWithTitle:_("ok")];
-   [alert show];
-  }
+  [self.modal setBodyText:text];
+  [self.modal popupAlertAnimated:true];
+  self.do_action(action);
  }
 @end
+_BackupAllScreenDelegate.prototype.setup = function(gui) {
+ if (this) this.gui = gui;
+ return this
+}
+_BackupAllScreenDelegate.prototype.do_action = function(app) {
+ var done_title           = _(action + "done");
+ var partially_done_title = _(action + "partially_done");
+ var done_text            = _(this.str_prefix + "done");
+ var failed_title         = _(action + "failed");
+ var failed_text          = _(this.str_prefix + "failed");
+ var corrupted_text       = _(this.str_prefix + "corrupted");
+ var results_box          = true;
+ var r = this.gui.appbackup.do_action(action);
+ this.gui.update_app_list();
+ if (r.success) {
+  var title = done_title;
+  var text  = done_text;
+  //if (action == "ignore" || action == "unignore")
+  // resutls_box = false;
+ } else {
+  // TODO: fix this to adjust to all apps failing or apps being unuseable
+  // (requires changes in the CLI but it's 1:30 AM and I don't want to do it
+  //  right now so instead I'm writing this silly TODO comment)
+  var title = partially_done_title;
+  var text  = failed_text + "\n\n" + r.data;
+ }
+ [this.modal dismiss];
+ if (results_box) {
+  this.alert = [new UIAlertView init];
+  [this.alert setTitle:title];
+  [this.alert setBodyText:text];
+  [this.alert addButtonWithTitle:_("ok")];
+  [this.alert show];
+ }
+}
+
+var BackupAllScreen = _BackupAllScreen;

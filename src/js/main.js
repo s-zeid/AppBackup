@@ -47,8 +47,21 @@ function get_languages() {
  for (i in list) languages += list[i].replace(/_+/g, "-").split("-", 1)[0];
  return languages;
 }
-function include(file) {
- eval(read(file));
+function compile(file) {
+ //eval(read(file));
+ var t = [new NSTask init];
+ [t setLaunchPath:@"/usr/bin/cycript"];
+ [t setArguments:["-c", file]];
+ var p = [NSPipe pipe];
+ [t setStandardOutput:p];
+ [t launch];
+ [t waitUntilExit];
+ [t release];
+ var s = [new NSString initWithData:[[p fileHandleForReading]
+          readDataToEndOfFile] encoding:4];
+ var r = s.toString();
+ [s release];
+ return s;
 }
 function localize_date(date) {
  if (!date) return "";
@@ -79,16 +92,23 @@ function read(file) {
  return String([NSString stringWithContentsOfFile:file encoding:4 error:null]);
 }
 
-include(bundled_file_path("js/json_parse.js"));
-include(bundled_file_path("js/sprintf.js"));
-include(bundled_file_path("js/AboutScreen.js"));
-include(bundled_file_path("js/AppBackup.js"));
-include(bundled_file_path("js/AppBackupGUI.js"));
-include(bundled_file_path("js/BackupAllScreen.js"));
-include(bundled_file_path("js/BackupOneScreen.js"));
-
+system.print(1);
+eval(read(bundled_file_path("js/json_parse.js")));
+system.print(2);
+eval(read(bundled_file_path("js/sprintf.js")));
+system.print(3);
+eval(compile(bundled_file_path("js/AboutScreen.js")));
+system.print(4);
+eval(compile(bundled_file_path("js/AppBackup.js")));
+system.print(5);
+eval(compile(bundled_file_path("js/AppBackupGUI.js")));
+system.print(6);
+eval(compile(bundled_file_path("js/BackupAllScreen.js")));
+system.print(7);
+eval(compile(bundled_file_path("js/BackupOneScreen.js")));
+system.print(AboutScreen);
 var strdup = new Functor(dlsym(RTLD_DEFAULT, "strdup"), "^c*");
-
+system.print(json_parse);
 var PRODUCT = {
  name: String([NSBundle.mainBundle
                objectForInfoDictionaryKey:"CFBundleDisplayName"]),

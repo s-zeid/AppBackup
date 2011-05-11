@@ -31,109 +31,91 @@
 
 // AppBackup CLI Bridge
 
-@class AppBackup : NSObject {}
- - init {
-  self = [super init];
-  if (self) {
-   self.apps = {}
-   self.all_backed_up = self.any_backed_up = self.any_corrupted = false;
-  }
-  return self;
+function AppBackup() {
+ this.apps = {}
+ this.all_backed_up = this.any_backed_up = this.any_corrupted = false;
+ this.do_action = function(action, app) {
+  if (typeof(app) != "undefined")
+   return this.run_cmd(action, ["--guid", app.guid]);
+  else
+   return this.run_cmd(action, ["--all"])
  }
- - doAction:action onApp:app {
-  return [self runCmd:action withArgs:["--guid", app.guid]];
- }
- - doActionOnAllApps:action {
-  return [self runCmd:action withArgs:["--all"]];
- }
- - findApps {
-  var r = [self runCmd:"list"]
-  if (r.success) self.apps = r.data;
-  else self.apps = {};
-  [self updateBackupInfo];
+ this.find_apps = function() {
+  var r = this.run_cmd("list");
+  if (r.success) this.apps = r.data;
+  else this.apps = {};
+  this.update_backup_info();
   return r;
  }
- - getBackupTimeTextForApp:app {
+ this.get_backup_time_text = function(app) {
   if (!app.useable) return _("app_corrupted_list");
   if (app.ignored) return _("baktext_ignored");
   var date = app.backup_text;
   if (date) return sprintf(_("baktext_yes"), localize_date(date));
   return _("baktext_no");
  }
- - runCmd:cmd { return [self runCmd:cmd withArgs:[]]; }
- - runCmd:cmd withArgs:args {
-  var abcmd = [new AppBackupCommand init];
-  [abcmd runWithCmd:cmd args:args];
-  return [abcmd waitForResult];
+ this.run_cmd = function(cmd, args) {
+  if (typeof(args) == "undefined")
+   args = [];
+  var abcmd = new AppBackupCommand(cmd, args);
+  return abcmd.run(true);
  }
- - starbucks {
-  var r = [self runCmd:"starbucks"];
+ this.starbucks = function() {
+  var r = this.run_cmd("starbucks");
   if (r.success) return r.data;
   return r
  }
- - updateAppAtIndex:index {
-  var app = self.apps[index];
-  var new_app = [self runCmd:"list" withArgs:["--verbose", "--guid", app.guid]];
+ this.update_app_at_index = function(index) {
+  var app = this.apps[index];
+  var new_app = this.run_cmd("list", ["--verbose", "--guid", app.guid]);
   if (new_app.found) {
    delete new_app.found;
-   self.apps[index] = new_app;
-   [self updateBackupInfo];
+   this.apps[index] = new_app;
+   this.update_backup_info();
    return true;
   } else {
-   delete self.apps[index];
-   [self updateBackupInfo];
+   delete this.apps[index];
+   this.update_backup_info();
    return false;
   }
  }
- - updateBackupInfo {
-  self.all_backed_up = Boolean(self.apps.length);
-  self.any_backed_up = self.any_corrupted = false;
-  for (app in self.apps) {
-   if (self.apps[app].useable) {
-    if (self.apps[app].backup_time && !self.apps[app].ignored)
-     self.any_backed_up = true;
-    else self.all_backed_up = false;
-   } else self.any_corrupted = true
+ this.update_backup_info = function() {
+  this.all_backed_up = Boolean(this.apps.length);
+  this.any_backed_up = this.any_corrupted = false;
+  for (app in this.apps) {
+   if (this.apps[app].useable) {
+    if (this.apps[app].backup_time && !this.apps[app].ignored)
+     this.any_backed_up = true;
+    else this.all_backed_up = false;
+   } else this.any_corrupted = true
   }
  }
-@end
+}
 
-@class AppBackupCommand : NSObject {}
- - init {
-  self = [super init];
-  if (self) {
-   self.cmd  = "";
-   self.args = [];
-   self.task = null;
-  }
-  return self;
- }
- - getResult {
-  if (![self.isFinished]) return null;
-  var data = [[self.task standardOutput] readDataToEndOfFile];
+function AppBackupCommand(cmd, args) {
+ if (typeof(args) == "undefined") args = [];
+ this.task = null;
+ this.get_result = function() {
+  if (!this.is_finished()) return null;
+  var data = [[this.task standardOutput] readDataToEndOfFile];
   var output = String([new NSString initWithData:data encoding:4]);
   if (output) return json_parse(output);
+  return {cmd: this.cmd, success:false, exit_code:-1, data:"unknown error"};
+ }
+ this.is_finished = function() {
+  if (this.task) return Boolean([this.task isRunning]);
   return false;
  }
- - isfinished {
-  if (self.task) return Boolean([self.task isRunning]);
-  return {cmd: self.cmd, success:false, exit_code:-1, data:"unknown error"};
- }
- - run {
+ this.run = function(wait) {
+  if (typeof(wait) == "undefined") wait = false;
   var path = get_file_path("appbackup-cli");
-  var args = ["--json", self.cmd].concat(self.args);
+  var args = ["--json", this.cmd].concat(this.args);
   var task = [NSTask launchedTaskWithLaunchPath:path arguments:args];
+  if (wait) {
+   var result = null;
+   while (result == null)
+    result = this.get_result();
+   return result;
+  }
  }
- - runWithCmd:cmd { return [self runWithCmd:cmd args:[]]; }
- - runWithCmd:cmd args:args {
-  self.cmd  = cmd;
-  self.args = args;
-  [self run];
- }
- - waitForResult {
-  var result = null;
-  while (result == null)
-   result = [self getResult];
-  return result;
- }
-@end
+}

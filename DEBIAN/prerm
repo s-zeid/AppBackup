@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm /Applications/AppBackup.app/python/{,appbackup,CFPropertyList,simplejson}/*.py[co] &>/dev/null
+true
