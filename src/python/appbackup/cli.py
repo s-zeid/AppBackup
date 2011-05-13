@@ -36,7 +36,8 @@ usage = """Usage: appbackup [options] command [args]
 Backs up and restores saved data and settings from iOS App Store apps.
 
 Options:
- -j / --json     Output should be in JSON format.
+ -j / --json     Output should be a JSON object.
+ -p / --plist    Output should be an XML property list.
 
 Commands:
  -h / --help     Display this help information and exit.
@@ -60,6 +61,7 @@ Arguments specific to list:
                  given.)"""
 
 import os
+import plistlib
 import sys
 
 from string import Template
@@ -94,9 +96,14 @@ def app_info(app, human_readable=False, sverbose=True):
  else:
   return info
 
-def json_result(cmd, success=False, exit_code=0, data=None):
- return json.dumps(dict(cmd=cmd, success=success, exit_code=exit_code,
-                        data=data))
+def fmt_result(mode, cmd, success=False, exit_code=0, data=None):
+ d = dict(cmd=cmd, success=success, exit_code=exit_code, data=data)
+ if mode == "json":
+  return json.dumps(d)
+ elif mode == "plist":
+  return plistlib.writePlistToString(d)
+ else:
+  raise ValueError("mode must be one of json or plist, not %s." % repr(mode))
 
 def main(argv):
  prog = argv[0]
@@ -108,15 +115,21 @@ def main(argv):
   safe_print(usage)
   return 0
  use_json = "j" in opts or "json" in opts
+ use_plist = "p" in opts or "plist" in opts
+ mode = ("json" if use_json else "plist") if use_json or use_plist else ""
+ if use_json and use_plist:
+  safe_print("Please choose only one  or neither of -j / --json or -p /"
+             " --plist.")
+  return 2
  appbackup = AppBackup(find_apps=False)
  if (cmd == "list" and
      "v" not in args and "verbose" not in args and not len(args[""])):
   # List App Store apps and their backup statuses
   apps = appbackup.sort_apps()
-  if use_json:
+  if mode:
    data = [dict(name=i.friendly, guid=i.guid, backup_time=i.backup_time_str,
                 ignored=i.ignored, useable=i.useable) for i in apps]
-   print json_result(cmd, True, data=data)
+   print fmt_result(mode, cmd, True, data=data)
   else:
    for i in apps:
     info = i.backup_time_str
@@ -139,7 +152,7 @@ def main(argv):
    # All apps
    apps = appbackup.sort_apps()
    for app in apps:
-    if use_json: data += [app_info(app, verbose=verbose)]
+    if mode: data += [app_info(app, verbose=verbose)]
     else: safe_print(app_info(app, True) + "\n")
   else:
    # Not all apps
@@ -147,13 +160,13 @@ def main(argv):
    for i in apps:
     app = appbackup.find_app(i, mode)
     if app:
-     if use_json: data += [app_info(app, verbose=verbose)]
+     if mode: data += [app_info(app, verbose=verbose)]
      else: safe_print(app_info(app, True) + "\n")
     else:
      success = False
-     if use_json: data += [dict(name=i, found=False)]
+     if mode: data += [dict(name=i, found=False)]
      else: safe_print("Could not find app %s.\n" % repr(i))
-  if use_json: print json_result(cmd, success, int(not success), data=data)
+  if mode: print fmt_result(mode, cmd, success, int(not success), data=data)
   return int(not success)
  elif cmd in ("backup", "restore", "delete", "ignore", "unignore"):
   # Other commands
@@ -162,7 +175,7 @@ def main(argv):
   apps = args[""]
   if not len(apps) and not all_apps:
    error = "Please specify one or more apps, or set -a / --all."
-   if use_json: print json_result(cmd, False, 2, data=error)
+   if mode: print fmt_result(mode, cmd, False, 2, data=error)
    else: safe_print(error)
    return 2
   success = True
@@ -195,19 +208,19 @@ def main(argv):
      errors += [u"%s: %s" % (app.friendly if app else i, result.reason)]
    if len(apps) == 1 and not success: exit_code = 1
   errors_str = "\n".join(errors)
-  if use_json: print json_result(cmd, success, exit_code, errors_str)
+  if mode: print fmt_result(mode, cmd, success, exit_code, errors_str)
   elif errors_str: safe_print(errors_str)
   return exit_code
  elif cmd == "starbucks":
   # STARBUCKS!!!!!111!11!!!one!!1!
   starbucks = appbackup.starbucks()
-  if use_json: print json_result(cmd, True, 0, starbucks)
+  if mode: print fmt_result(mode, cmd, True, 0, starbucks)
   else: safe_print(starbucks)
   return 0
  else:
   # Invalid command
   error = "%s is not a valid command." % repr(cmd)
-  if use_json: print json_result(cmd, False, 2, error)
+  if mode: print fmt_result(mode, cmd, False, 2, error)
   else: safe_print(error)
   return 2
 

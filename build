@@ -50,7 +50,7 @@ fi
 if [ $USE_CC -eq 0 ]; then
  cd src/util
  make clean
- make CC="$CC" DEVICE="$DEVICE"
+ make CC="$CC" LD="$CC" DEVICE="$DEVICE"
  cd ../..
 fi
 

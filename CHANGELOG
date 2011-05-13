@@ -1,7 +1,7 @@
 Changes in 2.0 (2011-05-DD):
 • AppBackup now works on iOS versions 4.3.1 and later (and it still works with older versions).
 • AppBackup has been split into two parts:
-   · A GUI written in Cycript
+   · The GUI, written in Objective-C this time
    · A command-line interface in the form of a Python package.  (Just type appbackup at the terminal to use it.)
 • As a result, the back-end code has been completely rewritten and is much cleaner and object-oriented.
 • The FixPermissions utility can now be used by typing appbackup-fix-permissions at the terminal.  It is still run automatically in the GUI mode only.
