@@ -42,12 +42,23 @@
 #define INFO_TAG 2
 
 @implementation AppBackupGUI
+@synthesize window;
+@synthesize view;
+@synthesize table;
+@synthesize appbackup;
+@synthesize app_name;
+@synthesize app_web_site;
+@synthesize about_file;
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+ // Set some properties
+ self.app_name = [NSBundle.mainBundle
+                  objectForInfoDictionaryKey:"CFBundleDisplayName"];
+ self.app_web_site = @"http://me.srwz.us/iphone/appbackup";
+ self.about_file = bundled_file_path(@"about.txt");
  // Set up window
- window = [[[UIWindow alloc] initWithFrame:[[UIScreen.mainScreen] bounds]]
-           retain];
+ self.window = [[UIWindow alloc] initWithFrame:[[UIScreen.mainScreen] bounds]];
  CGRect *bounds = [window bounds];
- view = [[[UIView alloc] initWithFrame:bounds] retain];
+ self.view = [[UIView alloc] initWithFrame:bounds];
  window.backgroundColor = [UIColor whiteColor];
  window.contentView = view;
  // Make some frames
@@ -75,14 +86,14 @@
  [view addSubview:toolbar];
  [title_bar release]; [toolbar release]; [toolbar2 release];
  // Make table view
- table = [[[UITableView alloc] initWithFrame:table_frame] retain];
+ self.table = [[UITableView alloc] initWithFrame:table_frame];
  table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
  table.rowHeight = 68;
  table.dataSource = self;
  table.delegate = self;
  [view addSubview:table];
  // Start up the AppBackup CLI bridge
- appbackup = [[[AppBackup alloc] init] retain];
+ self.appbackup = [[[AppBackup alloc] init] retain];
  [window makeKeyAndVisible];
  // TODO: move this into a thread
  [table reloadData];
@@ -135,9 +146,11 @@
 }
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
- NSMutableDictionary *app = [appbackup.apps objectAtIndex:ip.row];
- 
  [tv deselectRowAtIndexPath:ip animated:YES];
+ BackupOneScreen *screen = [[BackupOneScreen] alloc initWithGUI:self
+                            appAtIndex:ip.row];
+ [screen popupAlertAnimated:YES];
+ [screen release];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id {
@@ -155,7 +168,7 @@
  name_label.tag = NAME_TAG;
  name_label.font = [UIFont boldSystemFontOfSize:20];
  name_label.adjustsFontSizeToFitWidth = YES;
- name_label.color = [UIColor blackColor];
+ name_label.textColor = [UIColor blackColor];
  name_label.highlightedTextColor = [UIColor whiteColor];
  [cell.contentView addSubview:name_label];
  [name_label release];
@@ -168,7 +181,7 @@
  info_label.tag = INFO_TAG;
  info_label.font = [UIFont systemFontOfSize:14];
  info_label.adjustsFontSizeToFitWidth = YES;
- info_label.color = [UIColor grayColor];
+ info_label.textColor = [UIColor grayColor];
  info_label.highlightedTextColor = [UIColor whiteColor];
  [cell.contentView addSubview:info_label];
  [info_label release];
@@ -191,9 +204,13 @@
 }
 
 - (void)dealloc {
- [window release];
- [view release];
- [table release];
- [appbackup release];
+ self.window = nil;
+ self.view = nil;
+ self.table = nil;
+ self.appbackup = nil;
+ self.app_name = nil;
+ self.app_web_site = nil;
+ self.about_file = nil;
+ [super dealloc];
 }
 @end

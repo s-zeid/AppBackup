@@ -29,28 +29,38 @@
  * 
  */
 
-// AppBackup CLI Bridge (header)
+// About screen
 
-@interface AppBackup : NSObject {
- NSMutableArray *apps;
- BOOL all_backed_up;
- BOOL any_backed_up;
- BOOL any_corrupted;
+#import "util.h";
+#import "AppBackupGUI.h";
+
+@implementation AboutScreen
+@synthesize gui;
+- (id)initWithGUI:(AppBackupGUI *)gui_ {
+ self = [super init];
+ if (self) {
+  self.gui = gui_;
+  self.title = [NSString stringWithFormat:_(@"about_title"), gui.app_name];
+  self.delegate = self;
+  self.body_text = [NSString stringWithContentsOfFile:gui.about_file
+                    encoding:NSUTF8StringEncoding error:nil];
+  [self addButtonWithTitle:_(@"web_site")];
+  [self setCancelButtonIndex:[self addButtonWithTitle:_(@"ok")]];
+ }
+ return self;
 }
-@property (retain) NSMutableArray *apps;
-@property (retain) BOOL            all_backed_up;
-@property (retain) BOOL            any_backed_up;
-@property (retain) BOOL            any_corrupted;
-- (id)init;
-- (NSString *)backupTimeTextForApp:(NSMutableDictionary *app);
-- (NSMutableDictionary *)doActionOnAllApps:(NSString *)action;
-- (NSMutableDictionary *)doAction:(NSString *)action
-                         onApp:(NSMutableDictionary)app;
-- (void)findApps;
-- (NSMutableDictionary *)runCmd:(NSString *)cmd;
-- (NSMutableDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args
-- (NSString *)starbucks;
-- (BOOL)updateAppAtIndex:(NSUInteger)index;
-- (void)updateBackupInfo;
-- (void)dealloc;
+
+- (void)actionSheet:(UIActionSheet *)sheet
+        didDismissWithButtonIndex:(NSInteger)index {
+ NSString *action = [sheet buttonTitleAtIndex:index];
+ if ([action isEqualToString:_(@"web_site")]) {
+  url = [NSURL URLWithString:gui.app_web_site];
+  [[UIApplication sharedApplication] openURL:url];
+ }
+}
+
+- (void)dealloc {
+ self.gui = nil;
+ [super dealloc];
+}
 @end

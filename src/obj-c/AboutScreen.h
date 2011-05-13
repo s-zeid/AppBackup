@@ -29,28 +29,14 @@
  * 
  */
 
-// AppBackup CLI Bridge (header)
+// About screen (header)
 
-@interface AppBackup : NSObject {
- NSMutableArray *apps;
- BOOL all_backed_up;
- BOOL any_backed_up;
- BOOL any_corrupted;
+@interface AboutScreen : UIActionSheet {
+ AppBackupGUI *gui;
 }
-@property (retain) NSMutableArray *apps;
-@property (retain) BOOL            all_backed_up;
-@property (retain) BOOL            any_backed_up;
-@property (retain) BOOL            any_corrupted;
-- (id)init;
-- (NSString *)backupTimeTextForApp:(NSMutableDictionary *app);
-- (NSMutableDictionary *)doActionOnAllApps:(NSString *)action;
-- (NSMutableDictionary *)doAction:(NSString *)action
-                         onApp:(NSMutableDictionary)app;
-- (void)findApps;
-- (NSMutableDictionary *)runCmd:(NSString *)cmd;
-- (NSMutableDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args
-- (NSString *)starbucks;
-- (BOOL)updateAppAtIndex:(NSUInteger)index;
-- (void)updateBackupInfo;
+@property (retain) AppBackupGUI *gui;
+- (id)initWithGUI:(AppBackupGUI *)gui_;
+- (void)actionSheet:(UIActionSheet *)sheet
+        didDismissWithButtonIndex:(NSInteger)index;
 - (void)dealloc;
 @end

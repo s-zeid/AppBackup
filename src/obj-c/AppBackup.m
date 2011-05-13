@@ -32,16 +32,20 @@
 // AppBackup CLI Bridge
 
 #import "util.h";
-#import "AppBackupCommand.h";
 
 @implementation AppBackup
+@synthesize apps;
+@synthesize all_backed_up;
+@synthesize any_backed_up;
+@synthesize any_corrupted;
+
 - (id)init {
  self = [super init];
  if (self) {
-  apps = [NSArray array];
-  all_backed_up = NO;
-  any_backed_up = NO;
-  any_corrupted = NO;
+  self.apps = [NSArray array];
+  self.all_backed_up = NO;
+  self.any_backed_up = NO;
+  self.any_corrupted = NO;
  }
  return self;
 }
@@ -52,8 +56,8 @@
  if ([app objectForKey:@"ignored"])
   return _(@"baktext_ignored");
  NSString *date = [app objectForKey:@"backup_text"];
- if (date) return [NSString stringWithFormat:_(@"baktext_yes"),
-                   localize_date(date)];
+ if (date != nil && [date length])
+  return [NSString stringWithFormat:_(@"baktext_yes"), localize_date(date)];
  return _(@"baktext_no");
 }
 
@@ -74,9 +78,9 @@
 - (void)findApps {
  NSMutableDictionary *r = [self runCmd:@"list"];
  if ([r objectForKey:@"success"])
-  apps = ([NSArray arrayWithArray:[r objectForKey:@"data"]]);
+  self.apps = ([NSArray arrayWithArray:[r objectForKey:@"data"]]);
  else
-  apps = [NSArray array];
+  self.apps = [NSArray array];
 }
 
 - (NSMutableDictionary *)runCmd:(NSString *)cmd {
@@ -148,5 +152,12 @@
    else self.all_backed_up = NO;
   } else self.any_corrupted = YES;
  }
+}
+
+- (void)dealloc {
+ self.apps = nil;
+ self.all_backed_up = nil;
+ self.any_backed_up = nil;
+ self.any_corrupted = nil;
 }
 @end

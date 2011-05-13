@@ -36,7 +36,17 @@
  UITable *table;
  UIView *view;
  AppBackup *appbackup;
+ NSString *app_name;
+ NSString *app_web_site;
+ NSString *about_file;
 }
+@property (retain) UIWindow  *window;
+@property (retain) UITable   *table;
+@property (retain) UIView    *view;
+@property (retain) AppBackup *appbackup;
+@property (retain) NSString  *app_name;
+@property (retain) NSString  *app_web_site;
+@property (retain) NSString  *about_file;
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
 - (void)navigationBar:(UINavigationBar *)bar buttonClicked:(NSInteger *)index
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
