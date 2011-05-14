@@ -31,8 +31,12 @@
 
 // About screen
 
-#import "util.h";
+#import <UIKit/UIKit.h>;
+
 #import "AppBackupGUI.h";
+#import "util.h";
+
+#import "AboutScreen.h";
 
 @implementation AboutScreen
 @synthesize gui;
@@ -40,22 +44,23 @@
  self = [super init];
  if (self) {
   self.gui = gui_;
-  self.title = [NSString stringWithFormat:_(@"about_title"), gui.app_name];
+  self.title = [NSString stringWithFormat:[_ s:@"about_title"], gui.app_name];
   self.delegate = self;
-  self.body_text = [NSString stringWithContentsOfFile:gui.about_file
-                    encoding:NSUTF8StringEncoding error:nil];
-  [self addButtonWithTitle:_(@"web_site")];
-  [self setCancelButtonIndex:[self addButtonWithTitle:_(@"ok")]];
+  self.message = [NSString stringWithContentsOfFile:gui.about_file
+                  encoding:NSUTF8StringEncoding error:nil];
+  [self addButtonWithTitle:[_ s:@"web_site"]];
+  [self setCancelButtonIndex:[self addButtonWithTitle:[_ s:@"ok"]]];
  }
  return self;
 }
 
-- (void)actionSheet:(UIActionSheet *)sheet
+- (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)index {
  NSString *action = [sheet buttonTitleAtIndex:index];
- if ([action isEqualToString:_(@"web_site")]) {
-  url = [NSURL URLWithString:gui.app_web_site];
+ if ([action isEqualToString:[_ s:@"web_site"]]) {
+  NSURL *url = [NSURL URLWithString:gui.app_web_site];
   [[UIApplication sharedApplication] openURL:url];
+  [url release];
  }
 }
 

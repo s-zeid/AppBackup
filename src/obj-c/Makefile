@@ -8,25 +8,26 @@ DEVICE = scottPhone
 # <http://www.opensource.org/licenses/mit-license.php>
 
 LDFLAGS= -lobjc \
-         -bind_at_load \
-         -framework Foundation \
-         -framework CoreFoundation \
-         -framework UIKit
-         -w
+	 -bind_at_load \
+	 -framework Foundation \
+	 -framework CoreFoundation \
+	 -framework UIKit \
+	 -w
 
 all:     AppBackupGUI sign
 
-AppBackupGUI: AppBackupGUI.o
-         $(LD) $(LDFLAGS) -o $@ $^
-
-%.o:     %.m
-         $(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
+AppBackupGUI: AppBackupGUI.o AboutScreen.o AppBackup.o BackupAllAppsScreen.o \
+	BackupOneAppScreen.o main.o MBProgressHud.o util.o
+	 $(LD) $(LDFLAGS) -o $@ $^
 
 sign:
-         scp AppBackupGUI mobile@$(DEVICE):/tmp
-         ssh mobile@$(DEVICE) ldid -S /tmp/AppBackupGUI
-         scp mobile@$(DEVICE):/tmp/AppBackupGUI .
+	 scp AppBackupGUI mobile@$(DEVICE):/tmp
+	 ssh mobile@$(DEVICE) ldid -S /tmp/AppBackupGUI
+	 scp mobile@$(DEVICE):/tmp/AppBackupGUI .
+
+%.o:     %.m
+	 $(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 clean:
-         @rm -f AppBackupGUI
-         @rm -f *.o
+	 @rm -f AppBackupGUI
+	 @rm -f *.o

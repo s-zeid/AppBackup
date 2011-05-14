@@ -31,6 +31,10 @@
 
 // Utility functions (header)
 
-NSString *_(NSString *s);
-NSString *bundled_file_path(NSString *path);
-NSString *localize_date(NSString *date);
+#import <Foundation/Foundation.h>;
+
+@interface _ : NSObject {}
++ (NSString *)s:(NSString *)s;
++ (NSString *)bundledFilePath:(NSString *)path;
++ (NSString *)localizeDate:(NSString *)date;
+@end

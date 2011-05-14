@@ -29,24 +29,25 @@
  * 
  */
 
-// Backup One App screen (header)
+// Backup All Apps screen (header)
 
-@interface BackupOneAppScreen : UIActionSheet {
+#import <UIKit/UIKit.h>;
+
+#import "AppBackup.h";
+#import "AppBackupGUI.h";
+
+@interface BackupAllAppsScreen : UIAlertView <UIAlertViewDelegate> {
  AppBackupGUI        *gui;
- NSInteger            index;
- NSMutableDictionary *app;
- UIModalView         *modal;
+ UIAlertView         *modal;
  UIAlertView         *alert;
  NSString            *action;
 }
 @property (retain) AppBackupGUI        *gui;
-@property (retain) NSInteger            index;
-@property (retain) NSMutableDictionary *app;
-@property (retain) UIModalView         *modal;
+@property (retain) UIAlertView         *modal;
 @property (retain) UIAlertView         *alert;
 @property (retain) NSString            *action;
-- (id)initWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_;
-- (void)actionSheet:(UIActionSheet *)sheet
+- (id)initWithGUI:(AppBackupGUI *)gui_;
+- (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)index;
 - (void)doAction;
 - (void)dealloc;

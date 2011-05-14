@@ -46,9 +46,19 @@ elif [ $USE_CC -eq 1 -a "$PREFIX" = "" ]; then
  PREFIX=$1
 fi
 
-# Compile FixPermissions if $CC is set, exists, and is executable
+# Compile AppBackupGUI and FixPermissions if $CC is set, exists, and is
+# executable
 if [ $USE_CC -eq 0 ]; then
- cd src/util
+ # AppBackupGUI
+ cd src/obj-c
+ make clean
+ make CC="$CC" LD="$CC" DEVICE="$DEVICE"
+ if [ $? ]; then
+  exit $?
+ fi
+ cd ../..
+ # FixPermissions
+ cd src/FixPermissions
  make clean
  make CC="$CC" LD="$CC" DEVICE="$DEVICE"
  cd ../..

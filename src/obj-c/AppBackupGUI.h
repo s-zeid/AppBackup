@@ -31,31 +31,38 @@
 
 // Main screen (header)
 
-@interface AppBackupGUI : UIApplication <UIApplicationDelegate> {
- UIWindow *window;
- UITable *table;
- UIView *view;
- AppBackup *appbackup;
- NSString *app_name;
- NSString *app_web_site;
- NSString *about_file;
+#import <CoreFoundation/CoreFoundation.h>;
+#import <UIKit/UIKit.h>;
+
+#import "AppBackup.h";
+
+@interface AppBackupGUI : UIApplication
+           <UIApplicationDelegate, UITableViewDataSource, UITableViewDelegate> {
+ UIWindow    *window;
+ UITableView *table;
+ UIView      *view;
+ AppBackup   *appbackup;
+ NSString    *app_name;
+ NSString    *app_web_site;
+ NSString    *about_file;
 }
-@property (retain) UIWindow  *window;
-@property (retain) UITable   *table;
-@property (retain) UIView    *view;
-@property (retain) AppBackup *appbackup;
-@property (retain) NSString  *app_name;
-@property (retain) NSString  *app_web_site;
-@property (retain) NSString  *about_file;
+@property (retain) UIWindow    *window;
+@property (retain) UITableView *table;
+@property (retain) UIView      *view;
+@property (retain) AppBackup   *appbackup;
+@property (retain) NSString    *app_name;
+@property (retain) NSString    *app_web_site;
+@property (retain) NSString    *about_file;
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
-- (void)navigationBar:(UINavigationBar *)bar buttonClicked:(NSInteger *)index
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
+- (void)showAboutScreen:(id)sender;
+- (void)showAllAppsScreen:(id)sender;
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
 - (UITableViewCell *)tableView:(UITableView *)tv
                      cellForRowAtIndexPath:(NSIndexPath *)ip;
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
 - (void)updateAppList;
-- (void)updateAppAtIndex:(NSInteger *)index;
+- (void)updateAppAtIndex:(NSInteger)index;
 - (void)dealloc;
 @end

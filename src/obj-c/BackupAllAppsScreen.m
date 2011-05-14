@@ -31,9 +31,13 @@
 
 // Backup All Apps screen
 
-#import "util.h";
+#import <UIKit/UIKit.h>;
+
 #import "AppBackup.h";
 #import "AppBackupGUI.h";
+#import "util.h";
+
+#import "BackupAllScreen.h";
 
 @implementation BackupAllAppsScreen
 @synthesize gui;
@@ -45,52 +49,52 @@
  self = [super init];
  if (self) {
   self.gui = gui_;
-  self.title = _(@"all_apps");
+  self.title = [_ s:@"all_apps"];
   self.delegate = self;
   NSString *prompt;
-  [self addButtonWithTitle:_(@"backup")];
+  [self addButtonWithTitle:[_ s:@"backup"]];
   if ([gui.appbackup.any_backed_up]) {
-   prompt = _(@"backup_restore_all_apps");
-   [self addButtonWithTitle:_(@"restore")];
-   [self addButtonWithTitle:_(@"delete")];
-  } else prompt = _(@"backup_all_apps");
-  self.bodyText = prompt;
-  [self setCancelButtonIndex:[self addButtonWithTitle:_(@"cancel")]];
+   prompt = [_ s:@"backup_restore_all_apps"];
+   [self addButtonWithTitle:[_ s:@"restore"]];
+   [self addButtonWithTitle:[_ s:@"delete"]];
+  } else prompt = [_ s:@"backup_all_apps"];
+  self.message = prompt;
+  [self setCancelButtonIndex:[self addButtonWithTitle:[_ s:@"cancel"]]];
  }
  return self;
 }
 
-- (void)actionSheet:(UIActionSheet *)sheet
+- (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)index {
  // What to do when you close the backup all apps prompt
  NSString *button_text = [sheet buttonTitleAtIndex:index];
- if ([button_text isEqualToString:_(@"cancel")] ||
-     [button_text isEqualToString:_(@"ok")]) return;
- self.modal = [[UIModalView alloc] init];
- modal.title = _(@"please_wait");
- if ([button_text isEqualToString:_(@"backup")])   self.action = @"backup";
- if ([button_text isEqualToString:_(@"delete")])   self.action = @"delete";
- if ([button_text isEqualToString:_(@"ignore")])   self.action = @"ignore";
- if ([button_text isEqualToString:_(@"restore")])  self.action = @"restore";
- if ([button_text isEqualToString:_(@"unignore")]) self.action = @"unignore";
- modal.bodyText = _([NSString stringWithFormat:@"all_status_%s_doing", action]);
- [modal popupAlertAnimated:YES];
+ if ([button_text isEqualToString:[_ s:@"cancel"]] ||
+     [button_text isEqualToString:[_ s:@"ok"]]) return;
+ self.modal = [[UIAlertView alloc] init];
+ modal.title = [_ s:@"please_wait"];
+ if ([button_text isEqualToString:[_ s:@"backup"]])   self.action = @"backup";
+ if ([button_text isEqualToString:[_ s:@"delete"]])   self.action = @"delete";
+ if ([button_text isEqualToString:[_ s:@"ignore"]])   self.action = @"ignore";
+ if ([button_text isEqualToString:[_ s:@"restore"]])  self.action = @"restore";
+ if ([button_text isEqualToString:[_ s:@"unignore"]]) self.action = @"unignore";
+ modal.message=[_ s:[NSString stringWithFormat:@"all_status_%s_doing", action]];
+ [modal show];
  [self doAction];
 }
 
 - (void)doAction {
- NSString *done_title     = _([NSString stringWithFormat:@"%s_done", action]);
- NSString *partial_title  = _([NSString stringWithFormat:@"%s_partially_done",
-                               action]);
- NSString *done_text      = _([NSString stringWithFormat:@"all_status_%s_done",
-                               action]);
- NSString *failed_title   = _([NSString stringWithFormat:@"%s_failed", action]);
- NSString *failed_text    = _([NSString
+ NSString *done_title = [_ s:[NSString stringWithFormat:@"%s_done", action]];
+ NSString *partial_title = [_ s:[NSString stringWithFormat:@"%s_partially_done",
+                                 action]];
+ NSString *done_text = [_ s:[NSString stringWithFormat:@"all_status_%s_done",
+                             action]];
+ NSString *failed_title = [_ s:[NSString stringWithFormat:@"%s_failed",action]];
+ NSString *failed_text = [_ s:[NSString
                                stringWithFormat:@"all_status_%s_failed",
-                               action]);
- NSString *corrupted_text = _([NSString
-                               stringWithFormat:@"all_status_%s_corrupted",
-                               action]);
+                               action]];
+ NSString *corrupted_text = [_ s:[NSString
+                                  stringWithFormat:@"all_status_%s_corrupted",
+                                  action]];
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
@@ -103,6 +107,7 @@
   //    [action isEqualToString:@"unignore"])
   // results_box = NO;
  } else {
+  // TODO: detect all apps corrupted
   if ([r objectForKey:@"exit_code"] == 0) title = partially_done_title;
   else                                    title = failed_title;
   text = [NSString stringWithFormat:@"%s\n\n%s", failed_text,
@@ -113,8 +118,8 @@
  if (results_box) {
   self.alert = [[UIAlertView alloc] init];
   alert.title = title;
-  alert.bodyText = text;
-  [alert addButtonWithTitle:_(@"ok")];
+  alert.message = text;
+  [alert addButtonWithTitle:[_ s:@"ok"]];
   [alert show];
   [alert release];
  }

@@ -33,6 +33,8 @@
 
 #import "util.h";
 
+#import "AppBackup.h";
+
 @implementation AppBackup
 @synthesize apps;
 @synthesize all_backed_up;
@@ -50,15 +52,15 @@
  return self;
 }
 
-- (NSString *)backupTimeTextForApp:(NSMutableDictionary *app) {
+- (NSString *)backupTimeTextForApp:(NSMutableDictionary *)app {
  if (![app objectForKey:@"useable"])
-  return _(@"app_corrupted_list");
+  return [_ s:@"app_corrupted_list"];
  if ([app objectForKey:@"ignored"])
-  return _(@"baktext_ignored");
+  return [_ s:@"baktext_ignored"];
  NSString *date = [app objectForKey:@"backup_text"];
  if (date != nil && [date length])
-  return [NSString stringWithFormat:_(@"baktext_yes"), localize_date(date)];
- return _(@"baktext_no");
+  return [NSString stringWithFormat:[_ s:@"baktext_yes"], localize_date(date)];
+ return [_ s:@"baktext_no"];
 }
 
 - (NSMutableDictionary *)doActionOnAllApps:(NSString *)action {
@@ -68,7 +70,7 @@
 }
 
 - (NSMutableDictionary *)doAction:(NSString *)action
-                         onApp:(NSMutableDictionary)app {
+                         onApp:(NSMutableDictionary *)app {
  NSString *guid = [app objectForKey:@"guid"];
  NSArray *args = [NSArray arrayWithObjects:action, @"--guid", guid];
  NSMutableDictionary *r = [self runCmd:cmd withArgs:args];
@@ -142,8 +144,9 @@
  self.all_backed_up = ([apps count]) ? YES : NO;
  self.any_backed_up = NO;
  self.any_corrupted = NO;
- *NSMutableDictionary app;
- for (int i = 0; i < [apps count]; i++) {
+ NSMutableDictionary *app;
+ int i;
+ for (i = 0; i < [apps count]; i++) {
   app = [apps objectAtIndex:i];
   if ([app objectForKey:@"useable"]) {
    if ([[app objectForKey:@"backup_time"] length] &&

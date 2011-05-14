@@ -31,13 +31,16 @@
 
 // Utility functions
 
-NSString *_(NSString *s) {
+@implementation _
++ (NSString *)s:(NSString *)s {
  return NSLocalizedString(s, @"");
 }
-NSString *bundled_file_path(NSString *path) {
+
++ (NSString *)bundledFilePath:(NSString *)path {
  return [[NSBundle.mainBundle bundlePath] stringByAppendingPathComponent:path];
 }
-NSString *localize_date(NSString *date) {
+
++ (NSString *)localizeDate(NSString *)date {
  if (![date length]) return @"";
  NSDateFormatter *iso_8601_formatter = [[NSDateFormatter alloc] init];
  [iso_8601_formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -55,3 +58,4 @@ NSString *localize_date(NSString *date) {
  }
  return out;
 }
+@end

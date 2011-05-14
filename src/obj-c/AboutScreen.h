@@ -31,12 +31,19 @@
 
 // About screen (header)
 
-@interface AboutScreen : UIActionSheet {
+#import <UIKit/UIKit.h>;
+
+#import "AppBackupGUI.h";
+#import "util.h";
+
+#import "AboutScreen.h";
+
+@interface AboutScreen : UIAlertView <UIAlertViewDelegate> {
  AppBackupGUI *gui;
 }
 @property (retain) AppBackupGUI *gui;
 - (id)initWithGUI:(AppBackupGUI *)gui_;
-- (void)actionSheet:(UIActionSheet *)sheet
+- (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)index;
 - (void)dealloc;
 @end

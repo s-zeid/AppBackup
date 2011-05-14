@@ -31,9 +31,13 @@
 
 // Backup One App screen
 
-#import "util.h";
+#import <UIKit/UIKit.h>;
+
 #import "AppBackup.h";
 #import "AppBackupGUI.h";
+#import "util.h";
+
+#import "BackupOneScreen.h";
 
 @implementation BackupOneAppScreen
 @synthesize gui;
@@ -59,58 +63,58 @@
   NSString *cancel_string = @"cancel";
   if (![app objectForKey:@"useable"]) {
    prompt = [NSString stringWithFormat:@"%s\n\n%s", prompt,
-             _(@"app_corrupted_prompt")];
-   cancel_string = _(@"ok");
+             [_ s:@"app_corrupted_prompt"]];
+   cancel_string = [_ s:@"ok"];
   } else if ([app objectForKey:@"ignored"]) {
    prompt = [NSString stringWithFormat:@"%s\n\n%s", prompt,
-             _(@"app_corrupted_prompt")];
-   [self addButtonWithTitle:_(@"unignore")];
+             [_ s:@"app_ignored_prompt"]];
+   [self addButtonWithTitle:[_ s:@"unignore"]];
   } else if ([[app objectForKey:@"backup_time"] length]) {
-   [self addButtonWithTitle:_(@"backup")];
-   [self addButtonWithTitle:_(@"restore")];
-   [self addButtonWithTitle:_(@"ignore")];
-   [self addButtonWithTitle:_(@"delete")];
+   [self addButtonWithTitle:[_ s:@"backup"]];
+   [self addButtonWithTitle:[_ s:@"restore"]];
+   [self addButtonWithTitle:[_ s:@"ignore"]];
+   [self addButtonWithTitle:[_ s:@"delete"]];
   } else {
-   [self addButtonWithTitle:_(@"backup")];
-   [self addButtonWithTitle:_(@"ignore")];
+   [self addButtonWithTitle:[_ s:@"backup"]];
+   [self addButtonWithTitle:[_ s:@"ignore"]];
   }
-  self.bodyText = prompt;
-  [self setCancelButtonIndex:[self addButtonWithTitle:_(cancel_string)]];
+  self.message = prompt;
+  [self setCancelButtonIndex:[self addButtonWithTitle:[_ s:cancel_string]]];
  }
  return self;
 }
 
-- (void)actionSheet:(UIActionSheet *)sheet
+- (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)index {
  // What to do when you close the backup one app prompt
  NSString *button_text = [sheet buttonTitleAtIndex:index];
- if ([button_text isEqualToString:_(@"cancel")] ||
-     [button_text isEqualToString:_(@"ok")]) return;
- self.modal = [[UIModalView alloc] init];
- modal.title = _(@"please_wait");
- if ([button_text isEqualToString:_(@"backup")])   self.action = @"backup";
- if ([button_text isEqualToString:_(@"delete")])   self.action = @"delete";
- if ([button_text isEqualToString:_(@"ignore")])   self.action = @"ignore";
- if ([button_text isEqualToString:_(@"restore")])  self.action = @"restore";
- if ([button_text isEqualToString:_(@"unignore")]) self.action = @"unignore";
- NSString *text_ = _([NSString stringWithFormat:@"1_status_%s_doing", action]);
- modal.bodyText = [NSString stringWithFormat:text_,
-                   [app objectForKey:@"friendly"]];
- [modal popupAlertAnimated:YES];
+ if ([button_text isEqualToString:[_ s:@"cancel"]] ||
+     [button_text isEqualToString:[_ s:@"ok"]]) return;
+ self.modal = [[UIAlertView alloc] init];
+ modal.title = [_ s:@"please_wait"];
+ if ([button_text isEqualToString:[_ s:@"backup"]])   self.action = @"backup";
+ if ([button_text isEqualToString:[_ s:@"delete"]])   self.action = @"delete";
+ if ([button_text isEqualToString:[_ s:@"ignore"]])   self.action = @"ignore";
+ if ([button_text isEqualToString:[_ s:@"restore"]])  self.action = @"restore";
+ if ([button_text isEqualToString:[_ s:@"unignore"]]) self.action = @"unignore";
+ NSString *text_=[_ s:[NSString stringWithFormat:@"1_status_%s_doing",action]];
+ modal.message = [NSString stringWithFormat:text_,
+                  [app objectForKey:@"friendly"]];
+ [modal show];
  [self doAction];
 }
 
 - (void)doAction {
- NSString *done_title   = _([NSString stringWithFormat:@"%s_done", action]);
- NSString *done_text_   = _([NSString stringWithFormat:@"1_status_%s_done",
-                             action]);
- NSString *done_text    = _([NSString stringWithFormat:done_text_,
-                             [app objectForKey:@"friendly"]]);
- NSString *failed_title = _([NSString stringWithFormat:@"%s_failed", action]);
- NSString *failed_text_ = _([NSString stringWithFormat:@"1_status_%s_failed",
-                             action]);
- NSString *failed_text  = _([NSString stringWithFormat:failed_text_,
-                             [app objectForKey:@"friendly"]]);
+ NSString *done_title   = [_ s:[NSString stringWithFormat:@"%s_done", action]];
+ NSString *done_text_   = [_ s:[NSString stringWithFormat:@"1_status_%s_done",
+                             action]];
+ NSString *done_text    = [_ s:[NSString stringWithFormat:done_text_,
+                             [app objectForKey:@"friendly"]]];
+ NSString *failed_title = [_ s:[NSString stringWithFormat:@"%s_failed",action]];
+ NSString *failed_text_ = [_ s:[NSString stringWithFormat:@"1_status_%s_failed",
+                             action]];
+ NSString *failed_text  = [_ s:[NSString stringWithFormat:failed_text_,
+                             [app objectForKey:@"friendly"]]];
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
@@ -131,8 +135,8 @@
  if (results_box) {
   self.alert = [[UIAlertView alloc] init];
   alert.title = title;
-  alert.bodyText = text;
-  [alert addButtonWithTitle:_(@"ok")];
+  alert.message = text;
+  [alert addButtonWithTitle:[_ s:@"ok"]];
   [alert show];
   [alert release];
  }
