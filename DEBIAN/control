@@ -10,4 +10,4 @@ Icon: http://uploads.srwz.us/AppBackup/icon.png
 Maintainer: Scott Zeid <iphone@srwz.us>
 Author: Scott Zeid <iphone@srwz.us>
 Section: Utilities
-Depends: bash, coreutils-bin, cycript, python (>= 2.5), python (<< 3.0)
+Depends: bash, coreutils-bin, python (>= 2.5), python (<< 3.0)

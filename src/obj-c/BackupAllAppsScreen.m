@@ -37,7 +37,7 @@
 #import "AppBackupGUI.h";
 #import "util.h";
 
-#import "BackupAllScreen.h";
+#import "BackupAllAppsScreen.h";
 
 @implementation BackupAllAppsScreen
 @synthesize gui;
@@ -53,7 +53,7 @@
   self.delegate = self;
   NSString *prompt;
   [self addButtonWithTitle:[_ s:@"backup"]];
-  if ([gui.appbackup.any_backed_up]) {
+  if (gui.appbackup.any_backed_up) {
    prompt = [_ s:@"backup_restore_all_apps"];
    [self addButtonWithTitle:[_ s:@"restore"]];
    [self addButtonWithTitle:[_ s:@"delete"]];
@@ -98,7 +98,7 @@
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
- *r = (NSMutableDictionary *)[gui.appbackup doActionOnAllApps:action];
+ NSMutableDictionary *r = [gui.appbackup doActionOnAllApps:action];
  [gui updateAppList];
  if ([r objectForKey:@"success"]) {
   title = done_title;
@@ -108,12 +108,12 @@
   // results_box = NO;
  } else {
   // TODO: detect all apps corrupted
-  if ([r objectForKey:@"exit_code"] == 0) title = partially_done_title;
+  if ([r objectForKey:@"exit_code"] == 0) title = partial_title;
   else                                    title = failed_title;
   text = [NSString stringWithFormat:@"%s\n\n%s", failed_text,
           [r objectForKey:@"data"]];
  }
- [modal dismiss];
+ [modal dismissWithClickedButtonIndex:0 animated:YES];
  [modal release];
  if (results_box) {
   self.alert = [[UIAlertView alloc] init];

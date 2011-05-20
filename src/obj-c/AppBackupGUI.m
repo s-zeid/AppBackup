@@ -31,6 +31,7 @@
 
 // Main screen
 
+#include <stdio.h>
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;
 
@@ -56,22 +57,29 @@
 @synthesize app_web_site;
 @synthesize about_file;
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+ printf("entered applicationDidFinishLaunching:\n");
  // Set some properties
  self.app_name = [[NSBundle mainBundle]
                   objectForInfoDictionaryKey:@"CFBundleDisplayName"];
  self.app_web_site = @"http://me.srwz.us/iphone/appbackup";
  self.about_file = [_ bundledFilePath:@"about.txt"];
  // Set up window
+ printf("making window\n");
  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
- CGRect bounds = window.bounds;
+ CGRect bounds = [[UIScreen mainScreen] applicationFrame];
  self.view = [[UIView alloc] initWithFrame:bounds];
  window.backgroundColor = [UIColor whiteColor];
  [window addSubview:view];
+ printf("made window\n");
  // Make some frames
  struct CGRect frame;
  // Make the title bar
  frame = CGRectMake(0, 0, bounds.size.width, NAVBAR_HEIGHT);
  UINavigationBar *title_bar = [[UINavigationBar alloc] initWithFrame:frame];
+ UINavigationItem *title_item = [[UINavigationItem alloc]
+                                 initWithTitle:[_ s:@"main_window_title"]];
+ [title_bar pushNavigationItem:title_item animated:NO];
+ [title_item release];
  [view addSubview:title_bar];
  [title_bar release];
  // Make the bottom toolbar and add buttons
@@ -105,7 +113,7 @@
  self.appbackup = [[[AppBackup alloc] init] retain];
  [window makeKeyAndVisible];
  // TODO: move this into a thread
- [table reloadData];
+ //[table reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv {

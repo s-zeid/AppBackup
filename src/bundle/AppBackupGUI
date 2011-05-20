@@ -31,12 +31,20 @@
 
 # GUI runner
 
-FILE=js/main.js
 DEBUG_FILE=/var/mobile/Library/Preferences/AppBackup/debug.log
 
+# Fix permissions on user directory (This is a binary with setuid root)
+# Make a blank file in /Applications/AppBackup.app called NoFixPermissions to
+# disable this.
+if [ ! -e "$(dirname "$0")/NoFixPermissions" ]; then
+ "$(dirname "$0")"/FixPermissions > /tmp/FixPermissions.log
+fi
+
+# Run the GUI and log debug info to $DEBUG_FILE if we're mobile (which we
+# should be)
 cd "$(dirname "$0")"
 if [ "$USER" = "mobile" ]; then
- ./AppBackupCycript "$FILE" "$@" &>"$DEBUG_FILE"
+ exec "$(dirname "$0")/AppBackupGUI_" "$@" &>"$DEBUG_FILE"
 else
- ./AppBackupCycript "$FILE" "$@"
+ exec "$(dirname "$0")/AppBackupGUI_" "$@"
 fi

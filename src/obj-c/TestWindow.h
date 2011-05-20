@@ -29,30 +29,26 @@
  * 
  */
 
-// Backup One App screen (header)
+// Main screen
 
 #import <UIKit/UIKit.h>;
 
-#import "AppBackup.h";
-#import "AppBackupGUI.h";
-
-@interface BackupOneAppScreen : UIAlertView <UIAlertViewDelegate> {
- AppBackupGUI        *gui;
- NSInteger            index;
- NSMutableDictionary *app;
- UIAlertView         *modal;
- UIAlertView         *alert;
- NSString            *action;
+@interface TestWindow : UIApplication
+           <UIApplicationDelegate, UITableViewDataSource, UITableViewDelegate> {
+ UIWindow    *window;
+ UITableView *table;
+ UIView      *view;
 }
-@property (retain) AppBackupGUI        *gui;
-@property          NSInteger            index;
-@property (retain) NSMutableDictionary *app;
-@property (retain) UIAlertView         *modal;
-@property (retain) UIAlertView         *alert;
-@property (retain) NSString            *action;
-- (id)initWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_;
-- (void)alertView:(UIAlertView *)sheet
-        didDismissWithButtonIndex:(NSInteger)button_index;
-- (void)doAction;
+@property (retain) UIWindow    *window;
+@property (retain) UITableView *table;
+@property (retain) UIView      *view;
+- (void)application:(UIApplication *)application
+        didFinishLaunchingWithOptions:(NSDictionary *)options;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
+- (UITableViewCell *)tableView:(UITableView *)tv
+                     cellForRowAtIndexPath:(NSIndexPath *)ip;
+- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
 - (void)dealloc;
 @end

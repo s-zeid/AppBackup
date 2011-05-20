@@ -5,7 +5,7 @@ Computer//DTD PLIST 1.0//EN"
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleExecutable</key>
-  <string>appbackup-gui</string>
+  <string>AppBackupGUI</string>
   <key>CFBundleDisplayName</key>
   <string>AppBackup</string>
   <key>CFBundleIdentifier</key>

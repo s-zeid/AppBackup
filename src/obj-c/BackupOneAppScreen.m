@@ -37,7 +37,7 @@
 #import "AppBackupGUI.h";
 #import "util.h";
 
-#import "BackupOneScreen.h";
+#import "BackupOneAppScreen.h";
 
 @implementation BackupOneAppScreen
 @synthesize gui;
@@ -85,9 +85,9 @@
 }
 
 - (void)alertView:(UIAlertView *)sheet
-        didDismissWithButtonIndex:(NSInteger)index {
+        didDismissWithButtonIndex:(NSInteger)button_index {
  // What to do when you close the backup one app prompt
- NSString *button_text = [sheet buttonTitleAtIndex:index];
+ NSString *button_text = [sheet buttonTitleAtIndex:button_index];
  if ([button_text isEqualToString:[_ s:@"cancel"]] ||
      [button_text isEqualToString:[_ s:@"ok"]]) return;
  self.modal = [[UIAlertView alloc] init];
@@ -118,7 +118,7 @@
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
- *r = (NSMutableDictionary *)[gui.appbackup doAction:action onApp:app];
+ NSMutableDictionary *r = [gui.appbackup doAction:action onApp:app];
  [gui updateAppAtIndex:index];
  if ([r objectForKey:@"success"]) {
   title = done_title;
@@ -130,7 +130,7 @@
   title = failed_title;
   text  = failed_text;
  }
- [modal dismiss];
+ [modal dismissWithClickedButtonIndex:0 animated:YES];
  [modal release];
  if (results_box) {
   self.alert = [[UIAlertView alloc] init];
@@ -144,7 +144,7 @@
 
 - (void)dealloc {
  self.gui = nil;
- self.index = nil;
+ self.index = 0;
  self.app = nil;
  self.modal = nil;
  self.alert = nil;

@@ -31,9 +31,15 @@
 
 // GUI Runner
 
+#include <stdio.h>
+#import <Foundation/Foundation.h>;
+#import "AppBackupGUI.h";
+
+#define APP_DELEGATE_CLS @"AppBackupGUI"
+
 int main (int argc, char **argv) {
- NSAutoReleasePool *p = [[NSAutoReleasePool alloc] init];
- int ret = UIApplicatonMain(argc, argv, "AppBackupGUI", "AppBackupGUI");
+ NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
+ int ret = UIApplicationMain(argc, argv, APP_DELEGATE_CLS, APP_DELEGATE_CLS);
  [p drain];
  return ret;
 }

@@ -11,13 +11,14 @@ LDFLAGS= -lobjc \
 	 -bind_at_load \
 	 -framework Foundation \
 	 -framework CoreFoundation \
+	 -framework CoreGraphics \
 	 -framework UIKit \
 	 -w
 
 all:     AppBackupGUI sign
 
-AppBackupGUI: AppBackupGUI.o AboutScreen.o AppBackup.o BackupAllAppsScreen.o \
-	BackupOneAppScreen.o main.o MBProgressHud.o util.o
+AppBackupGUI: util.o AppBackup.o MBProgressHUD.o TestWindow.o \
+	AboutScreen.o BackupAllAppsScreen.o BackupOneAppScreen.o AppBackupGUI.o main.o
 	 $(LD) $(LDFLAGS) -o $@ $^
 
 sign:

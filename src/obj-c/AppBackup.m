@@ -31,9 +31,10 @@
 
 // AppBackup CLI Bridge
 
-#import "util.h";
+#import <Foundation/NSTask.h>;
 
 #import "AppBackup.h";
+#import "util.h";
 
 @implementation AppBackup
 @synthesize apps;
@@ -57,23 +58,23 @@
   return [_ s:@"app_corrupted_list"];
  if ([app objectForKey:@"ignored"])
   return [_ s:@"baktext_ignored"];
- NSString *date = [app objectForKey:@"backup_text"];
- if (date != nil && [date length])
-  return [NSString stringWithFormat:[_ s:@"baktext_yes"], localize_date(date)];
+ NSString *d = [app objectForKey:@"backup_text"];
+ if (d != nil && [d length])
+  return [NSString stringWithFormat:[_ s:@"baktext_yes"], [_ localizeDate:d]];
  return [_ s:@"baktext_no"];
 }
 
 - (NSMutableDictionary *)doActionOnAllApps:(NSString *)action {
- NSArray *args = [NSArray arrayWithObjects:action, @"--all"];
- NSMutableDictionary *r = [self runCmd:cmd withArgs:args];
+ NSArray *args = [NSArray arrayWithObject:@"--all"];
+ NSMutableDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
 
 - (NSMutableDictionary *)doAction:(NSString *)action
                          onApp:(NSMutableDictionary *)app {
  NSString *guid = [app objectForKey:@"guid"];
- NSArray *args = [NSArray arrayWithObjects:action, @"--guid", guid];
- NSMutableDictionary *r = [self runCmd:cmd withArgs:args];
+ NSArray *args = [NSArray arrayWithObjects:@"--guid", guid];
+ NSMutableDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
 
@@ -92,10 +93,10 @@
 
 - (NSMutableDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
  // Start task
- NSString *path = bundled_file_path(@"appbackup-cmd");
+ NSString *path = [_ bundledFilePath:@"appbackup-cmd"];
  NSArray *use_args = [[NSArray arrayWithObject:@"--plist"]
                       arrayByAddingObjectsFromArray:args];
- task = [NSTask launchedTaskWithLaunchPath:path arguments:use_args];
+ NSTask *task = [NSTask launchedTaskWithLaunchPath:path arguments:use_args];
  // Wait for it to finish (should I use [NSTask waitUntilExit]?)
  BOOL finished = NO;
  while (!finished) {
@@ -115,10 +116,10 @@
  NSString *starbucks;
  NSMutableDictionary *r = [self runCmd:@"starbucks"];
  if ([r objectForKey:@"success"])
-  s = [NSString stringWithString:[r objectForKey:@"data"]];
+  starbucks = [NSString stringWithString:[r objectForKey:@"data"]];
  else
-  s = @"";
- return s;
+  starbucks = @"";
+ return starbucks;
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
@@ -159,8 +160,9 @@
 
 - (void)dealloc {
  self.apps = nil;
- self.all_backed_up = nil;
- self.any_backed_up = nil;
- self.any_corrupted = nil;
+ self.all_backed_up = NO;
+ self.any_backed_up = NO;
+ self.any_corrupted = NO;
+ [super dealloc];
 }
 @end

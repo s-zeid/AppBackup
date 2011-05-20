@@ -31,26 +31,31 @@
 
 // Utility functions
 
+#import "util.h";
+
 @implementation _
 + (NSString *)s:(NSString *)s {
  return NSLocalizedString(s, @"");
 }
 
 + (NSString *)bundledFilePath:(NSString *)path {
- return [[NSBundle.mainBundle bundlePath] stringByAppendingPathComponent:path];
+ return [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:path];
 }
 
-+ (NSString *)localizeDate(NSString *)date {
++ (NSString *)localizeDate:(NSString *)date {
  if (![date length]) return @"";
+ // Make NSDate from ISO 8601 format string
  NSDateFormatter *iso_8601_formatter = [[NSDateFormatter alloc] init];
- [iso_8601_formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+ iso_8601_formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
  NSDate *nsdate = [iso_8601_formatter dateFromString:date];
  [iso_8601_formatter release];
- NSString *out = [NSDateFormatter localizedStringFromDate:nsdate
-                  dateStyle:NSDateFormatterMediumStyle
-                  timeStyle:NSDateFormatterShortStyle];
- if (out == nil || ![out.length]) {
-  var generic_formatter = [new NSDateFormatter init];
+ // Try to get localized format
+ NSDateFormatter *local_formatter = [[NSDateFormatter alloc] init];
+ local_formatter.dateStyle = NSDateFormatterMediumStyle;
+ local_formatter.timeStyle = NSDateFormatterShortStyle;
+ NSString *out = [local_formatter stringFromDate:nsdate];
+ if (out == nil || ![out length]) {
+  NSDateFormatter *generic_formatter = [[NSDateFormatter alloc] init];
   [generic_formatter setDateFormat:@"MMM d, yyyy h:mm a"];
   out = [generic_formatter stringFromDate:nsdate];
   [generic_formatter release];

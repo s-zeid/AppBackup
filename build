@@ -53,9 +53,7 @@ if [ $USE_CC -eq 0 ]; then
  cd src/obj-c
  make clean
  make CC="$CC" LD="$CC" DEVICE="$DEVICE"
- if [ $? ]; then
-  exit $?
- fi
+ rm ./*.o
  cd ../..
  # FixPermissions
  cd src/FixPermissions
@@ -85,12 +83,12 @@ cp -a ../DEBIAN/* files/DEBIAN/
 cp -a ../src/bundle/* files/Applications/AppBackup.app/
 cp -a ../src/FixPermissions/FixPermissions files/Applications/AppBackup.app/
 cp -a ../src/i18n/* files/Applications/AppBackup.app/
-cp -a ../src/js/* files/Applications/AppBackup.app/js
+cp -a ../src/obj-c/AppBackupGUI files/Applications/AppBackup.app/AppBackupGUI_
 cp -a ../src/python/* files/Applications/AppBackup.app/python
 cp -a ../src/usr/* files/usr/
 rm files/Applications/AppBackup.app/python/{,appbackup,CFPropertyList,simplejson}/*.py[co] &>/dev/null
-ln -s -f /usr/bin/cycript files/Applications/AppBackup.app/AppBackupCycript
-chmod +x files/Applications/AppBackup.app/appbackup-{cli,gui}
+chmod +x files/Applications/AppBackup.app/appbackup-cli
+chmod +x files/Applications/AppBackup.app/AppBackupGUI{,_}
 chmod +x files/usr/bin/appbackup{,-fix-permissions}
 touch files/Applications/AppBackup.app/about.txt
 echo | cat ../CREDITS - ../CHANGELOG > files/Applications/AppBackup.app/about.txt

@@ -31,6 +31,8 @@
 
 // AppBackup CLI Bridge (header)
 
+#import <Foundation/Foundation.h>;
+
 @interface AppBackup : NSObject {
  NSMutableArray *apps;
  BOOL all_backed_up;
@@ -50,7 +52,7 @@
 - (NSMutableDictionary *)runCmd:(NSString *)cmd;
 - (NSMutableDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args;
 - (NSString *)starbucks;
-- (BOOL)updateAppAtIndex:(NSUInteger)index;
+- (BOOL)updateAppAtIndex:(NSInteger)index;
 - (void)updateBackupInfo;
 - (void)dealloc;
 @end
