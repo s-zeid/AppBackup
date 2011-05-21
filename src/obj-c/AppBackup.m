@@ -84,6 +84,7 @@
   self.apps = [NSMutableArray arrayWithArray:[r objectForKey:@"data"]];
  else
   self.apps = [NSMutableArray array];
+ [self updateBackupInfo];
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd {
