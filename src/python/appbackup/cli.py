@@ -75,18 +75,19 @@ from appbackup import *
 from justifiedbool import *
 from util import *
 
-def app_info(app, human_readable=False, sverbose=True):
- info = dict(name=app.friendly, found=True, bundle=app.bundle, guid=app.guid,
-             ignored=app.ignored, backup_time=app.backup_time_str,
-             path=app.path, useable=app.useable)
- if not verbose:
-  del info["bundle"]
-  del info["path"]
+def app_info(app, human_readable=False, verbose=True, found_key=True):
+ info = dict(friendly=app.friendly, bundle=app.bundle, guid=app.guid,
+             useable=app.useable, ignored=app.ignored,
+             backup_time=app.backup_time_str)
+ if verbose or human_readable:
+  info["path"] = app.path
+ if found_key:
+  info["found"] = True
  if human_readable:
   if not info["backup_time"]: info["backup_time"] = "(not backed up)"
   info["ignored"] = "Yes" if info["ignored"] else "No"
   info["useable"] = "Yes" if info["useable"] else "No"
-  tpl = u"""$name ($bundle):
+  tpl = u"""$friendly ($bundle):
     GUID:         $guid
     Ignored:      $ignored
     Backup time:  $backup_time
@@ -96,8 +97,8 @@ def app_info(app, human_readable=False, sverbose=True):
  else:
   return info
 
-def fmt_result(mode, cmd, success=False, exit_code=0, data=None):
- d = dict(cmd=cmd, success=success, exit_code=exit_code, data=data)
+def fmt_result(mode, cmd, success=False, exit_code=0, data=None, **kwargs):
+ d = dict(cmd=cmd, success=success, exit_code=exit_code, data=data, **kwargs)
  if mode == "json":
   return json.dumps(d)
  elif mode == "plist":
@@ -116,7 +117,7 @@ def main(argv):
   return 0
  use_json = "j" in opts or "json" in opts
  use_plist = "p" in opts or "plist" in opts
- mode = ("json" if use_json else "plist") if use_json or use_plist else ""
+ out_mode = ("json" if use_json else "plist") if use_json or use_plist else ""
  if use_json and use_plist:
   safe_print("Please choose only one  or neither of -j / --json or -p /"
              " --plist.")
@@ -126,10 +127,9 @@ def main(argv):
      "v" not in args and "verbose" not in args and not len(args[""])):
   # List App Store apps and their backup statuses
   apps = appbackup.sort_apps()
-  if mode:
-   data = [dict(name=i.friendly, guid=i.guid, backup_time=i.backup_time_str,
-                ignored=i.ignored, useable=i.useable) for i in apps]
-   print fmt_result(mode, cmd, True, data=data)
+  if out_mode:
+   data = [app_info(app, verbose=False, found_key=False) for app in apps]
+   print fmt_result(out_mode, cmd, True, data=data)
   else:
    for i in apps:
     info = i.backup_time_str
@@ -152,35 +152,38 @@ def main(argv):
    # All apps
    apps = appbackup.sort_apps()
    for app in apps:
-    if mode: data += [app_info(app, verbose=verbose)]
+    if out_mode: data += [app_info(app, verbose=verbose)]
     else: safe_print(app_info(app, True) + "\n")
   else:
    # Not all apps
-   mode = "guid" if use_guid else "bundle"
+   search_mode = "guid" if use_guid else "bundle"
    for i in apps:
-    app = appbackup.find_app(i, mode)
+    app = appbackup.find_app(i, search_mode)
     if app:
-     if mode: data += [app_info(app, verbose=verbose)]
+     if out_mode: data += [app_info(app, verbose=verbose)]
      else: safe_print(app_info(app, True) + "\n")
     else:
      success = False
-     if mode: data += [dict(name=i, found=False)]
+     if out_mode: data += [dict(name=i, found=False)]
      else: safe_print("Could not find app %s.\n" % repr(i))
-  if mode: print fmt_result(mode, cmd, success, int(not success), data=data)
+  if out_mode: print fmt_result(out_mode, cmd, success, int(not success),
+                                data=data)
   return int(not success)
  elif cmd in ("backup", "restore", "delete", "ignore", "unignore"):
   # Other commands
   use_guid = "g" in args or "guid" in args
   all_apps = "a" in args or "all" in args
+  verbose  = "v" in args or "verbose" in args
   apps = args[""]
   if not len(apps) and not all_apps:
    error = "Please specify one or more apps, or set -a / --all."
-   if mode: print fmt_result(mode, cmd, False, 2, data=error)
+   if out_mode: print fmt_result(out_mode, cmd, False, 2, data=error)
    else: safe_print(error)
    return 2
   success = True
   exit_code = 0
   errors = []
+  data = []
   if all_apps:
    # All apps
    result = getattr(appbackup, cmd + "_all")()
@@ -192,9 +195,9 @@ def main(argv):
               if not result[i]]
   else:
    # Not all apps
-   mode = "guid" if use_guid else "bundle"
+   search_mode = "guid" if use_guid else "bundle"
    for i in apps:
-    app = appbackup.find_app(i, mode)
+    app = appbackup.find_app(i, search_mode)
     if app:
      try:
       getattr(app, cmd)()
@@ -203,24 +206,26 @@ def main(argv):
       result = JustifiedBool(False, str(error))
     else:
      result = JustifiedBool(False, "Could not find app %s." % repr(i))
+    data += [app_info(app, verbose=verbose)]
     if not result:
      success = False
      errors += [u"%s: %s" % (app.friendly if app else i, result.reason)]
    if len(apps) == 1 and not success: exit_code = 1
   errors_str = "\n".join(errors)
-  if mode: print fmt_result(mode, cmd, success, exit_code, errors_str)
+  if out_mode: print fmt_result(out_mode, cmd, success, exit_code, errors_str,
+                                apps=data)
   elif errors_str: safe_print(errors_str)
   return exit_code
  elif cmd == "starbucks":
   # STARBUCKS!!!!!111!11!!!one!!1!
   starbucks = appbackup.starbucks()
-  if mode: print fmt_result(mode, cmd, True, 0, starbucks)
+  if out_mode: print fmt_result(out_mode, cmd, True, 0, starbucks)
   else: safe_print(starbucks)
   return 0
  else:
   # Invalid command
   error = "%s is not a valid command." % repr(cmd)
-  if mode: print fmt_result(mode, cmd, False, 2, error)
+  if out_mode: print fmt_result(out_mode, cmd, False, 2, error)
   else: safe_print(error)
   return 2
 

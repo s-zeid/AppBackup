@@ -55,22 +55,26 @@
 @synthesize appbackup;
 @synthesize app_name;
 @synthesize app_web_site;
-@synthesize about_file;
+@synthesize about_text;
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
- printf("entered applicationDidFinishLaunching:\n");
  // Set some properties
  self.app_name = [[NSBundle mainBundle]
                   objectForInfoDictionaryKey:@"CFBundleDisplayName"];
  self.app_web_site = @"http://me.srwz.us/iphone/appbackup";
- self.about_file = [_ bundledFilePath:@"about.txt"];
+ self.about_text = [NSString
+                    stringWithContentsOfFile:[_ bundledFilePath:@"about.txt"]
+                    encoding:NSUTF8StringEncoding error:nil];
  // Set up window
- printf("making window\n");
- self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+ UIWindow *_window = [[UIWindow alloc]
+                      initWithFrame:[[UIScreen mainScreen] bounds]];
+ self.window = _window;
+ [_window release];
  CGRect bounds = [[UIScreen mainScreen] applicationFrame];
- self.view = [[UIView alloc] initWithFrame:bounds];
+ UIView *_view = [[UIView alloc] initWithFrame:bounds];
+ self.view = _view;
+ [_view release];
  window.backgroundColor = [UIColor whiteColor];
  [window addSubview:view];
- printf("made window\n");
  // Make some frames
  struct CGRect frame;
  // Make the title bar
@@ -87,6 +91,15 @@
                     NAVBAR_HEIGHT);
  UINavigationBar *toolbar = [[UIToolbar alloc] initWithFrame:frame];
  toolbar.delegate = self;
+ UIBarButtonItem *flex_space;
+ flex_space = [[UIBarButtonItem alloc]
+               initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+               target:nil action:nil];
+ UIBarButtonItem *space;
+ space = [[UIBarButtonItem alloc]
+          initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+          target:nil action:nil];
+ space.width = 5;
  UIBarButtonItem *all_btn = [[UIBarButtonItem alloc]
                              initWithTitle:[_ s:@"all_button"]
                              style:UIBarButtonItemStyleBordered
@@ -95,7 +108,10 @@
                                initWithTitle:[_ s:@"about_button"]
                                style:UIBarButtonItemStyleBordered
                                target:self action:@selector(showAboutScreen:)];
- toolbar.items = [NSArray arrayWithObjects:all_btn, about_btn];
+ toolbar.items = [NSArray arrayWithObjects:flex_space, all_btn, space,
+                                           about_btn, flex_space, nil];
+ [flex_space release];
+ [space release];
  [all_btn release];
  [about_btn release];
  [view addSubview:toolbar];
@@ -103,17 +119,26 @@
  // Make table view
  frame = CGRectMake(0, NAVBAR_HEIGHT, bounds.size.width,
                     bounds.size.height - (NAVBAR_HEIGHT * 2));
- self.table = [[UITableView alloc] initWithFrame:frame];
+ UITableView *_table = [[UITableView alloc] initWithFrame:frame];
+ self.table = _table;
+ [_table release];
  table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
  table.rowHeight = 68;
  table.dataSource = self;
  table.delegate = self;
  [view addSubview:table];
  // Start up the AppBackup CLI bridge
- self.appbackup = [[[AppBackup alloc] init] retain];
+ AppBackup *_appbackup = [[AppBackup alloc] init];
+ self.appbackup = _appbackup;
+ [_appbackup release];
  [window makeKeyAndVisible];
  // TODO: move this into a thread
- //[table reloadData];
+ [table reloadData];
+ [self updateAppList];
+}
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+ [hud removeFromSuperview];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv {
@@ -152,7 +177,10 @@
  // Name label
  label = (UILabel *)[cell viewWithTag:NAME_TAG];
  label.text = [app objectForKey:@"friendly"];
- if (![app objectForKey:@"useable"] || [app objectForKey:@"ignored"])
+ if ([[app objectForKey:@"useable"] boolValue] &&
+     ![[app objectForKey:@"ignored"] boolValue])
+  label.textColor = [UIColor blackColor];
+ else
   label.textColor = [UIColor grayColor];
  // Info label
  label = (UILabel *)[cell viewWithTag:INFO_TAG];
@@ -163,10 +191,9 @@
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
  [tv deselectRowAtIndexPath:ip animated:YES];
- BackupOneAppScreen *screen = [[BackupOneAppScreen alloc] initWithGUI:self
+ BackupOneAppScreen *screen = [BackupOneAppScreen screenWithGUI:self
                                appAtIndex:ip.row];
  [screen show];
- [screen release];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id {
@@ -206,6 +233,7 @@
 
 - (void)updateAppList {
  MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:view];
+ hud.delegate = self;
  hud.labelText = [_ s:@"please_wait"];
  [view addSubview:hud];
  [hud showWhileExecuting:@selector(_updateAppListCallback) onTarget:self
@@ -223,6 +251,11 @@
  [table reloadData];
 }
 
+- (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict {
+ [appbackup updateAppAtIndex:index withDictionary:dict];
+ [table reloadData];
+}
+
 - (void)dealloc {
  self.window = nil;
  self.view = nil;
@@ -230,7 +263,7 @@
  self.appbackup = nil;
  self.app_name = nil;
  self.app_web_site = nil;
- self.about_file = nil;
+ self.about_text = nil;
  [super dealloc];
 }
 @end

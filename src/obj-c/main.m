@@ -35,11 +35,11 @@
 #import <Foundation/Foundation.h>;
 #import "AppBackupGUI.h";
 
-#define APP_DELEGATE_CLS @"AppBackupGUI"
+#define APP_DELEGATE_NAME @"AppBackupGUI"
 
 int main (int argc, char **argv) {
  NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
- int ret = UIApplicationMain(argc, argv, APP_DELEGATE_CLS, APP_DELEGATE_CLS);
+ int ret = UIApplicationMain(argc, argv, APP_DELEGATE_NAME, APP_DELEGATE_NAME);
  [p drain];
  return ret;
 }

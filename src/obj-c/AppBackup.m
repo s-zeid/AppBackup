@@ -45,7 +45,7 @@
 - (id)init {
  self = [super init];
  if (self) {
-  self.apps = [NSArray array];
+  self.apps = [NSMutableArray array];
   self.all_backed_up = NO;
   self.any_backed_up = NO;
   self.any_corrupted = NO;
@@ -53,68 +53,68 @@
  return self;
 }
 
-- (NSString *)backupTimeTextForApp:(NSMutableDictionary *)app {
- if (![app objectForKey:@"useable"])
+- (NSString *)backupTimeTextForApp:(NSDictionary *)app {
+ if (![[app objectForKey:@"useable"] boolValue])
   return [_ s:@"app_corrupted_list"];
- if ([app objectForKey:@"ignored"])
+ if ([[app objectForKey:@"ignored"] boolValue])
   return [_ s:@"baktext_ignored"];
- NSString *d = [app objectForKey:@"backup_text"];
+ NSString *d = [app objectForKey:@"backup_time"];
  if (d != nil && [d length])
   return [NSString stringWithFormat:[_ s:@"baktext_yes"], [_ localizeDate:d]];
  return [_ s:@"baktext_no"];
 }
 
-- (NSMutableDictionary *)doActionOnAllApps:(NSString *)action {
+- (NSDictionary *)doActionOnAllApps:(NSString *)action {
  NSArray *args = [NSArray arrayWithObject:@"--all"];
- NSMutableDictionary *r = [self runCmd:action withArgs:args];
+ NSDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
 
-- (NSMutableDictionary *)doAction:(NSString *)action
-                         onApp:(NSMutableDictionary *)app {
+- (NSDictionary *)doAction:(NSString *)action
+                  onApp:(NSDictionary *)app {
  NSString *guid = [app objectForKey:@"guid"];
- NSArray *args = [NSArray arrayWithObjects:@"--guid", guid];
- NSMutableDictionary *r = [self runCmd:action withArgs:args];
+ NSArray *args = [NSArray arrayWithObjects:@"--guid", guid, nil];
+ NSDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
 
 - (void)findApps {
- NSMutableDictionary *r = [self runCmd:@"list"];
+ NSDictionary *r = [self runCmd:@"list"];
  if ([r objectForKey:@"success"])
-  self.apps = ([NSArray arrayWithArray:[r objectForKey:@"data"]]);
+  self.apps = [NSMutableArray arrayWithArray:[r objectForKey:@"data"]];
  else
-  self.apps = [NSArray array];
+  self.apps = [NSMutableArray array];
 }
 
-- (NSMutableDictionary *)runCmd:(NSString *)cmd {
- NSMutableDictionary *r = [self runCmd:cmd withArgs:[NSArray array]];
+- (NSDictionary *)runCmd:(NSString *)cmd {
+ NSDictionary *r = [self runCmd:cmd withArgs:[NSArray array]];
  return r;
 }
 
-- (NSMutableDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
+- (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
  // Start task
- NSString *path = [_ bundledFilePath:@"appbackup-cmd"];
- NSArray *use_args = [[NSArray arrayWithObject:@"--plist"]
-                      arrayByAddingObjectsFromArray:args];
- NSTask *task = [NSTask launchedTaskWithLaunchPath:path arguments:use_args];
- // Wait for it to finish (should I use [NSTask waitUntilExit]?)
- BOOL finished = NO;
- while (!finished) {
-  if (task != nil && [task isRunning])
-   finished = NO;
- }
+ NSTask *task = [[NSTask alloc] init];
+ task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
+ task.arguments = [[NSArray arrayWithObjects:@"--plist", cmd, nil]
+                   arrayByAddingObjectsFromArray:args];
+ task.standardOutput = [NSPipe pipe];
+ [task launch];
+ // Wait for it to finish
+ [task waitUntilExit];
  // Process result
- NSData *data = [[task standardOutput] readDataToEndOfFile];
- NSMutableDictionary *dict = (NSMutableDictionary *)[NSPropertyListSerialization
-                      propertyListFromData:data
-                      mutabilityOption:NSPropertyListMutableContainersAndLeaves
-                      format:NULL errorDescription:nil];
+ NSFileHandle *handle = [[task standardOutput] fileHandleForReading];
+ NSData *data = [handle readDataToEndOfFile];
+ [handle closeFile];
+ NSDictionary *dict = (NSDictionary *)[NSPropertyListSerialization
+                       propertyListFromData:data
+                       mutabilityOption:NSPropertyListImmutable
+                       format:NULL errorDescription:nil];
  return dict;
 }
 
 - (NSString *)starbucks {
  NSString *starbucks;
- NSMutableDictionary *r = [self runCmd:@"starbucks"];
+ NSDictionary *r = [self runCmd:@"starbucks"];
  if ([r objectForKey:@"success"])
   starbucks = [NSString stringWithString:[r objectForKey:@"data"]];
  else
@@ -123,14 +123,22 @@
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
- NSMutableDictionary *app = [apps objectAtIndex:index];
+ NSDictionary *app = [apps objectAtIndex:index];
  NSArray *args = [NSArray arrayWithObjects:@"--guid",
-                  [app objectForKey:@"guid"]];
- NSMutableDictionary *r = [self runCmd:@"list" withArgs:args];
- NSMutableDictionary *d = [NSMutableDictionary
-                           dictionaryWithDictionary:[r objectForKey:@"data"]];
- if ([d objectForKey:@"found"]) {
-  [d removeObjectForKey:@"found"];
+                  [app objectForKey:@"guid"], nil];
+ NSDictionary *r = [self runCmd:@"list" withArgs:args];
+ NSDictionary *d = [NSDictionary dictionaryWithDictionary:
+                    [[r objectForKey:@"data"] objectAtIndex:0]];
+ BOOL ret = [self updateAppAtIndex:index withDictionary:d];
+ return ret;
+}
+
+- (BOOL)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict {
+ NSDictionary *app = [apps objectAtIndex:index];
+ NSMutableDictionary *md = [NSMutableDictionary dictionaryWithDictionary:dict];
+ if ([[md objectForKey:@"found"] boolValue]) {
+  [md removeObjectForKey:@"found"];
+  NSDictionary *d = [NSDictionary dictionaryWithDictionary:md];
   [apps replaceObjectAtIndex:index withObject:d];
   [self updateBackupInfo];
   return YES;
@@ -145,13 +153,13 @@
  self.all_backed_up = ([apps count]) ? YES : NO;
  self.any_backed_up = NO;
  self.any_corrupted = NO;
- NSMutableDictionary *app;
+ NSDictionary *app;
  int i;
  for (i = 0; i < [apps count]; i++) {
   app = [apps objectAtIndex:i];
-  if ([app objectForKey:@"useable"]) {
+  if ([[app objectForKey:@"useable"] boolValue]) {
    if ([[app objectForKey:@"backup_time"] length] &&
-       ![app objectForKey:@"ignored"])
+       ![[app objectForKey:@"ignored"] boolValue])
     self.any_backed_up = YES;
    else self.all_backed_up = NO;
   } else self.any_corrupted = YES;

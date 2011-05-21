@@ -3,26 +3,26 @@
  * This is a standard *.lproj/Localizable.strings file; see Apple's docs for
  *   more info.
  *
- * Strings containing %s mean that the %s is replaced by something.  This
+ * Strings containing %@ mean that the %@ is replaced by something.  This
  * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
- * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
+ * THE %@ IF YOU WANT IT TO LOOK RIGHT!!!
  *
  * Thanks to Magnus Pålsson for this translation!
  *
  */
 
-"baktext_yes" = "Senast säkerhetskopierat:  %s"; /* %s = last backup time */
+"baktext_yes" = "Senast säkerhetskopierat:  %@"; /* %@ = last backup time */
 "baktext_no" = "Aldrig säkerhetskopierat.";
 "app_corrupted_list" = "Det här programmet är korrupt.";
 "app_corrupted_prompt" = "Det här programmet är korrupt och kan därmed inte säkerhetskopieras eller återställas.";
 "all_button" = "Alla";
 "all_apps" = "Alla program";
 "about_button" = "Om";
-"about_title" = "Om %s"; /* %s = AppBackup */
+"about_title" = "Om %@"; /* %@ = AppBackup */
 "main_window_title" = "App Store-program";
 "plural_last_letter" = ""; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
-"singular_possessive" = "%ss"; /* %s = app name */
-"plural_possessive" = "%ss"; /* %s = app name */
+"singular_possessive" = "%@s"; /* %@ = app name */
+"plural_possessive" = "%@s"; /* %@ = app name */
 "please_wait" = "Var god vänta...";
 "ok" = "OK";
 "cancel" = "Avbryt";
@@ -33,8 +33,8 @@
 "backup_all_apps" = "Vill du säkerhetskopiera alla programs sparade data?";
 "backup_restore_all_apps" = "Vill du säkerhetskopiera eller återställa alla programs sparade data?";
 "web_site" = "Hemsida";
-"done" = "%s klart!"; /* %s = action */
-"partially_done" = "%s delvis klart"; /* %s = action */
+"done" = "%@ klart!"; /* %@ = action */
+"partially_done" = "%@ delvis klart"; /* %@ = action */
 "backup_done" = "Säkerhetskopiering utförd!";
 "backup_partially_done" = "Säkerhetskopiering delvis utförd";
 "backup_failed" = "Säkerhetskopiering misslyckades";
@@ -49,9 +49,9 @@
 "all_status_restore_done" = "Återställt alla programs data!";
 "all_status_restore_failed" = "Följande programs data kunde inte återställas:";
 "all_status_restore_corrupted" = "Följande programs data återställdes inte då de är korrupta:";
-"1_status_backup_doing" = "Säkerhetskopierar %s sparade data..."; /* %s = app name */
-"1_status_backup_done" = "Säkerhetskopierat %s data!"; /* %s = app name */
-"1_status_backup_failed" = "Programmet %s data kunde inte säkerhetskopieras."; /* %s = app name */
-"1_status_restore_doing" = "Återställer %s sparade data..."; /* %s = app name */
-"1_status_restore_done" = "Återställt %s data!"; /* %s = app name */
-"1_status_restore_failed" = "Programmet %s data kunde inte återställas."; /* %s = app name */
+"1_status_backup_doing" = "Säkerhetskopierar %@ sparade data..."; /* %@ = app name */
+"1_status_backup_done" = "Säkerhetskopierat %@ data!"; /* %@ = app name */
+"1_status_backup_failed" = "Programmet %@ data kunde inte säkerhetskopieras."; /* %@ = app name */
+"1_status_restore_doing" = "Återställer %@ sparade data..."; /* %@ = app name */
+"1_status_restore_done" = "Återställt %@ data!"; /* %@ = app name */
+"1_status_restore_failed" = "Programmet %@ data kunde inte återställas."; /* %@ = app name */

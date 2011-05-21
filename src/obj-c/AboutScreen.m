@@ -46,8 +46,7 @@
   self.gui = gui_;
   self.title = [NSString stringWithFormat:[_ s:@"about_title"], gui.app_name];
   self.delegate = self;
-  self.message = [NSString stringWithContentsOfFile:gui.about_file
-                  encoding:NSUTF8StringEncoding error:nil];
+  self.message = gui.about_text;
   [self addButtonWithTitle:[_ s:@"web_site"]];
   [self setCancelButtonIndex:[self addButtonWithTitle:[_ s:@"ok"]]];
  }

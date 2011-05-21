@@ -77,30 +77,30 @@
  if ([button_text isEqualToString:[_ s:@"ignore"]])   self.action = @"ignore";
  if ([button_text isEqualToString:[_ s:@"restore"]])  self.action = @"restore";
  if ([button_text isEqualToString:[_ s:@"unignore"]]) self.action = @"unignore";
- modal.message=[_ s:[NSString stringWithFormat:@"all_status_%s_doing", action]];
+ modal.message=[_ s:[NSString stringWithFormat:@"all_status_%@_doing", action]];
  [modal show];
  [self doAction];
 }
 
 - (void)doAction {
- NSString *done_title = [_ s:[NSString stringWithFormat:@"%s_done", action]];
- NSString *partial_title = [_ s:[NSString stringWithFormat:@"%s_partially_done",
+ NSString *done_title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
+ NSString *partial_title = [_ s:[NSString stringWithFormat:@"%@_partially_done",
                                  action]];
- NSString *done_text = [_ s:[NSString stringWithFormat:@"all_status_%s_done",
+ NSString *done_text = [_ s:[NSString stringWithFormat:@"all_status_%@_done",
                              action]];
- NSString *failed_title = [_ s:[NSString stringWithFormat:@"%s_failed",action]];
+ NSString *failed_title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
  NSString *failed_text = [_ s:[NSString
-                               stringWithFormat:@"all_status_%s_failed",
+                               stringWithFormat:@"all_status_%@_failed",
                                action]];
  NSString *corrupted_text = [_ s:[NSString
-                                  stringWithFormat:@"all_status_%s_corrupted",
+                                  stringWithFormat:@"all_status_%@_corrupted",
                                   action]];
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
- NSMutableDictionary *r = [gui.appbackup doActionOnAllApps:action];
+ NSDictionary *r = [gui.appbackup doActionOnAllApps:action];
  [gui updateAppList];
- if ([r objectForKey:@"success"]) {
+ if ([[r objectForKey:@"success"] boolValue]) {
   title = done_title;
   text  = done_text;
   //if ([action isEqualToString:@"ignore"] ||
@@ -110,7 +110,7 @@
   // TODO: detect all apps corrupted
   if ([r objectForKey:@"exit_code"] == 0) title = partial_title;
   else                                    title = failed_title;
-  text = [NSString stringWithFormat:@"%s\n\n%s", failed_text,
+  text = [NSString stringWithFormat:@"%@\n\n%@", failed_text,
           [r objectForKey:@"data"]];
  }
  [modal dismissWithClickedButtonIndex:0 animated:YES];

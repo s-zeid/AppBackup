@@ -44,15 +44,15 @@
 @property          BOOL            any_backed_up;
 @property          BOOL            any_corrupted;
 - (id)init;
-- (NSString *)backupTimeTextForApp:(NSMutableDictionary *)app;
-- (NSMutableDictionary *)doActionOnAllApps:(NSString *)action;
-- (NSMutableDictionary *)doAction:(NSString *)action
-                         onApp:(NSMutableDictionary *)app;
+- (NSString *)backupTimeTextForApp:(NSDictionary *)app;
+- (NSDictionary *)doActionOnAllApps:(NSString *)action;
+- (NSDictionary *)doAction:(NSString *)action onApp:(NSDictionary *)app;
 - (void)findApps;
-- (NSMutableDictionary *)runCmd:(NSString *)cmd;
-- (NSMutableDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args;
+- (NSDictionary *)runCmd:(NSString *)cmd;
+- (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args;
 - (NSString *)starbucks;
 - (BOOL)updateAppAtIndex:(NSInteger)index;
+- (BOOL)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)updateBackupInfo;
 - (void)dealloc;
 @end

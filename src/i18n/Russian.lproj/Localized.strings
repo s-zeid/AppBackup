@@ -3,26 +3,26 @@
  * This is a standard *.lproj/Localizable.strings file; see Apple's docs for
  *   more info.
  *
- * Strings containing %s mean that the %s is replaced by something.  This
+ * Strings containing %@ mean that the %@ is replaced by something.  This
  * something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
- * THE %s IF YOU WANT IT TO LOOK RIGHT!!!
+ * THE %@ IF YOU WANT IT TO LOOK RIGHT!!!
  *
  * Thanks to Nikita "ZAY" Peshkov for this translation!
  *
  */
 
-"baktext_yes" = "Last backed up:  %s"; /* %s = Последний BackUp сделан в */
+"baktext_yes" = "Last backed up:  %@"; /* %@ = Последний BackUp сделан в */
 "baktext_no" = "BackUp еще не сделан.";
 "app_corrupted_list" = "Это приложение поврежденно.";
 "app_corrupted_prompt" = "Это приложение поврежденно,по-этому вы не можете сделать BackUp или восстановить его.";
 "all_button" = "Все";
 "all_apps" = "Все приложения";
 "about_button" = "Инфо";
-"about_title" = "Инфо о %s"; /* %s = AppBackup */
+"about_title" = "Инфо о %@"; /* %@ = AppBackup */
 "main_window_title" = "Приложения AppStore";
 "plural_last_letter" = "i.e. """; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
-"singular_possessive" = "%s's"; /* %s = app name */
-"plural_possessive" = "%s'"; /* %s = app name */
+"singular_possessive" = "%@'s"; /* %@ = app name */
+"plural_possessive" = "%@'"; /* %@ = app name */
 "please_wait" = "Пожалуйста подождите...";
 "ok" = "OK";
 "cancel" = "Отменить";
@@ -36,8 +36,8 @@
 "delete_1_app" = "Вы точно хотитие удалит BackUp этого приложения?";
 "delete_all_apps" = "Вы точно хотитие удалить BackUp всех приложений?";
 "web_site" = "Интернет сайт";
-"done" = "%s сделанно!"; /* %s = action */
-"partially_done" = "%s сделанно, но не до конца"; /* %s = action */
+"done" = "%@ сделанно!"; /* %@ = action */
+"partially_done" = "%@ сделанно, но не до конца"; /* %@ = action */
 "backup_done" = "BackUp сделан!";
 "backup_partially_done" = "BackUp сделан, но не до конца";
 "backup_failed" = "Сделать BackUp не удалось";
@@ -59,12 +59,12 @@
 "all_status_delete_done" = "Удаление всех BackUp завершено!";
 "all_status_delete_failed" = "Эти BackUp не могут быть удалены:";
 "all_status_delete_corrupted" = "Эти BackUp не могут быть удалены, т.к. они повреждены:";
-"1_status_backup_doing" = "Backing Up %s..."; /* %s = app name */
-"1_status_backup_done" = "BackUp %s Завершен!"; /* %s = app name */
-"1_status_backup_failed" = "BackUp %s не может быть завершен."; /* %s = app name */
-"1_status_restore_doing" = "Восстаналиваем %s..."; /* %s = app name */
-"1_status_restore_done" = "Восстановление %s завершено!"; /* %s = app name */
-"1_status_restore_failed" = "Восстановление %s не может быть завершено."; /* %s = app name */
-"1_status_delete_doing" = "Удаление %s BackUp..."; /* %s = app name */
-"1_status_delete_done" = "BackUp %s удален!"; /* %s = app name */
-"1_status_delete_failed" = "BackUp %s не может быть удален."; /* %s = app name */
+"1_status_backup_doing" = "Backing Up %@..."; /* %@ = app name */
+"1_status_backup_done" = "BackUp %@ Завершен!"; /* %@ = app name */
+"1_status_backup_failed" = "BackUp %@ не может быть завершен."; /* %@ = app name */
+"1_status_restore_doing" = "Восстаналиваем %@..."; /* %@ = app name */
+"1_status_restore_done" = "Восстановление %@ завершено!"; /* %@ = app name */
+"1_status_restore_failed" = "Восстановление %@ не может быть завершено."; /* %@ = app name */
+"1_status_delete_doing" = "Удаление %@ BackUp..."; /* %@ = app name */
+"1_status_delete_done" = "BackUp %@ удален!"; /* %@ = app name */
+"1_status_delete_failed" = "BackUp %@ не может быть удален."; /* %@ = app name */

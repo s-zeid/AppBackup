@@ -35,16 +35,18 @@
 #import <UIKit/UIKit.h>;
 
 #import "AppBackup.h";
+#import "MBProgressHUD.h";
 
 @interface AppBackupGUI : UIApplication
-           <UIApplicationDelegate, UITableViewDataSource, UITableViewDelegate> {
+           <MBProgressHUDDelegate, UIApplicationDelegate, UITableViewDataSource,
+            UITableViewDelegate> {
  UIWindow    *window;
  UITableView *table;
  UIView      *view;
  AppBackup   *appbackup;
  NSString    *app_name;
  NSString    *app_web_site;
- NSString    *about_file;
+ NSString    *about_text;
 }
 @property (retain) UIWindow    *window;
 @property (retain) UITableView *table;
@@ -52,8 +54,9 @@
 @property (retain) AppBackup   *appbackup;
 @property (retain) NSString    *app_name;
 @property (retain) NSString    *app_web_site;
-@property (retain) NSString    *about_file;
+@property (retain) NSString    *about_text;
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
+- (void)hudWasHidden:(MBProgressHUD *)hud;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
 - (void)showAboutScreen:(id)sender;
 - (void)showAllAppsScreen:(id)sender;
@@ -64,5 +67,6 @@
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
 - (void)updateAppList;
 - (void)updateAppAtIndex:(NSInteger)index;
+- (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)dealloc;
 @end

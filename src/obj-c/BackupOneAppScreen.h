@@ -35,24 +35,31 @@
 
 #import "AppBackup.h";
 #import "AppBackupGUI.h";
+#import "MBProgressHUD.h";
 
-@interface BackupOneAppScreen : UIAlertView <UIAlertViewDelegate> {
+@interface BackupOneAppScreen : NSObject
+           <MBProgressHUDDelegate, UIAlertViewDelegate> {
  AppBackupGUI        *gui;
  NSInteger            index;
- NSMutableDictionary *app;
- UIAlertView         *modal;
- UIAlertView         *alert;
+ NSDictionary        *app;
  NSString            *action;
+ UIAlertView         *action_screen;
+ MBProgressHUD       *hud;
+ UIAlertView         *result_screen;
 }
 @property (retain) AppBackupGUI        *gui;
 @property          NSInteger            index;
-@property (retain) NSMutableDictionary *app;
-@property (retain) UIAlertView         *modal;
-@property (retain) UIAlertView         *alert;
+@property (retain) NSDictionary        *app;
 @property (retain) NSString            *action;
+@property (retain) UIAlertView         *action_screen;
+@property (retain) MBProgressHUD       *hud;
+@property (retain) UIAlertView         *result_screen;
 - (id)initWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_;
++ (id)screenWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_;
 - (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)button_index;
 - (void)doAction;
+- (void)hudWasHidden:(MBProgressHUD *)hud;
+- (void)show;
 - (void)dealloc;
 @end
