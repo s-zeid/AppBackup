@@ -105,15 +105,12 @@
                              action]];
  NSString *failed_text  = [_ s:[NSString stringWithFormat:failed_text_,
                              [app objectForKey:@"friendly"]]];
- NSString *dbg = [_ s:@"starbucks"];
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
  NSDictionary *r = [gui.appbackup doAction:action onApp:app];
- dbg = [_ s:@"bnay"];
  [gui updateAppAtIndex:index
       withDictionary:[[r objectForKey:@"apps"] objectAtIndex:0]];
- dbg = [_ s:@"or"];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = done_title;
   text  = done_text;
@@ -124,7 +121,6 @@
   title = failed_title;
   text  = failed_text;
  }
- dbg = [_ s:@"Emily"];
  [hud hide:YES];
  [hud release];
  if (results_box) {
@@ -178,6 +174,7 @@
  self.gui = nil;
  self.index = 0;
  self.app = nil;
+ self.action = nil;
  self.action_screen = nil;
  self.hud = nil;
  self.result_screen = nil;

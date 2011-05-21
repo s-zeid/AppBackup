@@ -40,9 +40,9 @@
  BOOL any_corrupted;
 }
 @property (retain) NSMutableArray *apps;
-@property          BOOL            all_backed_up;
-@property          BOOL            any_backed_up;
-@property          BOOL            any_corrupted;
+@property (assign) BOOL            all_backed_up;
+@property (assign) BOOL            any_backed_up;
+@property (assign) BOOL            any_corrupted;
 - (id)init;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;

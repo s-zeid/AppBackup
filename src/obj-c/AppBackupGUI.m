@@ -154,9 +154,8 @@
 
 - (void)showAllAppsScreen:(id)sender {
  // Called when you tap the All button
- BackupAllAppsScreen *screen = [[BackupAllAppsScreen alloc] initWithGUI:self];
+ BackupAllAppsScreen *screen = [BackupAllAppsScreen screenWithGUI:self];
  [screen show];
- [screen release];
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {

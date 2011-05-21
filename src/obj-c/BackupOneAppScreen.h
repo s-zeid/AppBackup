@@ -48,7 +48,7 @@
  UIAlertView         *result_screen;
 }
 @property (retain) AppBackupGUI        *gui;
-@property          NSInteger            index;
+@property (assign) NSInteger            index;
 @property (retain) NSDictionary        *app;
 @property (retain) NSString            *action;
 @property (retain) UIAlertView         *action_screen;
