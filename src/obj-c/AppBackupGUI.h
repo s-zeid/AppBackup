@@ -60,6 +60,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
 - (void)showAboutScreen:(id)sender;
 - (void)showAllAppsScreen:(id)sender;
+- (void)showBackupOneAppScreenForAppAtIndex:(NSInteger)index;
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
 - (UITableViewCell *)tableView:(UITableView *)tv
                      cellForRowAtIndexPath:(NSIndexPath *)ip;

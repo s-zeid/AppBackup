@@ -45,9 +45,8 @@
 @synthesize index;
 @synthesize app;
 @synthesize action;
-@synthesize action_screen;
+@synthesize screen;
 @synthesize hud;
-@synthesize result_screen;
 
 - (id)initWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_ {
  self = [super init];
@@ -59,15 +58,11 @@
  return self;
 }
 
-+ (id)screenWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_ {
- BackupOneAppScreen *s = [[self alloc] initWithGUI:gui_ appAtIndex:index_];
- return s;
-}
-
-- (void)alertView:(UIAlertView *)sheet
+- (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)button_index {
  // What to do when you close the backup one app prompt
- NSString *button_text = [sheet buttonTitleAtIndex:button_index];
+ NSString *button_text = [alertView buttonTitleAtIndex:button_index];
+ [screen autorelease];
  if ([button_text isEqualToString:[_ s:@"cancel"]] ||
      [button_text isEqualToString:[_ s:@"ok"]]) {
   [self autorelease];
@@ -124,12 +119,12 @@
  [hud hide:YES];
  [hud release];
  if (results_box) {
-  self.result_screen = [[[UIAlertView alloc] init] autorelease];
-  result_screen.delegate = self;
-  result_screen.title = title;
-  result_screen.message = text;
-  [result_screen addButtonWithTitle:[_ s:@"ok"]];
-  [result_screen show];
+  self.screen = [[UIAlertView alloc] init];
+  screen.delegate = self;
+  screen.title = title;
+  screen.message = text;
+  [screen addButtonWithTitle:[_ s:@"ok"]];
+  [screen show];
  }
 }
 
@@ -138,9 +133,9 @@
 }
 
 - (void)show {
- self.action_screen = [[UIAlertView alloc] init];
- action_screen.title = [app objectForKey:@"friendly"];
- action_screen.delegate = self;
+ self.screen = [[UIAlertView alloc] init];
+ screen.title = [app objectForKey:@"friendly"];
+ screen.delegate = self;
  NSString *prompt = [app objectForKey:@"bundle"];
  if ([prompt length] > 30)
   prompt = [[prompt substringWithRange:NSMakeRange(0, 30)]
@@ -154,20 +149,21 @@
  } else if ([[app objectForKey:@"ignored"] boolValue]) {
   prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
             [_ s:@"app_ignored_prompt"]];
-  [action_screen addButtonWithTitle:[_ s:@"unignore"]];
+  [screen addButtonWithTitle:[_ s:@"unignore"]];
  } else if ([[app objectForKey:@"backup_time"] length]) {
-  [action_screen addButtonWithTitle:[_ s:@"backup"]];
-  [action_screen addButtonWithTitle:[_ s:@"restore"]];
-  [action_screen addButtonWithTitle:[_ s:@"ignore"]];
-  [action_screen addButtonWithTitle:[_ s:@"delete"]];
+  [screen addButtonWithTitle:[_ s:@"backup"]];
+  [screen addButtonWithTitle:[_ s:@"restore"]];
+  [screen addButtonWithTitle:[_ s:@"ignore"]];
+  [screen addButtonWithTitle:[_ s:@"delete"]];
  } else {
-  [action_screen addButtonWithTitle:[_ s:@"backup"]];
-  [action_screen addButtonWithTitle:[_ s:@"ignore"]];
+  [screen addButtonWithTitle:[_ s:@"backup"]];
+  [screen addButtonWithTitle:[_ s:@"ignore"]];
  }
- action_screen.message = prompt;
- NSInteger cancel_btn = [action_screen addButtonWithTitle:[_ s:cancel_string]];
- [action_screen setCancelButtonIndex:cancel_btn];
- [action_screen show];
+ screen.message = prompt;
+ NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:cancel_string]];
+ [screen setCancelButtonIndex:cancel_btn];
+ [screen show];
+ [self retain];
 }
 
 - (void)dealloc {
@@ -175,9 +171,8 @@
  self.index = 0;
  self.app = nil;
  self.action = nil;
- self.action_screen = nil;
+ self.screen = nil;
  self.hud = nil;
- self.result_screen = nil;
  [super dealloc];
 }
 @end

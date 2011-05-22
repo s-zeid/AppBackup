@@ -43,20 +43,17 @@
  NSInteger            index;
  NSDictionary        *app;
  NSString            *action;
- UIAlertView         *action_screen;
+ UIAlertView         *screen;
  MBProgressHUD       *hud;
- UIAlertView         *result_screen;
 }
 @property (retain) AppBackupGUI        *gui;
 @property (assign) NSInteger            index;
 @property (retain) NSDictionary        *app;
 @property (retain) NSString            *action;
-@property (retain) UIAlertView         *action_screen;
+@property (retain) UIAlertView         *screen;
 @property (retain) MBProgressHUD       *hud;
-@property (retain) UIAlertView         *result_screen;
 - (id)initWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_;
-+ (id)screenWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_;
-- (void)alertView:(UIAlertView *)sheet
+- (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)button_index;
 - (void)doAction;
 - (void)hudWasHidden:(MBProgressHUD *)hud;

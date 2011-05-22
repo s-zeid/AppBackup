@@ -38,12 +38,15 @@
 
 #import "AboutScreen.h";
 
-@interface AboutScreen : UIAlertView <UIAlertViewDelegate> {
+@interface AboutScreen : NSObject <UIAlertViewDelegate> {
  AppBackupGUI *gui;
+ UIAlertView  *screen;
 }
 @property (retain) AppBackupGUI *gui;
+@property (retain) UIAlertView  *screen;
 - (id)initWithGUI:(AppBackupGUI *)gui_;
 - (void)alertView:(UIAlertView *)sheet
         didDismissWithButtonIndex:(NSInteger)index;
+- (void)show;
 - (void)dealloc;
 @end

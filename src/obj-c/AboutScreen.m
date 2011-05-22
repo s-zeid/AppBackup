@@ -40,15 +40,11 @@
 
 @implementation AboutScreen
 @synthesize gui;
+@synthesize screen;
 - (id)initWithGUI:(AppBackupGUI *)gui_ {
  self = [super init];
  if (self) {
   self.gui = gui_;
-  self.title = [NSString stringWithFormat:[_ s:@"about_title"], gui.app_name];
-  self.delegate = self;
-  self.message = gui.about_text;
-  [self addButtonWithTitle:[_ s:@"web_site"]];
-  [self setCancelButtonIndex:[self addButtonWithTitle:[_ s:@"ok"]]];
  }
  return self;
 }
@@ -60,7 +56,17 @@
   NSURL *url = [NSURL URLWithString:gui.app_web_site];
   [[UIApplication sharedApplication] openURL:url];
   [url release];
+  [self autorelease];
  }
+}
+
+- (void)show {
+ screen.title = [NSString stringWithFormat:[_ s:@"about_title"], gui.app_name];
+ screen.delegate = self;
+ screen.message = gui.about_text;
+ [screen addButtonWithTitle:[_ s:@"web_site"]];
+ [screen setCancelButtonIndex:[screen addButtonWithTitle:[_ s:@"ok"]]];
+ [self retain];
 }
 
 - (void)dealloc {

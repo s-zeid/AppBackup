@@ -41,18 +41,15 @@
            <MBProgressHUDDelegate, UIAlertViewDelegate> {
  AppBackupGUI        *gui;
  NSString            *action;
- UIAlertView         *action_screen;
+ UIAlertView         *screen;
  MBProgressHUD       *hud;
- UIAlertView         *result_screen;
 }
 @property (retain) AppBackupGUI        *gui;
 @property (retain) NSString            *action;
-@property (retain) UIAlertView         *action_screen;
+@property (retain) UIAlertView         *screen;
 @property (retain) MBProgressHUD       *hud;
-@property (retain) UIAlertView         *result_screen;
 - (id)initWithGUI:(AppBackupGUI *)gui_;
-+ (id)screenWithGUI:(AppBackupGUI *)gui_;
-- (void)alertView:(UIAlertView *)sheet
+- (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)index;
 - (void)doAction;
 - (void)hudWasHidden:(MBProgressHUD *)hud;

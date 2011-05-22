@@ -43,9 +43,8 @@
 @implementation BackupAllAppsScreen
 @synthesize gui;
 @synthesize action;
-@synthesize action_screen;
+@synthesize screen;
 @synthesize hud;
-@synthesize result_screen;
 
 - (id)initWithGUI:(AppBackupGUI *)gui_ {
  self = [super init];
@@ -55,15 +54,11 @@
  return self;
 }
 
-+ (id)screenWithGUI:(AppBackupGUI *)gui_ {
- BackupAllAppsScreen *s = [[self alloc] initWithGUI:gui_];
- return s;
-}
-
-- (void)alertView:(UIAlertView *)sheet
+- (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)index {
  // What to do when you close the backup all apps prompt
- NSString *button_text = [sheet buttonTitleAtIndex:index];
+ NSString *button_text = [alertView buttonTitleAtIndex:index];
+ [screen autorelease];
  if ([button_text isEqualToString:[_ s:@"cancel"]] ||
      [button_text isEqualToString:[_ s:@"ok"]]) {
   [self autorelease];
@@ -123,12 +118,11 @@
  [hud hide:YES];
  [hud release];
  if (results_box) {
-  self.result_screen = [[[UIAlertView alloc] init] autorelease];
-  result_screen.title = title;
-  result_screen.message = text;
-  [result_screen addButtonWithTitle:[_ s:@"ok"]];
-  [result_screen show];
-  [result_screen release];
+  self.screen = [[UIAlertView alloc] init];
+  screen.title = title;
+  screen.message = text;
+  [screen addButtonWithTitle:[_ s:@"ok"]];
+  [screen show];
  }
 }
 
@@ -137,28 +131,28 @@
 }
 
 - (void)show {
- self.action_screen = [[UIAlertView alloc] init];
- action_screen.title = [_ s:@"all_apps"];
- action_screen.delegate = self;
+ self.screen = [[UIAlertView alloc] init];
+ screen.title = [_ s:@"all_apps"];
+ screen.delegate = self;
  NSString *prompt;
- [action_screen addButtonWithTitle:[_ s:@"backup"]];
+ [screen addButtonWithTitle:[_ s:@"backup"]];
  if (gui.appbackup.any_backed_up) {
   prompt = [_ s:@"backup_restore_all_apps"];
-  [action_screen addButtonWithTitle:[_ s:@"restore"]];
-  [action_screen addButtonWithTitle:[_ s:@"delete"]];
+  [screen addButtonWithTitle:[_ s:@"restore"]];
+  [screen addButtonWithTitle:[_ s:@"delete"]];
  } else prompt = [_ s:@"backup_all_apps"];
- action_screen.message = prompt;
- NSInteger cancel_btn = [action_screen addButtonWithTitle:[_ s:@"cancel"]];
- [action_screen setCancelButtonIndex:cancel_btn];
- [action_screen show];
+ screen.message = prompt;
+ NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:@"cancel"]];
+ [screen setCancelButtonIndex:cancel_btn];
+ [screen show];
+ [self retain];
 }
 
 - (void)dealloc {
  self.gui = nil;
  self.action = nil;
- self.action_screen = nil;
+ self.screen = nil;
  self.hud = nil;
- self.result_screen = nil;
  [super dealloc];
 }
 @end

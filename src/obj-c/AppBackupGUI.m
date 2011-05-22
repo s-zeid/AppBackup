@@ -154,8 +154,17 @@
 
 - (void)showAllAppsScreen:(id)sender {
  // Called when you tap the All button
- BackupAllAppsScreen *screen = [BackupAllAppsScreen screenWithGUI:self];
+ BackupAllAppsScreen *screen = [[BackupAllAppsScreen alloc] initWithGUI:self];
  [screen show];
+ [screen release];
+}
+
+- (void)showBackupOneAppScreenForAppAtIndex:(NSInteger)index {
+ // Called from tableView:didSelectRowAtIndexPath:
+ BackupOneAppScreen *screen = [[BackupOneAppScreen alloc] initWithGUI:self
+                               appAtIndex:index];
+ [screen show];
+ [screen release];
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
@@ -189,10 +198,9 @@
 }
 
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
+ // Called when a table row is selected
  [tv deselectRowAtIndexPath:ip animated:YES];
- BackupOneAppScreen *screen = [BackupOneAppScreen screenWithGUI:self
-                               appAtIndex:ip.row];
- [screen show];
+ [self showBackupOneAppScreenForAppAtIndex:ip.row];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id {
