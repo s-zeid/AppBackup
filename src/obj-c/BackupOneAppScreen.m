@@ -116,15 +116,18 @@
   title = failed_title;
   text  = failed_text;
  }
- [hud hide:YES];
- [hud release];
  if (results_box) {
   self.screen = [[UIAlertView alloc] init];
   screen.delegate = self;
   screen.title = title;
   screen.message = text;
   [screen addButtonWithTitle:[_ s:@"ok"]];
+  [hud hide:YES];
+  [hud release];
   [screen show];
+ } else {
+  [hud hide:YES];
+  [hud release];
  }
 }
 

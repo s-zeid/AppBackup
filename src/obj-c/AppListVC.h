@@ -38,7 +38,7 @@
 #import "MBProgressHUD.h";
 
 @interface AppListVC : UIViewController
-           <MBProgressHUDDelegate, UITableViewDataSource, UITableViewDelegate> {
+           <UITableViewDataSource, UITableViewDelegate> {
  UITableView *table;
  AppBackup   *appbackup;
  NSString    *app_name;
@@ -52,7 +52,6 @@
 @property (retain) NSString    *about_text;
 - (void)loadView;
 - (void)viewDidAppear:(BOOL)animated;
-- (void)hudWasHidden:(MBProgressHUD *)hud;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
 - (void)showAboutScreen:(id)sender;
 - (void)showAllAppsScreen:(id)sender;
@@ -62,7 +61,8 @@
                      cellForRowAtIndexPath:(NSIndexPath *)ip;
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
-- (void)updateAppList;
+- (void)updateAppListUsingHUD:(BOOL)useHUD;
+- (void)_updateAppListCallback:(MBProgressHUD *)hud;
 - (void)updateAppAtIndex:(NSInteger)index;
 - (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)dealloc;

@@ -101,7 +101,7 @@
  NSString *text;
  BOOL      results_box  = YES;
  NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
- [vc updateAppList];
+ [vc updateAppListUsingHUD:NO];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = done_title;
   text  = done_text;
@@ -115,14 +115,18 @@
   text = [NSString stringWithFormat:@"%@\n\n%@", failed_text,
           [r objectForKey:@"data"]];
  }
- [hud hide:YES];
- [hud release];
  if (results_box) {
   self.screen = [[UIAlertView alloc] init];
   screen.title = title;
   screen.message = text;
   [screen addButtonWithTitle:[_ s:@"ok"]];
+  [hud hide:YES];
+  [hud release];
   [screen show];
+ }
+ else {
+  [hud hide:YES];
+  [hud release];
  }
 }
 

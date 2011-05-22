@@ -124,12 +124,8 @@
 
 - (void)viewDidAppear:(BOOL)animated {
  [table reloadData];
- [self updateAppList];
+ [self updateAppListUsingHUD:YES];
  [super viewDidAppear:animated];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
- [hud removeFromSuperview];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv {
@@ -229,19 +225,21 @@
  return cell;
 }
 
-- (void)updateAppList {
- MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
- hud.delegate = self;
- hud.labelText = [_ s:@"please_wait"];
- [self.view addSubview:hud];
- [hud showWhileExecuting:@selector(_updateAppListCallback) onTarget:self
-      withObject:nil animated:YES];
- [hud release];
+- (void)updateAppListUsingHUD:(BOOL)useHUD {
+ if (useHUD) {
+  MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
+  hud.labelText = [_ s:@"please_wait"];
+  [self.view addSubview:hud];
+  [hud showWhileExecuting:@selector(_updateAppListCallback:) onTarget:self
+       withObject:hud animated:YES];
+  [hud release];
+ } else [self _updateAppListCallback:nil];
 }
 
-- (void)_updateAppListCallback {
+- (void)_updateAppListCallback:(MBProgressHUD *)hud {
  [appbackup findApps];
  [table reloadData];
+ if (hud) [hud removeFromSuperview];
 }
 
 - (void)updateAppAtIndex:(NSInteger)index {
