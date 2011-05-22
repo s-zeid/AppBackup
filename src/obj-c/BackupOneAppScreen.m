@@ -34,26 +34,26 @@
 #import <UIKit/UIKit.h>;
 
 #import "AppBackup.h";
-#import "AppBackupGUI.h";
+#import "AppListVC.h";
 #import "MBProgressHUD.h";
 #import "util.h";
 
 #import "BackupOneAppScreen.h";
 
 @implementation BackupOneAppScreen
-@synthesize gui;
+@synthesize vc;
 @synthesize index;
 @synthesize app;
 @synthesize action;
 @synthesize screen;
 @synthesize hud;
 
-- (id)initWithGUI:(AppBackupGUI *)gui_ appAtIndex:(NSInteger)index_ {
+- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_ {
  self = [super init];
  if (self) {
-  self.gui = gui_;
+  self.vc = vc_;
   self.index = index_;
-  self.app = [gui.appbackup.apps objectAtIndex:index];
+  self.app = [vc.appbackup.apps objectAtIndex:index];
  }
  return self;
 }
@@ -79,12 +79,12 @@
  if ([button_text isEqualToString:[_ s:@"unignore"]])
   self.action = @"unignore";
  NSString *text_=[_ s:[NSString stringWithFormat:@"1_status_%@_doing", action]];
- self.hud = [[MBProgressHUD alloc] initWithView:gui.view];
+ self.hud = [[MBProgressHUD alloc] initWithView:vc.view];
  hud.delegate = self;
  hud.labelText = [_ s:@"please_wait"];
  hud.detailsLabelText = [NSString stringWithFormat:text_,
                          [app objectForKey:@"friendly"]];
- [gui.view addSubview:hud];
+ [vc.view addSubview:hud];
  [hud showWhileExecuting:@selector(doAction) onTarget:self withObject:nil
       animated:YES];
 }
@@ -103,8 +103,8 @@
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
- NSDictionary *r = [gui.appbackup doAction:action onApp:app];
- [gui updateAppAtIndex:index
+ NSDictionary *r = [vc.appbackup doAction:action onApp:app];
+ [vc updateAppAtIndex:index
       withDictionary:[[r objectForKey:@"apps"] objectAtIndex:0]];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = done_title;
@@ -167,7 +167,7 @@
 }
 
 - (void)dealloc {
- self.gui = nil;
+ self.vc = nil;
  self.index = 0;
  self.app = nil;
  self.action = nil;

@@ -31,43 +31,22 @@
 
 // Main screen (header)
 
-#import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;
 
-#import "AppBackup.h";
-#import "MBProgressHUD.h";
-
-@interface AppBackupGUI : UIApplication
-           <MBProgressHUDDelegate, UIApplicationDelegate, UITableViewDataSource,
-            UITableViewDelegate> {
- UIWindow    *window;
- UITableView *table;
- UIView      *view;
- AppBackup   *appbackup;
- NSString    *app_name;
- NSString    *app_web_site;
- NSString    *about_text;
+@interface AppBackupGUI : UIApplication <UIApplicationDelegate> {
+ UIWindow         *window;
+ UIViewController *vc;
+ UIView           *defaultImageView;
+ BOOL              shouldShowAppList;
 }
-@property (retain) UIWindow    *window;
-@property (retain) UITableView *table;
-@property (retain) UIView      *view;
-@property (retain) AppBackup   *appbackup;
-@property (retain) NSString    *app_name;
-@property (retain) NSString    *app_web_site;
-@property (retain) NSString    *about_text;
+@property (retain) UIWindow         *window;
+@property (retain) UIViewController *vc;
+@property (retain) UIView           *defaultImageView;
+@property (assign) BOOL              shouldShowAppList;
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
-- (void)hudWasHidden:(MBProgressHUD *)hud;
-- (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
-- (void)showAboutScreen:(id)sender;
-- (void)showAllAppsScreen:(id)sender;
-- (void)showBackupOneAppScreenForAppAtIndex:(NSInteger)index;
-- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
-- (UITableViewCell *)tableView:(UITableView *)tv
-                     cellForRowAtIndexPath:(NSIndexPath *)ip;
-- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
-- (void)updateAppList;
-- (void)updateAppAtIndex:(NSInteger)index;
-- (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url;
+- (void)hideDefaultImageView;
+- (void)showAppList;
+- (void)showTestScreen;
 - (void)dealloc;
 @end

@@ -29,21 +29,17 @@
  * 
  */
 
-// Main screen
+// Test screen (header)
 
 #import <UIKit/UIKit.h>;
 
-@interface TestWindow : UIApplication
-           <UIApplicationDelegate, UITableViewDataSource, UITableViewDelegate> {
- UIWindow    *window;
+@interface TestScreenVC : UIViewController
+           <UITableViewDataSource, UITableViewDelegate> {
  UITableView *table;
- UIView      *view;
 }
-@property (retain) UIWindow    *window;
 @property (retain) UITableView *table;
-@property (retain) UIView      *view;
-- (void)application:(UIApplication *)application
-        didFinishLaunchingWithOptions:(NSDictionary *)options;
+- (void)loadView;
+- (void)viewDidAppear:(BOOL)animated;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
 - (UITableViewCell *)tableView:(UITableView *)tv

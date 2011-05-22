@@ -29,24 +29,41 @@
  * 
  */
 
-// About screen (header)
+// App list view controller (header)
 
+#import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;
 
-#import "AppListVC.h";
-#import "util.h";
+#import "AppBackup.h";
+#import "MBProgressHUD.h";
 
-#import "AboutScreen.h";
-
-@interface AboutScreen : NSObject <UIAlertViewDelegate> {
- AppListVC    *vc;
- UIAlertView  *screen;
+@interface AppListVC : UIViewController
+           <MBProgressHUDDelegate, UITableViewDataSource, UITableViewDelegate> {
+ UITableView *table;
+ AppBackup   *appbackup;
+ NSString    *app_name;
+ NSString    *app_web_site;
+ NSString    *about_text;
 }
-@property (retain) AppListVC    *vc;
-@property (retain) UIAlertView  *screen;
-- (id)initWithVC:(AppListVC *)vc_;
-- (void)alertView:(UIAlertView *)sheet
-        didDismissWithButtonIndex:(NSInteger)index;
-- (void)show;
+@property (retain) UITableView *table;
+@property (retain) AppBackup   *appbackup;
+@property (retain) NSString    *app_name;
+@property (retain) NSString    *app_web_site;
+@property (retain) NSString    *about_text;
+- (void)loadView;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)hudWasHidden:(MBProgressHUD *)hud;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
+- (void)showAboutScreen:(id)sender;
+- (void)showAllAppsScreen:(id)sender;
+- (void)showBackupOneAppScreenForAppAtIndex:(NSInteger)index;
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
+- (UITableViewCell *)tableView:(UITableView *)tv
+                     cellForRowAtIndexPath:(NSIndexPath *)ip;
+- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
+- (void)updateAppList;
+- (void)updateAppAtIndex:(NSInteger)index;
+- (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)dealloc;
 @end

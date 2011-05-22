@@ -29,32 +29,24 @@
  * 
  */
 
-// Main screen
+// Test screen
 
-#include <stdio.h>
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;
 
-#import "TestWindow.h";
+#import "TestScreenVC.h";
 #import "util.h";
 
 #define NAVBAR_HEIGHT 44
 
-@implementation TestWindow
-@synthesize window;
-@synthesize view;
+@implementation TestScreenVC
 @synthesize table;
-- (void)application:(UIApplication *)application
-        didFinishLaunchingWithOptions:(NSDictionary *)options {
- printf("entered applicationDidFinishLaunching:\n");
+- (void)loadView {
  // Set up window
- printf("making window\n");
- self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
  CGRect bounds = [[UIScreen mainScreen] applicationFrame];
  self.view = [[UIView alloc] initWithFrame:bounds];
- window.backgroundColor = [UIColor whiteColor];
- [window addSubview:view];
- printf("made window\n");
+ UIView *view = self.view;
+ view.backgroundColor = [UIColor whiteColor];
  // Make some frames
  struct CGRect frame;
  // Make the title bar
@@ -75,8 +67,11 @@
  table.dataSource = self;
  table.delegate = self;
  [view addSubview:table];
- [window makeKeyAndVisible];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
  [table reloadData];
+ [super viewDidAppear:animated];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv {
@@ -117,7 +112,7 @@
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id {
- NSInteger width = [[self window] bounds].size.width;
+ NSInteger width = [self.view bounds].size.width;
  UITableViewCell *cell = [[[UITableViewCell alloc]
                            initWithStyle:UITableViewCellStyleDefault
                            reuseIdentifier:cell_id] autorelease];
@@ -134,8 +129,6 @@
 }
 
 - (void)dealloc {
- self.window = nil;
- self.view = nil;
  self.table = nil;
  [super dealloc];
 }

@@ -34,22 +34,22 @@
 #import <UIKit/UIKit.h>;
 
 #import "AppBackup.h";
-#import "AppBackupGUI.h";
+#import "AppListVC.h";
 #import "MBProgressHUD.h";
 #import "util.h";
 
 #import "BackupAllAppsScreen.h";
 
 @implementation BackupAllAppsScreen
-@synthesize gui;
+@synthesize vc;
 @synthesize action;
 @synthesize screen;
 @synthesize hud;
 
-- (id)initWithGUI:(AppBackupGUI *)gui_ {
+- (id)initWithVC:(AppListVC *)vc_ {
  self = [super init];
  if (self) {
-  self.gui = gui_;
+  self.vc = vc_;
  }
  return self;
 }
@@ -74,12 +74,12 @@
   self.action = @"restore";
  if ([button_text isEqualToString:[_ s:@"unignore"]])
   self.action = @"unignore";
- self.hud = [[MBProgressHUD alloc] initWithView:gui.view];
+ self.hud = [[MBProgressHUD alloc] initWithView:vc.view];
  hud.delegate = self;
  hud.labelText = [_ s:@"please_wait"];
  hud.detailsLabelText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
                                                         action]];
- [gui.view addSubview:hud];
+ [vc.view addSubview:hud];
  [hud showWhileExecuting:@selector(doAction) onTarget:self withObject:nil
       animated:YES];
 }
@@ -100,8 +100,8 @@
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
- NSDictionary *r = [gui.appbackup doActionOnAllApps:action];
- [gui updateAppList];
+ NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
+ [vc updateAppList];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = done_title;
   text  = done_text;
@@ -136,7 +136,7 @@
  screen.delegate = self;
  NSString *prompt;
  [screen addButtonWithTitle:[_ s:@"backup"]];
- if (gui.appbackup.any_backed_up) {
+ if (vc.appbackup.any_backed_up) {
   prompt = [_ s:@"backup_restore_all_apps"];
   [screen addButtonWithTitle:[_ s:@"restore"]];
   [screen addButtonWithTitle:[_ s:@"delete"]];
@@ -149,7 +149,7 @@
 }
 
 - (void)dealloc {
- self.gui = nil;
+ self.vc = nil;
  self.action = nil;
  self.screen = nil;
  self.hud = nil;

@@ -33,27 +33,28 @@
 
 #import <UIKit/UIKit.h>;
 
-#import "AppBackupGUI.h";
+#import "AppListVC.h";
 #import "util.h";
 
 #import "AboutScreen.h";
 
 @implementation AboutScreen
-@synthesize gui;
+@synthesize vc;
 @synthesize screen;
-- (id)initWithGUI:(AppBackupGUI *)gui_ {
+- (id)initWithVC:(AppListVC *)vc_ {
  self = [super init];
  if (self) {
-  self.gui = gui_;
+  self.vc = vc_;
  }
  return self;
 }
 
-- (void)alertView:(UIAlertView *)sheet
+- (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)index {
- NSString *action = [sheet buttonTitleAtIndex:index];
+ NSString *action = [alertView buttonTitleAtIndex:index];
+ [screen autorelease];
  if ([action isEqualToString:[_ s:@"web_site"]]) {
-  NSURL *url = [NSURL URLWithString:gui.app_web_site];
+  NSURL *url = [NSURL URLWithString:vc.app_web_site];
   [[UIApplication sharedApplication] openURL:url];
   [url release];
   [self autorelease];
@@ -61,16 +62,18 @@
 }
 
 - (void)show {
- screen.title = [NSString stringWithFormat:[_ s:@"about_title"], gui.app_name];
+ self.screen = [[UIAlertView alloc] init];
+ screen.title = [NSString stringWithFormat:[_ s:@"about_title"], vc.app_name];
  screen.delegate = self;
- screen.message = gui.about_text;
+ screen.message = vc.about_text;
  [screen addButtonWithTitle:[_ s:@"web_site"]];
  [screen setCancelButtonIndex:[screen addButtonWithTitle:[_ s:@"ok"]]];
+ [screen show];
  [self retain];
 }
 
 - (void)dealloc {
- self.gui = nil;
+ self.vc = nil;
  [super dealloc];
 }
 @end

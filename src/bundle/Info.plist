@@ -24,5 +24,16 @@ Computer//DTD PLIST 1.0//EN"
   <string>2.0</string>
   <key>UIApplicationExitsOnSuspend</key>
   <true/>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key>
+      <string>us.srwz.appbackup</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>appbackup</string>
+      </array>
+    </dict>
+  </array>
  </dict>
 </plist>
