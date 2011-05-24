@@ -4,8 +4,8 @@
 # arm-apple-darwin9-gcc
 # To disable compiling FixPermissions, leave blank or use a value that isn't an
 # executable file
-CC=/home/scottywz/opt/iphone-toolchain/pre/bin/arm-apple-darwin9-gcc
+CC=/path/to/iphone-toolchain/pre/bin/arm-apple-darwin9-gcc
 
 # Path to move old .deb files to; leave blank to leave them alone
 # Set to /dev/null to delete old .deb files
-OLD_DEBS="../AppBackup - Non-source Files/Old versions"
+OLD_DEBS=

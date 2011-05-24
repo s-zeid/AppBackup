@@ -29,38 +29,16 @@
  * 
  */
 
-// About screen
+// About screen (header)
 
-@class _AboutScreen : UIActionSheet {}
- // What to do when you click the "About" button
- - init {
-  return [super init];
- }
-@end
-_AboutScreen.prototype.setup = function(gui) {
- if (this) {
-  [this setTitle:sprintf(_("about_title"), PRODUCT.name)];
-  [this setDelegate:[new _AboutScreenDelegate init].setup(gui)];
-  [this setBodyText:read(bundled_file_path("about.txt"))];
-  [this addButtonWithTitle:_("web_site")];
-  [this setCancelButtonIndex:[this addButtonWithTitle:_("ok")]];
- }
- return this;
+#import <UIKit/UIKit.h>;
+
+@interface AboutScreenVC : UIViewController {
+ UIWebView *webView;
 }
-
-@class _AboutScreenDelegate : NSObject <UIActionSheetDelegate> {}
- // What to do when you close the about box
- - actionSheet:sheet didDismissWithButtonIndex:index {
-  var action = [sheet buttonTitleAtIndex:index];
-  if (action == _("web_site")) {
-   url = [new NSURL initWithString:PRODUCT.web_site];
-   [[UIApplication sharedApplication] openURL:url];
-  }
- }
+@property (retain) UIWebView *webView;
+- (void)loadView;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)goToWebSite:(id)sender;
+- (void)dealloc;
 @end
-_AboutScreenDelegate.prototype.setup = function(gui) {
- if (this) this.gui = gui;
- return this;
-}
-
-var AboutScreen = _AboutScreen;

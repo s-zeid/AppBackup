@@ -35,14 +35,14 @@
 
 @interface AppBackup : NSObject {
  NSMutableArray *apps;
- BOOL all_backed_up;
- BOOL any_backed_up;
- BOOL any_corrupted;
+ BOOL allBackedUp;
+ BOOL anyBackedUp;
+ BOOL anyCorrupted;
 }
 @property (retain) NSMutableArray *apps;
-@property (assign) BOOL            all_backed_up;
-@property (assign) BOOL            any_backed_up;
-@property (assign) BOOL            any_corrupted;
+@property (assign) BOOL            allBackedUp;
+@property (assign) BOOL            anyBackedUp;
+@property (assign) BOOL            anyCorrupted;
 - (id)init;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;

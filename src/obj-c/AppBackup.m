@@ -38,17 +38,17 @@
 
 @implementation AppBackup
 @synthesize apps;
-@synthesize all_backed_up;
-@synthesize any_backed_up;
-@synthesize any_corrupted;
+@synthesize allBackedUp;
+@synthesize anyBackedUp;
+@synthesize anyCorrupted;
 
 - (id)init {
  self = [super init];
  if (self) {
   self.apps = [NSMutableArray array];
-  self.all_backed_up = NO;
-  self.any_backed_up = NO;
-  self.any_corrupted = NO;
+  self.allBackedUp = NO;
+  self.anyBackedUp = NO;
+  self.anyCorrupted = NO;
  }
  return self;
 }
@@ -151,9 +151,9 @@
 }
 
 - (void)updateBackupInfo {
- self.all_backed_up = ([apps count]) ? YES : NO;
- self.any_backed_up = NO;
- self.any_corrupted = NO;
+ self.allBackedUp = ([apps count]) ? YES : NO;
+ self.anyBackedUp = NO;
+ self.anyCorrupted = NO;
  NSDictionary *app;
  int i;
  for (i = 0; i < [apps count]; i++) {
@@ -161,17 +161,17 @@
   if ([[app objectForKey:@"useable"] boolValue]) {
    if ([[app objectForKey:@"backup_time"] length] &&
        ![[app objectForKey:@"ignored"] boolValue])
-    self.any_backed_up = YES;
-   else self.all_backed_up = NO;
-  } else self.any_corrupted = YES;
+    self.anyBackedUp = YES;
+   else self.allBackedUp = NO;
+  } else self.anyCorrupted = YES;
  }
 }
 
 - (void)dealloc {
  self.apps = nil;
- self.all_backed_up = NO;
- self.any_backed_up = NO;
- self.any_corrupted = NO;
+ self.allBackedUp = NO;
+ self.anyBackedUp = NO;
+ self.anyCorrupted = NO;
  [super dealloc];
 }
 @end

@@ -34,19 +34,14 @@
 #import <UIKit/UIKit.h>;
 
 @interface AppBackupGUI : UIApplication <UIApplicationDelegate> {
- UIWindow         *window;
- UIViewController *vc;
- UIView           *defaultImageView;
- BOOL              shouldShowAppList;
+ UIWindow               *window;
+ UINavigationController *navigationController;
 }
-@property (retain) UIWindow         *window;
-@property (retain) UIViewController *vc;
-@property (retain) UIView           *defaultImageView;
-@property (assign) BOOL              shouldShowAppList;
+@property (retain) UIWindow               *window;
+@property (retain) UINavigationController *navigationController;
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url;
-- (void)hideDefaultImageView;
-- (void)showAppList;
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl;
+- (void)showAboutScreen;
 - (void)showTestScreen;
 - (void)dealloc;
 @end

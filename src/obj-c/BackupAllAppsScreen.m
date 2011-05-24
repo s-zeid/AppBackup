@@ -55,31 +55,32 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView
-        didDismissWithButtonIndex:(NSInteger)index {
+        didDismissWithButtonIndex:(NSInteger)buttonIndex {
  // What to do when you close the backup all apps prompt
- NSString *button_text = [alertView buttonTitleAtIndex:index];
+ NSString *buttonText = [alertView buttonTitleAtIndex:buttonIndex];
  [screen autorelease];
- if ([button_text isEqualToString:[_ s:@"cancel"]] ||
-     [button_text isEqualToString:[_ s:@"ok"]]) {
+ if ([buttonText isEqualToString:[_ s:@"cancel"]] ||
+     [buttonText isEqualToString:[_ s:@"ok"]]) {
   [self autorelease];
   return;
  }
- if ([button_text isEqualToString:[_ s:@"backup"]])
+ if ([buttonText isEqualToString:[_ s:@"backup"]])
   self.action = @"backup";
- if ([button_text isEqualToString:[_ s:@"delete"]])
+ if ([buttonText isEqualToString:[_ s:@"delete"]])
   self.action = @"delete";
- if ([button_text isEqualToString:[_ s:@"ignore"]])
+ if ([buttonText isEqualToString:[_ s:@"ignore"]])
   self.action = @"ignore";
- if ([button_text isEqualToString:[_ s:@"restore"]])
+ if ([buttonText isEqualToString:[_ s:@"restore"]])
   self.action = @"restore";
- if ([button_text isEqualToString:[_ s:@"unignore"]])
+ if ([buttonText isEqualToString:[_ s:@"unignore"]])
   self.action = @"unignore";
- self.hud = [[MBProgressHUD alloc] initWithView:vc.view];
+ self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
  hud.delegate = self;
+ hud.yOffset -= vc.navigationController.navigationBar.frame.size.height;
  hud.labelText = [_ s:@"please_wait"];
  hud.detailsLabelText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
                                                         action]];
- [vc.view addSubview:hud];
+ [vc.view.window addSubview:hud];
  [hud showWhileExecuting:@selector(doAction) onTarget:self withObject:nil
       animated:YES];
 }
@@ -87,7 +88,7 @@
 - (void)doAction {
  NSString *title;
  NSString *text;
- BOOL      results_box  = YES;
+ BOOL      resultsBox = YES;
  NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
  [vc updateAppListUsingHUD:NO];
  if ([[r objectForKey:@"success"] boolValue]) {
@@ -95,7 +96,7 @@
   text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];
   //if ([action isEqualToString:@"ignore"] ||
   //    [action isEqualToString:@"unignore"])
-  // results_box = NO;
+  // resultsBox = NO;
  } else {
   if ([r objectForKey:@"exit_code"] == 0)
    title = [_ s:[NSString stringWithFormat:@"%@_partially_done", action]];
@@ -104,18 +105,18 @@
   text = [_ s:[NSString stringWithFormat:@"all_status_%@_failed", action]];
   text = [NSString stringWithFormat:@"%@\n\n%@",text,[r objectForKey:@"data"]];
  }
- if (results_box) {
+ if (resultsBox) {
   self.screen = [[UIAlertView alloc] init];
   screen.title = title;
   screen.message = text;
   [screen addButtonWithTitle:[_ s:@"ok"]];
   [hud hide:YES];
-  [hud release];
+  [hud autorelease];
   [screen show];
  }
  else {
   [hud hide:YES];
-  [hud release];
+  [hud autorelease];
  }
 }
 
@@ -129,7 +130,7 @@
  screen.delegate = self;
  NSString *prompt;
  [screen addButtonWithTitle:[_ s:@"backup"]];
- if (vc.appbackup.any_backed_up) {
+ if (vc.appbackup.anyBackedUp) {
   prompt = [_ s:@"backup_restore_all_apps"];
   [screen addButtonWithTitle:[_ s:@"restore"]];
   [screen addButtonWithTitle:[_ s:@"delete"]];

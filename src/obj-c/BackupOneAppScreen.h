@@ -54,7 +54,7 @@
 @property (retain) MBProgressHUD       *hud;
 - (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_;
 - (void)alertView:(UIAlertView *)alertView
-        didDismissWithButtonIndex:(NSInteger)button_index;
+        didDismissWithButtonIndex:(NSInteger)buttonIndex;
 - (void)doAction;
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 - (void)show;

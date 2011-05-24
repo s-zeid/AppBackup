@@ -92,6 +92,7 @@ chmod +x files/Applications/AppBackup.app/AppBackupGUI{,_}
 chmod +x files/usr/bin/appbackup{,-fix-permissions}
 touch files/Applications/AppBackup.app/about.txt
 echo | cat ../CREDITS - ../CHANGELOG > files/Applications/AppBackup.app/about.txt
+../src/about-html/make-about-html.py > files/Applications/AppBackup.app/about.html
 
 # Build .deb and move it
 dpkg-deb -b files .

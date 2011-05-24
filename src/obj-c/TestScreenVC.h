@@ -45,6 +45,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tv
                      cellForRowAtIndexPath:(NSIndexPath *)ip;
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID;
 - (void)dealloc;
 @end

@@ -34,14 +34,13 @@
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;
 
-#import "AboutScreen.h";
+#import "AboutScreenVC.h";
 #import "AppBackup.h";
 #import "BackupAllAppsScreen.h";
 #import "BackupOneAppScreen.h";
 #import "MBProgressHUD.h";
 #import "util.h";
 
-#define NAVBAR_HEIGHT 44
 #define NAME_TAG 1
 #define INFO_TAG 2
 
@@ -50,46 +49,34 @@
 @implementation AppListVC
 @synthesize table;
 @synthesize appbackup;
-@synthesize app_name;
-@synthesize app_web_site;
-@synthesize about_text;
+@synthesize appsLoaded;
 - (void)loadView {
- // Set some properties
- self.app_name = [[NSBundle mainBundle]
-                  objectForInfoDictionaryKey:@"CFBundleDisplayName"];
- self.app_web_site = @"http://me.srwz.us/iphone/appbackup";
- self.about_text = [NSString
-                    stringWithContentsOfFile:[_ bundledFilePath:@"about.txt"]
-                    encoding:NSUTF8StringEncoding error:nil];
- // Set up window
- CGRect bounds = [[UIScreen mainScreen] applicationFrame];
- self.view = [[UIView alloc] initWithFrame:bounds];
+ // Get some frames
+ CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+ CGRect navBarFrame = self.navigationController.navigationBar.frame;
+ NSInteger navBarHeight = navBarFrame.size.height;
+ CGRect bounds = CGRectMake(appFrame.origin.x, appFrame.origin.y,
+                            appFrame.size.width,
+                            appFrame.size.height - navBarHeight);
+ struct CGRect frame;
+ // Set up main view
+ self.view = [[[UIView alloc] initWithFrame:bounds] autorelease];
  UIView *view = self.view;
  view.backgroundColor = [UIColor whiteColor];
- // Make some frames
- struct CGRect frame;
- // Make the title bar
- frame = CGRectMake(0, 0, bounds.size.width, NAVBAR_HEIGHT);
- UINavigationBar *title_bar = [[UINavigationBar alloc] initWithFrame:frame];
- UINavigationItem *title_item = [[UINavigationItem alloc]
-                                 initWithTitle:[_ s:@"main_window_title"]];
+ // Configure the navigation bar
+ self.navigationItem.title = [_ s:@"main_window_title"];
  UIBarButtonItem *back_item = [[UIBarButtonItem alloc]
                                initWithTitle:[_ s:@"apps"]
                                style:UIBarButtonItemStyleBordered
                                target:nil action:nil];
- title_item.backBarButtonItem = back_item;
+ self.navigationItem.backBarButtonItem = back_item;
  [back_item release];
- [title_bar pushNavigationItem:title_item animated:NO];
- [title_item release];
- [view addSubview:title_bar];
- [title_bar release];
  // Make the bottom toolbar and add buttons
- frame = CGRectMake(0, bounds.size.height - NAVBAR_HEIGHT, bounds.size.width,
-                    NAVBAR_HEIGHT);
- UINavigationBar *toolbar = [[UIToolbar alloc] initWithFrame:frame];
- toolbar.delegate = self;
- UIBarButtonItem *flex_space;
- flex_space = [[UIBarButtonItem alloc]
+ frame = CGRectMake(0, bounds.size.height - navBarHeight, bounds.size.width,
+                    navBarHeight);
+ UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:frame];
+ UIBarButtonItem *flexSpace;
+ flexSpace = [[UIBarButtonItem alloc]
                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                target:nil action:nil];
  UIBarButtonItem *space;
@@ -97,40 +84,41 @@
           initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
           target:nil action:nil];
  space.width = 5;
- UIBarButtonItem *all_btn = [[UIBarButtonItem alloc]
-                             initWithTitle:[_ s:@"all_button"]
-                             style:UIBarButtonItemStyleBordered
-                             target:self action:@selector(showAllAppsScreen:)];
- UIBarButtonItem *about_btn = [[UIBarButtonItem alloc]
-                               initWithTitle:[_ s:@"about_button"]
-                               style:UIBarButtonItemStyleBordered
-                               target:self action:@selector(showAboutScreen:)];
- toolbar.items = [NSArray arrayWithObjects:flex_space, all_btn, space,
-                                           about_btn, flex_space, nil];
- [flex_space release];
+ UIBarButtonItem *allBtn = [[UIBarButtonItem alloc]
+                            initWithTitle:[_ s:@"all_button"]
+                            style:UIBarButtonItemStyleBordered
+                            target:self action:@selector(showAllAppsScreen:)];
+ UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc]
+                              initWithTitle:[_ s:@"about_button"]
+                              style:UIBarButtonItemStyleBordered
+                              target:self action:@selector(showAboutScreen:)];
+ toolbar.items = [NSArray arrayWithObjects:flexSpace, allBtn, space,
+                                           aboutBtn, flexSpace, nil];
+ [flexSpace release];
  [space release];
- [all_btn release];
- [about_btn release];
+ [allBtn release];
+ [aboutBtn release];
  [view addSubview:toolbar];
  [toolbar release];
  // Make table view
- frame = CGRectMake(0, NAVBAR_HEIGHT, bounds.size.width,
-                    bounds.size.height - (NAVBAR_HEIGHT * 2));
- UITableView *_table = [[UITableView alloc] initWithFrame:frame];
- self.table = _table;
- [_table release];
+ frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - navBarHeight);
+ self.table = [[[UITableView alloc] initWithFrame:frame] autorelease];
  table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
  table.rowHeight = 68;
  table.dataSource = self;
  table.delegate = self;
  [view addSubview:table];
+ self.appsLoaded = NO;
  // Start up the AppBackup CLI bridge
- self.appbackup = [[AppBackup alloc] init];
+ self.appbackup = [[[AppBackup alloc] init] autorelease];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
- [table reloadData];
- [self updateAppListUsingHUD:YES];
+ if (!appsLoaded) {
+  [table reloadData];
+  [self updateAppListUsingHUD:YES];
+  self.appsLoaded = YES;
+ }
  [super viewDidAppear:animated];
 }
 
@@ -140,9 +128,9 @@
 
 - (void)showAboutScreen:(id)sender {
  // Called when you tap the About button
- AboutScreen *screen = [[AboutScreen alloc] initWithVC:self];
- [screen show];
- [screen release];
+ AboutScreenVC *aboutScreenVC = [[AboutScreenVC alloc] init];
+ [self.navigationController pushViewController:aboutScreenVC animated:YES];
+ [aboutScreenVC release];
 }
 
 - (void)showAllAppsScreen:(id)sender {
@@ -166,13 +154,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tv
                      cellForRowAtIndexPath:(NSIndexPath *)ip {
- static NSString *cell_id = @"AppBackupAppCell";
+ static NSString *cellID = @"AppBackupAppCell";
  // Get the app
  NSMutableDictionary *app = [appbackup.apps objectAtIndex:ip.row];
  // Get an existing cell to reuse or make a new one if it doesn't exist yet
- UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:cell_id];
+ UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:cellID];
  if (cell == nil)
-  cell = [self tableViewCellWithReuseIdentifier:cell_id];
+  cell = [self tableViewCellWithReuseIdentifier:cellID];
  // Set up labels
  UILabel *label;
  // Name label
@@ -196,44 +184,45 @@
  [self showBackupOneAppScreenForAppAtIndex:ip.row];
 }
 
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id {
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID {
  NSInteger width = [self.view bounds].size.width;
  UITableViewCell *cell = [[[UITableViewCell alloc]
                            initWithStyle:UITableViewCellStyleDefault
-                           reuseIdentifier:cell_id] autorelease];
+                           reuseIdentifier:cellID] autorelease];
  // Label 1 - Name of app
  // System font, bold, text resizes to fit width, 20px, black if valid, gray if
  // not
  // Clear background; positioned at 10, 8 from top-left of label0
  // (Screen width - 20) px wide, 25px high
- UILabel *name_label = [[UILabel alloc]
-                        initWithFrame:CGRectMake(10, 8, width-20, 25)];
- name_label.tag = NAME_TAG;
- name_label.font = [UIFont boldSystemFontOfSize:20];
- name_label.adjustsFontSizeToFitWidth = YES;
- name_label.textColor = [UIColor blackColor];
- name_label.highlightedTextColor = [UIColor whiteColor];
- [cell.contentView addSubview:name_label];
- [name_label release];
+ UILabel *nameLabel = [[UILabel alloc]
+                       initWithFrame:CGRectMake(10, 8, width-20, 25)];
+ nameLabel.tag = NAME_TAG;
+ nameLabel.font = [UIFont boldSystemFontOfSize:20];
+ nameLabel.adjustsFontSizeToFitWidth = YES;
+ nameLabel.textColor = [UIColor blackColor];
+ nameLabel.highlightedTextColor = [UIColor whiteColor];
+ [cell.contentView addSubview:nameLabel];
+ [nameLabel release];
  // Label 2
  // System font, normal weight, 14px, gray
  // Clear background; positioned at 10, 38 from top-left of label0
  // (Screen width - 20) px wide, 20 px high
- UILabel *info_label = [[UILabel alloc]
-                        initWithFrame:CGRectMake(10, 38, width-20, 20)];
- info_label.tag = INFO_TAG;
- info_label.font = [UIFont systemFontOfSize:14];
- info_label.adjustsFontSizeToFitWidth = YES;
- info_label.textColor = [UIColor grayColor];
- info_label.highlightedTextColor = [UIColor whiteColor];
- [cell.contentView addSubview:info_label];
- [info_label release];
+ UILabel *infoLabel = [[UILabel alloc]
+                       initWithFrame:CGRectMake(10, 38, width-20, 20)];
+ infoLabel.tag = INFO_TAG;
+ infoLabel.font = [UIFont systemFontOfSize:14];
+ infoLabel.adjustsFontSizeToFitWidth = YES;
+ infoLabel.textColor = [UIColor grayColor];
+ infoLabel.highlightedTextColor = [UIColor whiteColor];
+ [cell.contentView addSubview:infoLabel];
+ [infoLabel release];
  return cell;
 }
 
 - (void)updateAppListUsingHUD:(BOOL)useHUD {
  if (useHUD) {
-  MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
+  MBProgressHUD *hud = [[MBProgressHUD alloc] initWithWindow:self.view.window];
+  hud.yOffset -= self.navigationController.navigationBar.frame.size.height;
   hud.labelText = [_ s:@"please_wait"];
   [self.view addSubview:hud];
   [hud showWhileExecuting:@selector(_updateAppListCallback:) onTarget:self
@@ -261,9 +250,7 @@
 - (void)dealloc {
  self.table = nil;
  self.appbackup = nil;
- self.app_name = nil;
- self.app_web_site = nil;
- self.about_text = nil;
+ self.appsLoaded = NO;
  [super dealloc];
 }
 @end

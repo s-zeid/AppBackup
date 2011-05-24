@@ -41,15 +41,11 @@
            <UITableViewDataSource, UITableViewDelegate> {
  UITableView *table;
  AppBackup   *appbackup;
- NSString    *app_name;
- NSString    *app_web_site;
- NSString    *about_text;
+ BOOL         appsLoaded;
 }
 @property (retain) UITableView *table;
 @property (retain) AppBackup   *appbackup;
-@property (retain) NSString    *app_name;
-@property (retain) NSString    *app_web_site;
-@property (retain) NSString    *about_text;
+@property (assign) BOOL         appsLoaded;
 - (void)loadView;
 - (void)viewDidAppear:(BOOL)animated;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
@@ -60,7 +56,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tv
                      cellForRowAtIndexPath:(NSIndexPath *)ip;
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cell_id;
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID;
 - (void)updateAppListUsingHUD:(BOOL)useHUD;
 - (void)_updateAppListCallback:(MBProgressHUD *)hud;
 - (void)updateAppAtIndex:(NSInteger)index;

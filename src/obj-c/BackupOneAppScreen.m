@@ -59,32 +59,32 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView
-        didDismissWithButtonIndex:(NSInteger)button_index {
+        didDismissWithButtonIndex:(NSInteger)buttonIndex {
  // What to do when you close the backup one app prompt
- NSString *button_text = [alertView buttonTitleAtIndex:button_index];
+ NSString *buttonText = [alertView buttonTitleAtIndex:buttonIndex];
  [screen autorelease];
- if ([button_text isEqualToString:[_ s:@"cancel"]] ||
-     [button_text isEqualToString:[_ s:@"ok"]]) {
+ if ([buttonText isEqualToString:[_ s:@"cancel"]] ||
+     [buttonText isEqualToString:[_ s:@"ok"]]) {
   [self autorelease];
   return;
  }
- if ([button_text isEqualToString:[_ s:@"backup"]])
+ if ([buttonText isEqualToString:[_ s:@"backup"]])
   self.action = @"backup";
- if ([button_text isEqualToString:[_ s:@"delete"]])
+ if ([buttonText isEqualToString:[_ s:@"delete"]])
   self.action = @"delete";
- if ([button_text isEqualToString:[_ s:@"ignore"]])
+ if ([buttonText isEqualToString:[_ s:@"ignore"]])
   self.action = @"ignore";
- if ([button_text isEqualToString:[_ s:@"restore"]])
+ if ([buttonText isEqualToString:[_ s:@"restore"]])
   self.action = @"restore";
- if ([button_text isEqualToString:[_ s:@"unignore"]])
+ if ([buttonText isEqualToString:[_ s:@"unignore"]])
   self.action = @"unignore";
  NSString *text_=[_ s:[NSString stringWithFormat:@"1_status_%@_doing", action]];
- self.hud = [[MBProgressHUD alloc] initWithView:vc.view];
+ self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
  hud.delegate = self;
  hud.labelText = [_ s:@"please_wait"];
  hud.detailsLabelText = [NSString stringWithFormat:text_,
                          [app objectForKey:@"friendly"]];
- [vc.view addSubview:hud];
+ [vc.view.window addSubview:hud];
  [hud showWhileExecuting:@selector(doAction) onTarget:self withObject:nil
       animated:YES];
 }
@@ -93,7 +93,7 @@
  NSString *friendly = [app objectForKey:@"friendly"];
  NSString *title;
  NSString *text;
- BOOL      results_box  = YES;
+ BOOL      resultsBox  = YES;
  NSDictionary *r = [vc.appbackup doAction:action onApp:app];
  [vc updateAppAtIndex:index
       withDictionary:[[r objectForKey:@"apps"] objectAtIndex:0]];
@@ -103,24 +103,24 @@
   text  = [_ s:[NSString stringWithFormat:text, friendly]];
   if ([action isEqualToString:@"ignore"] ||
       [action isEqualToString:@"unignore"])
-   results_box = NO;
+   resultsBox = NO;
  } else {
   title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
   text  = [_ s:[NSString stringWithFormat:@"1_status_%@_failed", action]];
   text  = [_ s:[NSString stringWithFormat:text, friendly]];
  }
- if (results_box) {
+ if (resultsBox) {
   self.screen = [[UIAlertView alloc] init];
   screen.delegate = self;
   screen.title = title;
   screen.message = text;
   [screen addButtonWithTitle:[_ s:@"ok"]];
   [hud hide:YES];
-  [hud release];
+  [hud autorelease];
   [screen show];
  } else {
   [hud hide:YES];
-  [hud release];
+  [hud autorelease];
  }
 }
 
@@ -137,11 +137,11 @@
   prompt = [[prompt substringWithRange:NSMakeRange(0, 30)]
             stringByAppendingString:@"..."];
  prompt = [NSString stringWithFormat:@"(%@)", prompt];
- NSString *cancel_string = @"cancel";
+ NSString *cancelString = @"cancel";
  if (![[app objectForKey:@"useable"] boolValue]) {
   prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
             [_ s:@"app_corrupted_prompt"]];
-  cancel_string = [_ s:@"ok"];
+  cancelString = [_ s:@"ok"];
  } else if ([[app objectForKey:@"ignored"] boolValue]) {
   prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
             [_ s:@"app_ignored_prompt"]];
@@ -156,8 +156,8 @@
   [screen addButtonWithTitle:[_ s:@"ignore"]];
  }
  screen.message = prompt;
- NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:cancel_string]];
- [screen setCancelButtonIndex:cancel_btn];
+ NSInteger cancelBtn = [screen addButtonWithTitle:[_ s:cancelString]];
+ [screen setCancelButtonIndex:cancelBtn];
  [screen show];
  [self retain];
 }

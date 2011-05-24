@@ -35,6 +35,7 @@
 #import <UIKit/UIKit.h>;
 
 #import "AppListVC.h";
+#import "AboutScreenVC.h";
 #import "TestScreenVC.h";
 #import "util.h";
 
@@ -42,36 +43,28 @@
 
 @implementation AppBackupGUI
 @synthesize window;
-@synthesize vc;
-@synthesize defaultImageView;
-@synthesize shouldShowAppList;
+@synthesize navigationController;
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
- // Create the window.  A UIImageView with the Default.png is created because
- // otherwise the user will see an empty window briefly because of the URL
- // handling shit.
+ // Create the window and navigation controller.
  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
- CGRect bounds = [[UIScreen mainScreen] applicationFrame];
- self.defaultImageView = [[UIView alloc] initWithFrame:bounds];
- UIImage *image = [UIImage imageNamed:@"Default.png"];
- UIImageView *image_view = [[UIImageView alloc] initWithImage:image];
- [defaultImageView addSubview:image_view];
- [image_view release];
- [window addSubview:defaultImageView];
+ UIViewController *rootVC = [[AppListVC alloc] init];
+ self.navigationController = [[[UINavigationController alloc]
+                               initWithRootViewController:rootVC] autorelease];
+ [rootVC release];
+ [window addSubview:navigationController.view];
  [window makeKeyAndVisible];
- // Schedule showAppList to be run after application:handleOpenURL: has a
- // chance to run
- self.shouldShowAppList = YES;
- [self performSelector:@selector(showAppList) withObject:nil afterDelay:0.0];
 }
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
- if ([[url scheme] isEqualToString:@"appbackup"]) {
-  NSString *url_s = [url absoluteString];
-  if ([url_s isEqualToString:@"appbackup://test"] ||
-      [url_s isEqualToString:@"appbackup://starbucks"] ||
-      [url_s isEqualToString:@"appbackup://bnay"] ||
-      [url_s isEqualToString:@"appbackup://starbucks/bnay/or/emily"]) {
-   self.shouldShowAppList = NO;
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl {
+ if ([[nsurl scheme] isEqualToString:@"appbackup"]) {
+  NSString *url = [nsurl absoluteString];
+  if ([url isEqualToString:@"appbackup://about"])
+   [self performSelector:@selector(showAboutScreen) withObject:nil
+         afterDelay:0.0];
+  if ([url isEqualToString:@"appbackup://test"] ||
+      [url isEqualToString:@"appbackup://starbucks"] ||
+      [url isEqualToString:@"appbackup://bnay"] ||
+      [url isEqualToString:@"appbackup://starbucks/bnay/or/emily"]) {
    [self performSelector:@selector(showTestScreen) withObject:nil
          afterDelay:0.0];
   }
@@ -80,33 +73,23 @@
  return NO;
 }
 
-- (void)hideDefaultImageView {
- [defaultImageView removeFromSuperview];
- [defaultImageView release];
- self.defaultImageView = nil;
-}
-
-- (void)showAppList {
- // Show app list, if shouldShowAppList is YES
- if (self.shouldShowAppList) {
-  self.vc = [[AppListVC alloc] init];
-  [window addSubview:vc.view];
-  [self hideDefaultImageView];
- }
+- (void)showAboutScreen {
+ // Show about screen
+ UIViewController *vc = [[AboutScreenVC alloc] init];
+ [self.navigationController pushViewController:vc animated:YES];
+ [vc release];
 }
 
 - (void)showTestScreen {
  // Show test screen
- self.vc = [[TestScreenVC alloc] init];
- [window addSubview:vc.view];
- [self hideDefaultImageView];
+ UIViewController *vc = [[TestScreenVC alloc] init];
+ [self.navigationController pushViewController:vc animated:YES];
+ [vc release];
 }
 
 - (void)dealloc {
  self.window = nil;
- self.vc = nil;
- self.defaultImageView = nil;
- self.shouldShowAppList = NO;
+ self.navigationController = nil;
  [super dealloc];
 }
 @end
