@@ -73,6 +73,12 @@
  UINavigationBar *title_bar = [[UINavigationBar alloc] initWithFrame:frame];
  UINavigationItem *title_item = [[UINavigationItem alloc]
                                  initWithTitle:[_ s:@"main_window_title"]];
+ UIBarButtonItem *back_item = [[UIBarButtonItem alloc]
+                               initWithTitle:[_ s:@"apps"]
+                               style:UIBarButtonItemStyleBordered
+                               target:nil action:nil];
+ title_item.backBarButtonItem = back_item;
+ [back_item release];
  [title_bar pushNavigationItem:title_item animated:NO];
  [title_item release];
  [view addSubview:title_bar];

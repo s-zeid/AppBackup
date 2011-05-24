@@ -55,8 +55,6 @@ Arguments for all commands:
  -g / --guid     A GUID is given as <app> instead of a bundle ID.
  <app>           The bundle IDs (or GUIDs if -g / --guid is set) for each app
                  you want to work with.
-
-Arguments specific to list:
  -v / --verbose  Show more information for each app (implied when <app> is
                  given.)"""
 
@@ -119,7 +117,7 @@ def main(argv):
  use_plist = "p" in opts or "plist" in opts
  out_mode = ("json" if use_json else "plist") if use_json or use_plist else ""
  if use_json and use_plist:
-  safe_print("Please choose only one  or neither of -j / --json or -p /"
+  safe_print("Please choose only one or neither of -j / --json or -p /"
              " --plist.")
   return 2
  appbackup = AppBackup(find_apps=False)
@@ -149,13 +147,13 @@ def main(argv):
   success = True
   data = []
   if all_apps:
-   # All apps
+   # List all apps
    apps = appbackup.sort_apps()
    for app in apps:
     if out_mode: data += [app_info(app, verbose=verbose)]
     else: safe_print(app_info(app, True) + "\n")
   else:
-   # Not all apps
+   # List some apps
    search_mode = "guid" if use_guid else "bundle"
    for i in apps:
     app = appbackup.find_app(i, search_mode)

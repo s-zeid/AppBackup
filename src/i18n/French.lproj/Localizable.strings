@@ -20,6 +20,7 @@
 "about_button" = "À propos";
 "about_title" = "À propos de %@"; /* %@ = AppBackup */
 "main_window_title" = "Applications";
+"apps" = "Applications";
 "plural_last_letter" = "s"; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
 "singular_possessive" = "de %@"; /* %@ = app name */
 "plural_possessive" = "de %@"; /* %@ = app name */

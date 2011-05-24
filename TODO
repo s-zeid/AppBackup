@@ -1,0 +1,7 @@
+* About screen revamp
+* Kill subprocesses on app exit
+* Remove old source files (e.g. src/js)
+* Update README
+* Add credits for 3rd-party libraries
+* Update Default image?
+* Fix property naming style (underscored_names to camelCaseNames)

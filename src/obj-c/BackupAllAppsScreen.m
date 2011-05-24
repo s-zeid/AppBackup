@@ -85,35 +85,24 @@
 }
 
 - (void)doAction {
- NSString *done_title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
- NSString *partial_title = [_ s:[NSString stringWithFormat:@"%@_partially_done",
-                                 action]];
- NSString *done_text = [_ s:[NSString stringWithFormat:@"all_status_%@_done",
-                             action]];
- NSString *failed_title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
- NSString *failed_text = [_ s:[NSString
-                               stringWithFormat:@"all_status_%@_failed",
-                               action]];
- NSString *corrupted_text = [_ s:[NSString
-                                  stringWithFormat:@"all_status_%@_corrupted",
-                                  action]];
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
  NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
  [vc updateAppListUsingHUD:NO];
  if ([[r objectForKey:@"success"] boolValue]) {
-  title = done_title;
-  text  = done_text;
+  title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
+  text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];
   //if ([action isEqualToString:@"ignore"] ||
   //    [action isEqualToString:@"unignore"])
   // results_box = NO;
  } else {
-  // TODO: detect all apps corrupted
-  if ([r objectForKey:@"exit_code"] == 0) title = partial_title;
-  else                                    title = failed_title;
-  text = [NSString stringWithFormat:@"%@\n\n%@", failed_text,
-          [r objectForKey:@"data"]];
+  if ([r objectForKey:@"exit_code"] == 0)
+   title = [_ s:[NSString stringWithFormat:@"%@_partially_done", action]];
+  else
+   title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
+  text = [_ s:[NSString stringWithFormat:@"all_status_%@_failed", action]];
+  text = [NSString stringWithFormat:@"%@\n\n%@",text,[r objectForKey:@"data"]];
  }
  if (results_box) {
   self.screen = [[UIAlertView alloc] init];

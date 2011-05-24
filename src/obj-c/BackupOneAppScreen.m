@@ -90,16 +90,7 @@
 }
 
 - (void)doAction {
- NSString *done_title   = [_ s:[NSString stringWithFormat:@"%@_done", action]];
- NSString *done_text_   = [_ s:[NSString stringWithFormat:@"1_status_%@_done",
-                             action]];
- NSString *done_text    = [_ s:[NSString stringWithFormat:done_text_,
-                             [app objectForKey:@"friendly"]]];
- NSString *failed_title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
- NSString *failed_text_ = [_ s:[NSString stringWithFormat:@"1_status_%@_failed",
-                             action]];
- NSString *failed_text  = [_ s:[NSString stringWithFormat:failed_text_,
-                             [app objectForKey:@"friendly"]]];
+ NSString *friendly = [app objectForKey:@"friendly"];
  NSString *title;
  NSString *text;
  BOOL      results_box  = YES;
@@ -107,14 +98,16 @@
  [vc updateAppAtIndex:index
       withDictionary:[[r objectForKey:@"apps"] objectAtIndex:0]];
  if ([[r objectForKey:@"success"] boolValue]) {
-  title = done_title;
-  text  = done_text;
+  title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
+  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_done", action]];
+  text  = [_ s:[NSString stringWithFormat:text, friendly]];
   if ([action isEqualToString:@"ignore"] ||
       [action isEqualToString:@"unignore"])
    results_box = NO;
  } else {
-  title = failed_title;
-  text  = failed_text;
+  title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
+  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_failed", action]];
+  text  = [_ s:[NSString stringWithFormat:text, friendly]];
  }
  if (results_box) {
   self.screen = [[UIAlertView alloc] init];

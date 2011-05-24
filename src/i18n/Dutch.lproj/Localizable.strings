@@ -20,6 +20,7 @@
 "about_button" = "Info";
 "about_title" = "Info %@"; /* %@ = AppBackup */
 "main_window_title" = "App Store Applicaties";
+"apps" = "Applicaties";
 "plural_last_letter" = "s"; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
 "singular_possessive" = "%@'s"; /* %@ = app name */
 "plural_possessive" = "%@'"; /* %@ = app name */

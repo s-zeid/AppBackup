@@ -20,6 +20,7 @@
 "about_button" = "Инфо";
 "about_title" = "Инфо о %@"; /* %@ = AppBackup */
 "main_window_title" = "Приложения AppStore";
+"apps" = "Приложения";
 "plural_last_letter" = "i.e. """; /* Used to tell if the app's name is plural (might not apply to all languages; if this is the case make the value a blank string (i.e. "")) */
 "singular_possessive" = "%@'s"; /* %@ = app name */
 "plural_possessive" = "%@'"; /* %@ = app name */
