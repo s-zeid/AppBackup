@@ -34,6 +34,7 @@
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;
 
+#import "AppBackup.h";
 #import "AppListVC.h";
 #import "AboutScreenVC.h";
 #import "TestScreenVC.h";
@@ -43,11 +44,16 @@
 
 @implementation AppBackupGUI
 @synthesize window;
+@synthesize appbackup;
 @synthesize navigationController;
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
  // Create the window and navigation controller.
- self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
- UIViewController *rootVC = [[AppListVC alloc] init];
+ self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]
+                autorelease];
+ // Start up the AppBackup CLI bridge
+ self.appbackup = [[[AppBackup alloc] init] autorelease];
+ // Set up the navigation and root view controllers
+ UIViewController *rootVC = [[AppListVC alloc] initWithAppBackup:appbackup];
  self.navigationController = [[[UINavigationController alloc]
                                initWithRootViewController:rootVC] autorelease];
  [rootVC release];
@@ -73,6 +79,10 @@
  return NO;
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application {
+ [self.appbackup terminateAllRunningTasks];
+}
+
 - (void)showAboutScreen {
  // Show about screen
  UIViewController *vc = [[AboutScreenVC alloc] init];
@@ -89,6 +99,7 @@
 
 - (void)dealloc {
  self.window = nil;
+ self.appbackup = nil;
  self.navigationController = nil;
  [super dealloc];
 }

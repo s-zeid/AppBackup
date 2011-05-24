@@ -33,14 +33,19 @@
 
 #import <UIKit/UIKit.h>;
 
+#import "AppBackup.h";
+
 @interface AppBackupGUI : UIApplication <UIApplicationDelegate> {
  UIWindow               *window;
+ AppBackup              *appbackup;
  UINavigationController *navigationController;
 }
 @property (retain) UIWindow               *window;
+@property (retain) AppBackup              *appbackup;
 @property (retain) UINavigationController *navigationController;
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl;
+- (void)applicationWillTerminate:(UIApplication *)application;
 - (void)showAboutScreen;
 - (void)showTestScreen;
 - (void)dealloc;

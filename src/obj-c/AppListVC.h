@@ -46,6 +46,7 @@
 @property (retain) UITableView *table;
 @property (retain) AppBackup   *appbackup;
 @property (assign) BOOL         appsLoaded;
+- (id)initWithAppBackup:(AppBackup *)appbackup_;
 - (void)loadView;
 - (void)viewDidAppear:(BOOL)animated;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;

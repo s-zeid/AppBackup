@@ -50,6 +50,14 @@
 @synthesize table;
 @synthesize appbackup;
 @synthesize appsLoaded;
+- (id)initWithAppBackup:(AppBackup *)appbackup_ {
+ self = [super init];
+ if (self) {
+  self.appbackup = appbackup_;
+ }
+ return self;
+}
+
 - (void)loadView {
  // Get some frames
  CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
@@ -109,8 +117,6 @@
  table.delegate = self;
  [view addSubview:table];
  self.appsLoaded = NO;
- // Start up the AppBackup CLI bridge
- self.appbackup = [[[AppBackup alloc] init] autorelease];
 }
 
 - (void)viewDidAppear:(BOOL)animated {

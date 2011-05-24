@@ -35,14 +35,16 @@
 
 @interface AppBackup : NSObject {
  NSMutableArray *apps;
- BOOL allBackedUp;
- BOOL anyBackedUp;
- BOOL anyCorrupted;
+ BOOL            allBackedUp;
+ BOOL            anyBackedUp;
+ BOOL            anyCorrupted;
+ NSMutableArray *runningTasks;
 }
 @property (retain) NSMutableArray *apps;
 @property (assign) BOOL            allBackedUp;
 @property (assign) BOOL            anyBackedUp;
 @property (assign) BOOL            anyCorrupted;
+@property (retain) NSMutableArray *runningTasks;
 - (id)init;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;
@@ -51,6 +53,7 @@
 - (NSDictionary *)runCmd:(NSString *)cmd;
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args;
 - (NSString *)starbucks;
+- (void)terminateAllRunningTasks;
 - (BOOL)updateAppAtIndex:(NSInteger)index;
 - (BOOL)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)updateBackupInfo;

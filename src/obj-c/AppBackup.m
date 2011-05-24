@@ -41,6 +41,7 @@
 @synthesize allBackedUp;
 @synthesize anyBackedUp;
 @synthesize anyCorrupted;
+@synthesize runningTasks;
 
 - (id)init {
  self = [super init];
@@ -49,6 +50,7 @@
   self.allBackedUp = NO;
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
+  self.runningTasks = [NSMutableArray array];
  }
  return self;
 }
@@ -99,9 +101,11 @@
  task.arguments = [[NSArray arrayWithObjects:@"--plist", cmd, nil]
                    arrayByAddingObjectsFromArray:args];
  task.standardOutput = [NSPipe pipe];
+ [runningTasks addObject:task];
  [task launch];
  // Wait for it to finish
  [task waitUntilExit];
+ [runningTasks removeObject:task];
  // Process result
  NSFileHandle *handle = [[task standardOutput] fileHandleForReading];
  NSData *data = [handle readDataToEndOfFile];
@@ -110,6 +114,7 @@
                        propertyListFromData:data
                        mutabilityOption:NSPropertyListImmutable
                        format:NULL errorDescription:nil];
+ [task release];
  return dict;
 }
 
@@ -121,6 +126,18 @@
  else
   starbucks = @"";
  return starbucks;
+}
+
+- (void)terminateAllRunningTasks {
+ // Stop any running tasks
+ NSTask *task;
+ int i;
+ for (i = 0; i < [runningTasks count]; i++) {
+  task = [runningTasks objectAtIndex:i];
+  if ([task isRunning])
+   [task terminate];
+ }
+ [runningTasks removeAllObjects];
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
@@ -172,6 +189,8 @@
  self.allBackedUp = NO;
  self.anyBackedUp = NO;
  self.anyCorrupted = NO;
+ [self terminateAllRunningTasks];
+ self.runningTasks = nil;
  [super dealloc];
 }
 @end
