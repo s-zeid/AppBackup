@@ -30,6 +30,8 @@
 
 # About screen HTML generator
 
+from __future__ import with_statement
+
 import functools
 import htmlentitydefs
 import os
@@ -71,12 +73,15 @@ os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(script))))
 info_plist = plistlib.readPlist(os.path.join("src", "bundle", "Info.plist"))
 app_name   = htmlentities(info_plist["CFBundleDisplayName"], exclude="")
 version    = htmlentities(info_plist["CFBundleShortVersionString"], exclude="")
-tplvars    = dict(app_name=app_name, changelog="", credits="", version=version)
+tplvars    = dict(app_name=app_name, changelog="", credits="", license="",
+                  version=version)
 
 with open("CHANGELOG", "rb") as f:
  tplvars["changelog"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
 with open("CREDITS", "rb") as f:
  tplvars["credits"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
+with open("LICENSE", "rb") as f:
+ tplvars["license"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
 os.chdir(os.path.dirname(script))
 with open("about-template.html", "rb") as f:
  tpl = unicode(f.read(), "utf8")

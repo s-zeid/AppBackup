@@ -86,12 +86,14 @@ cp -a ../src/i18n/* files/Applications/AppBackup.app/
 cp -a ../src/obj-c/AppBackupGUI files/Applications/AppBackup.app/AppBackupGUI_
 cp -a ../src/python/* files/Applications/AppBackup.app/python
 cp -a ../src/usr/* files/usr/
+cp -a ../CHANGELOG files/Applications/AppBackup.app/
+cp -a ../CREDITS files/Applications/AppBackup.app/
+cp -a ../LICENSE files/Applications/AppBackup.app/
 rm files/Applications/AppBackup.app/python/{,appbackup,CFPropertyList,simplejson}/*.py[co] &>/dev/null
 chmod +x files/Applications/AppBackup.app/appbackup-cli
 chmod +x files/Applications/AppBackup.app/AppBackupGUI{,_}
 chmod +x files/usr/bin/appbackup{,-fix-permissions}
-touch files/Applications/AppBackup.app/about.txt
-echo | cat ../CREDITS - ../CHANGELOG > files/Applications/AppBackup.app/about.txt
+touch files/Applications/AppBackup.app/about.html
 ../src/about-html/make-about-html.py > files/Applications/AppBackup.app/about.html
 
 # Build .deb and move it

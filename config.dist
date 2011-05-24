@@ -2,8 +2,8 @@
 
 # Replace the path below with the full path to your toolchain's
 # arm-apple-darwin9-gcc
-# To disable compiling FixPermissions, leave blank or use a value that isn't an
-# executable file
+# To disable compiling AppBackupGUI and FixPermissions, leave blank or use a
+# value that isn't an executable file or doesn't exist.
 CC=/path/to/iphone-toolchain/pre/bin/arm-apple-darwin9-gcc
 
 # Path to move old .deb files to; leave blank to leave them alone
