@@ -6,11 +6,15 @@
   <title>About $app_name</title>
   <style type="text/css">
    body {
-    margin: 0 1em 1em 1em;
+    margin: 0 .5em .5em .5em;
     font-family: "Helvetica", "Arial", sans-serif;
     font-size: 15px;
     background-color: #FFFFFF;
     color: #000000;
+   }
+   a {
+    color: #0000FF;
+    text-decoration: none;
    }
    h1 {
     font-size: 17px;
@@ -22,7 +26,8 @@
   </style>
   <meta name="format-detection" content="telephone=no" />
  </head>
- <body></body>
+ <body>
+  <div id="top"></div>
   <h1>Contents</h1>
   <div>
    <p><a href="#credits">Credits</a></p>
@@ -32,14 +37,17 @@
   <h1 id="credits">Credits</h1>
   <div>
    <pre>$credits</pre>
+   <p><a href="#top">Back to top</a></p>
   </div>
   <h1 id="changelog">Change Log</h1>
   <div>
    <pre>$changelog</pre>
+   <p><a href="#top">Back to top</a></p>
   </div>
   <h1 id="license">License</h1>
   <div>
    <pre>$license</pre>
+   <p><a href="#top">Back to top</a></p>
   </div>
  </body>
 </html>

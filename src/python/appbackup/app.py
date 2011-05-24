@@ -79,14 +79,14 @@ path is the directory which the app's .app folder is contained in.
   if os.path.exists(plist_file):
    pl = propertylist.load(plist_file)
    self.bundle   = pl["CFBundleIdentifier"]
-   self.friendly = (pl.get("CFBundleDisplayName", "").strip() or
-                    self.name.rsplit(u".app", 1)[0])
+   self.friendly = to_unicode(pl.get("CFBundleDisplayName", "").strip() or
+                              self.name.rsplit(u".app", 1)[0], errors="ignore")
    self.sort_key = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
                                self.bundle)
    self.useable  = True
   else:
    self.bundle   = "invalid.appbackup.corrupted"
-   self.friendly = self.name.rsplit(u".app", 1)[0]
+   self.friendly = to_unicode(self.name.rsplit(u".app", 1)[0], errors="ignore")
    self.sort_key = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
                                self.bundle)
    self.useable  = False

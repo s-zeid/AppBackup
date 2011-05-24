@@ -21,11 +21,11 @@ Directory structure with descriptions for some files
   src/
     about-html/     - Generator for the HTML file used in the About screen
     bundle/         - Files included in .app bundle, excluding subdirectories
+    FixPermissions/ - FixPermissions (C; fixes storage directory permissions)*
+    gui/            - GUI source code and third-party libraries in Objective-C
     i18n/           - Localizations / .lproj folders
-    FixPermissions/ - FixPermissions C code (fixes user directory permissions)*
     images/         - GIMP source files for image resources
-    obj-c/          - GUI source code and third-party libraries in Objective-C
-    python/         - AppBackup CLI and Python package; other Python stuff
+    python/         - AppBackup CLI and Python package; other Python modules
     usr/            - /usr/bin/appbackup{,-fix-permissions} launcher scripts
   AppBackup.geany - Geany project file; I don't use this (but I do use Geany)
   build - Build a Debian package (./build [device-hostname] [deb-file-prefix])**

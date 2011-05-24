@@ -85,15 +85,15 @@ Letter to diacritical mark mappings are found in latin_diacritics.py and sourced
 from Wikipedia.
 
 """
- ret = s
+ ret = to_unicode(s, errors="ignore")
  for letter in LATIN_DIACRITICS_TABLE:
   for i in LATIN_DIACRITICS_TABLE[letter]:
    ret = ret.replace(i, letter)
  return ret
 
-def to_unicode(s, encoding="utf8"):
+def to_unicode(s, encoding="utf8", errors="strict"):
  if isinstance(s, unicode):
   return s
  if isinstance(s, (str, buffer)):
-  return unicode(s, encoding)
- return unicode(s)
+  return unicode(s, encoding, errors=errors)
+ return unicode(s, errors=errors)

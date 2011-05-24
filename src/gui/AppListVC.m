@@ -239,18 +239,31 @@
 
 - (void)_updateAppListCallback:(MBProgressHUD *)hud {
  [appbackup findApps];
- [table reloadData];
- if (hud) [hud removeFromSuperview];
+ [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
+       withObject:hud waitUntilDone:YES];
+ 
 }
 
 - (void)updateAppAtIndex:(NSInteger)index {
  [appbackup updateAppAtIndex:index];
- [table reloadData];
+ [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
+       withObject:nil waitUntilDone:YES];
 }
 
 - (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict {
  [appbackup updateAppAtIndex:index withDictionary:dict];
+ [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
+       withObject:nil waitUntilDone:YES];
+}
+
+- (void)updateAppAtIndexWithDictUsingArray:(NSArray *)array {
+ [self updateAppAtIndex:[[array objectAtIndex:0] integerValue]
+       withDictionary:[array objectAtIndex:1]];
+}
+
+- (void)updateTableAndRemoveHUD:(MBProgressHUD *)hud {
  [table reloadData];
+ if (hud) [hud removeFromSuperview];
 }
 
 - (void)dealloc {

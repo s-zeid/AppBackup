@@ -29,7 +29,7 @@
  * 
  */
 
-// Backup All Apps screen (header)
+// Backup One App screen (header)
 
 #import <UIKit/UIKit.h>;
 
@@ -37,22 +37,28 @@
 #import "AppListVC.h";
 #import "MBProgressHUD.h";
 
-@interface BackupAllAppsScreen : NSObject
+@interface BackupOneAppScreen : NSObject
            <MBProgressHUDDelegate, UIAlertViewDelegate> {
  AppListVC           *vc;
+ NSInteger            index;
+ NSDictionary        *app;
  NSString            *action;
  UIAlertView         *screen;
  MBProgressHUD       *hud;
 }
 @property (retain) AppListVC           *vc;
+@property (assign) NSInteger            index;
+@property (retain) NSDictionary        *app;
 @property (retain) NSString            *action;
 @property (retain) UIAlertView         *screen;
 @property (retain) MBProgressHUD       *hud;
-- (id)initWithVC:(AppListVC *)vc_;
+- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_;
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex;
 - (void)doAction;
+- (void)hideHUD;
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 - (void)show;
+- (void)showResultWithTitleAndText:(NSArray *)array;
 - (void)dealloc;
 @end

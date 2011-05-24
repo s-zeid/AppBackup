@@ -50,7 +50,7 @@ fi
 # executable
 if [ $USE_CC -eq 0 ]; then
  # AppBackupGUI
- cd src/obj-c
+ cd src/gui
  make clean
  make CC="$CC" LD="$CC" DEVICE="$DEVICE"
  rm ./*.o
@@ -82,8 +82,8 @@ mkdir -p files/usr
 cp -a ../DEBIAN/* files/DEBIAN/
 cp -a ../src/bundle/* files/Applications/AppBackup.app/
 cp -a ../src/FixPermissions/FixPermissions files/Applications/AppBackup.app/
+cp -a ../src/gui/AppBackupGUI files/Applications/AppBackup.app/AppBackupGUI_
 cp -a ../src/i18n/* files/Applications/AppBackup.app/
-cp -a ../src/obj-c/AppBackupGUI files/Applications/AppBackup.app/AppBackupGUI_
 cp -a ../src/python/* files/Applications/AppBackup.app/python
 cp -a ../src/usr/* files/usr/
 cp -a ../CHANGELOG files/Applications/AppBackup.app/

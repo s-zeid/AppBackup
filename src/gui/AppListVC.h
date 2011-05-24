@@ -62,5 +62,7 @@
 - (void)_updateAppListCallback:(MBProgressHUD *)hud;
 - (void)updateAppAtIndex:(NSInteger)index;
 - (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
+- (void)updateAppAtIndexWithDictUsingArray:(NSArray *)array;
+- (void)updateTableAndRemoveHUD:(MBProgressHUD *)hud;
 - (void)dealloc;
 @end

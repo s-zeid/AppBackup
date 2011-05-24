@@ -29,7 +29,7 @@
  * 
  */
 
-// Backup One App screen
+// Backup All Apps screen
 
 #import <UIKit/UIKit.h>;
 
@@ -38,29 +38,25 @@
 #import "MBProgressHUD.h";
 #import "util.h";
 
-#import "BackupOneAppScreen.h";
+#import "BackupAllAppsScreen.h";
 
-@implementation BackupOneAppScreen
+@implementation BackupAllAppsScreen
 @synthesize vc;
-@synthesize index;
-@synthesize app;
 @synthesize action;
 @synthesize screen;
 @synthesize hud;
 
-- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_ {
+- (id)initWithVC:(AppListVC *)vc_ {
  self = [super init];
  if (self) {
   self.vc = vc_;
-  self.index = index_;
-  self.app = [vc.appbackup.apps objectAtIndex:index];
  }
  return self;
 }
 
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex {
- // What to do when you close the backup one app prompt
+ // What to do when you close the backup all apps prompt
  NSString *buttonText = [alertView buttonTitleAtIndex:buttonIndex];
  [screen autorelease];
  if ([buttonText isEqualToString:[_ s:@"cancel"]] ||
@@ -78,50 +74,49 @@
   self.action = @"restore";
  if ([buttonText isEqualToString:[_ s:@"unignore"]])
   self.action = @"unignore";
- NSString *text_=[_ s:[NSString stringWithFormat:@"1_status_%@_doing", action]];
  self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
  hud.delegate = self;
+ hud.yOffset -= vc.navigationController.navigationBar.frame.size.height;
  hud.labelText = [_ s:@"please_wait"];
- hud.detailsLabelText = [NSString stringWithFormat:text_,
-                         [app objectForKey:@"friendly"]];
+ hud.detailsLabelText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
+                                                        action]];
  [vc.view.window addSubview:hud];
  [hud showWhileExecuting:@selector(doAction) onTarget:self withObject:nil
       animated:YES];
 }
 
 - (void)doAction {
- NSString *friendly = [app objectForKey:@"friendly"];
  NSString *title;
  NSString *text;
- BOOL      resultsBox  = YES;
- NSDictionary *r = [vc.appbackup doAction:action onApp:app];
- [vc updateAppAtIndex:index
-      withDictionary:[[r objectForKey:@"apps"] objectAtIndex:0]];
+ BOOL      resultsBox = YES;
+ NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
+ [vc performSelectorOnMainThread:@selector(updateAppListUsingHUD:)
+     withObject:NO waitUntilDone:YES];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
-  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_done", action]];
-  text  = [_ s:[NSString stringWithFormat:text, friendly]];
-  if ([action isEqualToString:@"ignore"] ||
-      [action isEqualToString:@"unignore"])
-   resultsBox = NO;
+  text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];
+  //if ([action isEqualToString:@"ignore"] ||
+  //    [action isEqualToString:@"unignore"])
+  // resultsBox = NO;
  } else {
-  title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
-  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_failed", action]];
-  text  = [_ s:[NSString stringWithFormat:text, friendly]];
+  if ([r objectForKey:@"exit_code"] == 0)
+   title = [_ s:[NSString stringWithFormat:@"%@_partially_done", action]];
+  else
+   title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
+  text = [_ s:[NSString stringWithFormat:@"all_status_%@_failed", action]];
+  text = [NSString stringWithFormat:@"%@\n\n%@",text,[r objectForKey:@"data"]];
  }
+ [self performSelectorOnMainThread:@selector(hideHUD) withObject:nil
+       waitUntilDone:YES];
  if (resultsBox) {
-  self.screen = [[UIAlertView alloc] init];
-  screen.delegate = self;
-  screen.title = title;
-  screen.message = text;
-  [screen addButtonWithTitle:[_ s:@"ok"]];
-  [hud hide:YES];
-  [hud autorelease];
-  [screen show];
- } else {
-  [hud hide:YES];
-  [hud autorelease];
+  [self performSelectorOnMainThread:@selector(showResultWithTitleAndText:)
+        withObject:[NSArray arrayWithObjects:title,text,nil] waitUntilDone:YES];
  }
+}
+
+- (void)hideHUD {
+ [hud hide:YES];
+ [hud autorelease];
 }
 
 - (void)hudWasHidden:(MBProgressHUD *)hud_ {
@@ -130,42 +125,32 @@
 
 - (void)show {
  self.screen = [[UIAlertView alloc] init];
- screen.title = [app objectForKey:@"friendly"];
+ screen.title = [_ s:@"all_apps"];
  screen.delegate = self;
- NSString *prompt = [app objectForKey:@"bundle"];
- if ([prompt length] > 30)
-  prompt = [[prompt substringWithRange:NSMakeRange(0, 30)]
-            stringByAppendingString:@"..."];
- prompt = [NSString stringWithFormat:@"(%@)", prompt];
- NSString *cancelString = @"cancel";
- if (![[app objectForKey:@"useable"] boolValue]) {
-  prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
-            [_ s:@"app_corrupted_prompt"]];
-  cancelString = [_ s:@"ok"];
- } else if ([[app objectForKey:@"ignored"] boolValue]) {
-  prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
-            [_ s:@"app_ignored_prompt"]];
-  [screen addButtonWithTitle:[_ s:@"unignore"]];
- } else if ([[app objectForKey:@"backup_time"] length]) {
-  [screen addButtonWithTitle:[_ s:@"backup"]];
+ NSString *prompt;
+ [screen addButtonWithTitle:[_ s:@"backup"]];
+ if (vc.appbackup.anyBackedUp) {
+  prompt = [_ s:@"backup_restore_all_apps"];
   [screen addButtonWithTitle:[_ s:@"restore"]];
-  [screen addButtonWithTitle:[_ s:@"ignore"]];
   [screen addButtonWithTitle:[_ s:@"delete"]];
- } else {
-  [screen addButtonWithTitle:[_ s:@"backup"]];
-  [screen addButtonWithTitle:[_ s:@"ignore"]];
- }
+ } else prompt = [_ s:@"backup_all_apps"];
  screen.message = prompt;
- NSInteger cancelBtn = [screen addButtonWithTitle:[_ s:cancelString]];
- [screen setCancelButtonIndex:cancelBtn];
+ NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:@"cancel"]];
+ [screen setCancelButtonIndex:cancel_btn];
  [screen show];
  [self retain];
 }
 
+- (void)showResultWithTitleAndText:(NSArray *)array {
+ self.screen = [[UIAlertView alloc] init];
+ screen.title = [array objectAtIndex:0];
+ screen.message = [array objectAtIndex:1];
+ [screen addButtonWithTitle:[_ s:@"ok"]];
+ [screen show];
+}
+
 - (void)dealloc {
  self.vc = nil;
- self.index = 0;
- self.app = nil;
  self.action = nil;
  self.screen = nil;
  self.hud = nil;
