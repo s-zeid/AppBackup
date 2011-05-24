@@ -17,7 +17,7 @@ LDFLAGS= -lobjc \
 
 all:     AppBackupGUI sign
 
-AppBackupGUI: util.o AppBackup.o MBProgressHUD.o \
+AppBackupGUI: util.o BDSKTask.o AppBackup.o MBProgressHUD.o \
 	AboutScreenVC.o BackupAllAppsScreen.o BackupOneAppScreen.o \
 	AppListVC.o TestScreenVC.o AppBackupGUI.o main.o
 	 $(LD) $(LDFLAGS) -o $@ $^

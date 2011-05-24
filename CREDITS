@@ -5,6 +5,7 @@ http://me.srwz.us/iphone/appbackup
 AppBackup is released under the X11 License.
 
 This program contains the following libraries or portions of them:
+ • BDSKTask (Adam Maxwell; http://code.google.com/p/mactlmgr/)
  • CFPropertyList (Ben Cochran; https://github.com/bencochran/CFPropertyList)
  • simplejson (Bob Ippolito; http://pypi.python.org/pypi/simplejson/)
  • MBProgressHUD (Matej Bukovinski, with modifications by Jonathan George;

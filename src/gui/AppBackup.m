@@ -31,10 +31,10 @@
 
 // AppBackup CLI Bridge
 
-#import <Foundation/NSTask.h>;
+#import "BDSKTask.h";
+#import "util.h";
 
 #import "AppBackup.h";
-#import "util.h";
 
 @implementation AppBackup
 @synthesize apps;
@@ -96,7 +96,7 @@
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
  // Start task
- NSTask *task = [[NSTask alloc] init];
+ BDSKTask *task = [[BDSKTask alloc] init];
  task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
  task.arguments = [[NSArray arrayWithObjects:@"--plist", cmd, nil]
                    arrayByAddingObjectsFromArray:args];
@@ -130,7 +130,7 @@
 
 - (void)terminateAllRunningTasks {
  // Stop any running tasks
- NSTask *task;
+ BDSKTask *task;
  int i;
  for (i = 0; i < [runningTasks count]; i++) {
   task = [runningTasks objectAtIndex:i];
