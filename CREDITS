@@ -1,24 +1,40 @@
-AppBackup 1.0.12
+AppBackup 2.0
 Copyright © 2008-2011 Scott Zeid (aka scottywz & DPGumby).
+http://me.srwz.us/iphone/appbackup
 
-Released under the X11 License; see the Web site for details.
+AppBackup is released under the X11 License.
 
-I would like to thank the following people who paid me lots of money to see their names in lights:
+This program contains the following libraries or portions of them:
+ • CFPropertyList (Ben Cochran; https://github.com/bencochran/CFPropertyList)
+ • simplejson (Bob Ippolito; http://pypi.python.org/pypi/simplejson/)
+ • MBProgressHUD (Matej Bukovinski, with modifications by Jonathan George;
+   https://github.com/jdg/MBProgressHUD)
+See the LICENSE file for the copyright and license information for these
+libraries.
 
-• The Python developers.
-• saurik, for porting Python and PyObjC to iPhoneOS (this whole thing is written in Python!).
-• Dave Arter, for writing the Python sample code used as the basis for this app.
-• gojohnnyboi, for posting the (Obj-C) source code of his apps so people like me could learn from it.
-• BigBoss, for hosting AppBackup on his repository.
-• Dennis Morren and Tim van Neerbos for the Dutch translation.
-• Marc Klein for the French translation.
-• Chris Zander for the German translation.
-• Pietropaolo Mastromarco for the Italian translation.
-• Nikita "ZAY" Peshkov for the Russian translation.
-• Ramón Cutanda for the Spanish translation.
-• Magnus Pålsson for the Swedish translation.
-• Everyone who has sent me bug reports!
+Translations for languages other than English were provided by the following
+volunteers:
+ • Dennis Morren and Tim van Neerbos - Dutch
+ • Marc Klein - French
+ • Chris Zander - German
+ • Pietropaolo Mastromarco - Italian
+ • Nikita "ZAY" Peshkov - Russian
+ • Ramón Cutanda - Spanish
+ • Magnus Pålsson - Swedish
 
-Tango icons are © Tango Desktop Project and are released under the Creative Commons Attribution Share-Alike license.
+This app's logo is a Tango icon.  The icon is © Tango Desktop Project and
+released under the Creative Commons Attribution Share-Alike license.
 
-If you want to help translate AppBackup into a different language, please contact me at <iphone@srwz.us>.  Currently, it supports English, Dutch, French, German, Italian, Russian, Spanish, and Swedish.
+In addition to everyone listed above, I would like to thank the following
+people who paid me lots of money to see their names in lights:
+ • The Python developers.
+ • Jay Freeman (saurik) for packaging Python for iOS.
+ • Dustin L. Howett (https://github.com/DHowett/theos), Dave Arter,
+   gojohnnyboi, Jim Beesley (http://code.google.com/p/iphonetextreader/),
+   and others who wrote the sample code I used as reference.
+ • BigBoss, for hosting AppBackup on his repository.
+ • Everyone who has sent me bug reports.
+
+If you want to help translate AppBackup into a different language, please go 
+to <http://me.srwz.us/iphone/appbackup>.  Currently, it supports English, 
+Dutch, French, German, Italian, Russian, Spanish, and Swedish.

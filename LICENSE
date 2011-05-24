@@ -77,6 +77,8 @@ This program contains the following libraries or portions of them:
     SOFTWARE.
 
  * MBProgressHUD (https://github.com/jdg/MBProgressHUD):
+    (with modifications by Jonathan George)
+    
     This code is distributed under the terms and conditions of the MIT license. 
     
     Copyright (c) 2009 Matej Bukovinski
