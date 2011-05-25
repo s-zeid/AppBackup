@@ -1,4 +1,4 @@
-Translations
+AppBackup Translations
 
 I use Transifex to manage translations for AppBackup.  If you would like to
 translate AppBackup to another language, or update an existing translation:
@@ -14,3 +14,8 @@ NOTE:  %@ is a placeholder for various items of text that are included at
       there, click Add Translation, select your language, and click Translate
       Online.
   5.  Update your translation and click Save All when you’re done.
+
+Developer note:  The translations are stored here as INI files (this is one of
+the few formats supported by Transifex), and the ini-to-strings.py script is
+run by build in order to convert them into Localizable.strings and place them
+into the proper .lproj folders.
