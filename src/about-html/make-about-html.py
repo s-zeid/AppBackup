@@ -75,7 +75,7 @@ info_plist = plistlib.readPlist(os.path.join("src", "bundle", "Info.plist"))
 app_name   = htmlentities(info_plist["CFBundleDisplayName"], exclude="")
 version    = htmlentities(info_plist["CFBundleShortVersionString"], exclude="")
 tplvars    = dict(app_name=app_name, changelog="", credits="", license="",
-                  version=version)
+                  template="document", version=version)
 
 with open("CHANGELOG", "rb") as f:
  tplvars["changelog"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
