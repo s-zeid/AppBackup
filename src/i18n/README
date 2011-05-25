@@ -1,0 +1,16 @@
+Translations
+
+I use Transifex to manage translations for AppBackup.  If you would like to
+translate AppBackup to another language, or update an existing translation:
+
+NOTE:  %@ is a placeholder for various items of text that are included at
+       runtime.  You need to have the %@ in the appropriate places in your
+       translations for AppBackup to work.
+
+  1.  Go to <https://www.transifex.net/>.
+  2.  Sign up for a free account or log in if you already have one.
+  3.  Go to <https://www.transifex.net/projects/p/appbackup/resource/localizable-strings/>.
+  4.  Click on your language and click Translate Now.  If your language is not
+      there, click Add Translation, select your language, and click Translate
+      Online.
+  5.  Update your translation and click Save All when you’re done.
