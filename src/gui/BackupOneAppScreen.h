@@ -56,6 +56,7 @@
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex;
 - (void)doAction;
+- (void)_doActionCallback;
 - (void)hideHUD;
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 - (void)show;

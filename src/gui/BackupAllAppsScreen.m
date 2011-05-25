@@ -60,20 +60,37 @@
  NSString *buttonText = [alertView buttonTitleAtIndex:buttonIndex];
  [screen autorelease];
  if ([buttonText isEqualToString:[_ s:@"cancel"]] ||
-     [buttonText isEqualToString:[_ s:@"ok"]]) {
+     [buttonText isEqualToString:[_ s:@"ok"]] ||
+     [buttonText isEqualToString:[_ s:@"no"]]) {
+  // User canceled action or clicked OK
   [self autorelease];
   return;
+ } else if ([buttonText isEqualToString:[_ s:@"yes"]]) {
+  // User confirmed action
+  [self doAction];
+ } else {
+  // User selected action and needs to confirm it first
+  if ([buttonText isEqualToString:[_ s:@"backup"]])
+   self.action = @"backup";
+  if ([buttonText isEqualToString:[_ s:@"delete"]])
+   self.action = @"delete";
+  if ([buttonText isEqualToString:[_ s:@"ignore"]])
+   self.action = @"ignore";
+  if ([buttonText isEqualToString:[_ s:@"restore"]])
+   self.action = @"restore";
+  if ([buttonText isEqualToString:[_ s:@"unignore"]])
+   self.action = @"unignore";
+  self.screen = [[UIAlertView alloc] init];
+  screen.delegate = self;
+  screen.title = [_ s:@"are_you_sure"];
+  [screen addButtonWithTitle:[_ s:@"yes"]];
+  NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:@"no"]];
+  [screen setCancelButtonIndex:cancel_btn];
+  [screen show];
  }
- if ([buttonText isEqualToString:[_ s:@"backup"]])
-  self.action = @"backup";
- if ([buttonText isEqualToString:[_ s:@"delete"]])
-  self.action = @"delete";
- if ([buttonText isEqualToString:[_ s:@"ignore"]])
-  self.action = @"ignore";
- if ([buttonText isEqualToString:[_ s:@"restore"]])
-  self.action = @"restore";
- if ([buttonText isEqualToString:[_ s:@"unignore"]])
-  self.action = @"unignore";
+}
+
+- (void)doAction {
  self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
  hud.delegate = self;
  hud.yOffset -= vc.navigationController.navigationBar.frame.size.height;
@@ -81,11 +98,11 @@
  hud.detailsLabelText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
                                                         action]];
  [vc.view.window addSubview:hud];
- [hud showWhileExecuting:@selector(doAction) onTarget:self withObject:nil
-      animated:YES];
+ [hud showWhileExecuting:@selector(_doActionCallback) onTarget:self
+      withObject:nil animated:YES];
 }
 
-- (void)doAction {
+- (void)_doActionCallback {
  NSString *title;
  NSString *text;
  BOOL      resultsBox = YES;
@@ -125,8 +142,8 @@
 
 - (void)show {
  self.screen = [[UIAlertView alloc] init];
- screen.title = [_ s:@"all_apps"];
  screen.delegate = self;
+ screen.title = [_ s:@"all_apps"];
  NSString *prompt;
  [screen addButtonWithTitle:[_ s:@"backup"]];
  if (vc.appbackup.anyBackedUp) {
