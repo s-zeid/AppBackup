@@ -49,6 +49,8 @@ out_file = os.path.abspath(sys.argv[2])
 print "Converting %s..." % in_file
 with open(in_file, "rb") as f:
  t = unicode(f.read(), "utf8") + "\n"
+if "%s" in t:
+ print "warning: %s contains one or more occurrences of %%s" % in_file
 t = re.compile(r"\/\*.*?\*\/", re.MULTILINE|re.DOTALL|re.UNICODE).sub("", t)
 t = t.replace('" = "', '": "')
 t = t.replace('; \n', '\n')
@@ -59,5 +61,6 @@ o = []
 keys = sorted(y.keys())
 for k in keys:
  o += ['%s=%s' % (k, y[k])]
+o = "\n".join(o)
 with open(out_file, "wb") as f:
- f.write("\n".join(o).encode("utf8"))
+ f.write(o.encode("utf8"))

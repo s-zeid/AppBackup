@@ -7,9 +7,9 @@ Changes in 2.0 (2011-05-DD):
  • The FixPermissions utility can now be used by typing appbackup-fix-permissions at the terminal.  It is still run automatically in the GUI mode only.
  • Updated translations and added new translations for the following languages:
     · Czech - Jan Kozánek
+    · Chinese - goodlook8666
     · Greek - Spiros
     · Japanese - Osamu
-    · Korean - Joon Ki Hong
     · Norwegian - Jan Gerhard Schøpp
  • Changed translations format in the source tree.
  • Translations are now managed on Transifex (https://www.transifex.net/) and converted to Apple's Localizable.strings format at build time.
