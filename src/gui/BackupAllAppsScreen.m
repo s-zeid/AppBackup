@@ -93,7 +93,6 @@
 - (void)doAction {
  self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
  hud.delegate = self;
- hud.yOffset -= vc.navigationController.navigationBar.frame.size.height;
  hud.labelText = [_ s:@"please_wait"];
  hud.detailsLabelText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
                                                         action]];
