@@ -17,5 +17,5 @@ NOTE:  %@ is a placeholder for various items of text that are included at
 
 Developer note:  The translations are stored here as INI files (this is one of
 the few formats supported by Transifex), and the ini-to-strings.py script is
-run by build in order to convert them into Localizable.strings and place them
-into the proper .lproj folders.
+run by build in order to convert them into Localizable.strings files and place
+them into the proper .lproj folders.
