@@ -1,0 +1,78 @@
+# AppBackup Translation (English, Scott Zeid)
+#
+# Strings containing %@ mean that the %@ is replaced by something.  This
+# something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
+# THE %@ IF YOU WANT IT TO LOOK RIGHT!!!
+#
+# This file should be saved in UTF-8 encoding.
+
+baktext_yes: "Last backed up:  %@" # %@ = last backup time
+baktext_no: "Never backed up."
+baktext_ignored: "You are ignoring this app."
+app_corrupted_list: "This app is corrupted."
+app_corrupted_prompt: "This app is corrupted and therefore cannot be backed up or restored."
+app_ignored_prompt: "You are ignoring this app, so it will not be backed up or restored."
+all_button: "All"
+all_apps: "All Applications"
+about_button: "About"
+about_title: "About %@" # %@ = AppBackup
+main_window_title: "App Store Apps"
+apps: "Apps"
+please_wait: "Please wait..."
+ok: "OK"
+cancel: "Cancel"
+"yes": "Yes"
+"no": "No"
+backup: "Backup"
+restore: "Restore"
+delete: "Delete"
+ignore: "Ignore"
+unignore: "Un-ignore"
+are_you_sure: "Are you sure?"
+backup_1_app: "Do you want to backup this app's saved data?"
+backup_restore_1_app: "Do you want to backup or restore this app's saved data?"
+backup_all_apps: "Do you want to backup all apps' saved data?"
+backup_restore_all_apps: "Do you want to backup or restore all apps' saved data?"
+delete_1_app: "Do you want to delete this app's backup?"
+delete_all_apps: "Do you want to backup all apps' backups?"
+web_site: "Web Site"
+done: "%@ done!" # %@ = action
+partially_done: "%@ partially done" # %@ = action
+backup_done: "Backup done!"
+backup_partially_done: "Backup partially done"
+backup_failed: "Backup failed"
+restore_done: "Restore done!"
+restore_partially_done: "Restore partially done"
+restore_failed: "Restore failed"
+delete_done: "Deleted backup(s)!"
+delete_partially_done: "Some backups deleted"
+delete_failed: "Delete failed"
+ignore_failed: "Ignore failed"
+unignore_failed: "Un-ignore failed"
+all_status_backup_doing: "Backing up all apps' saved data..."
+all_status_backup_done: "Backed up all apps' data!"
+all_status_backup_failed: "The following apps' data could not be backed up:"
+all_status_backup_corrupted: "The following apps' data were not backed up because they are corrupted:"
+all_status_restore_doing: "Restoring all apps' saved data..."
+all_status_restore_done: "Restored all apps' data!"
+all_status_restore_failed: "The following apps' data could not be restored:"
+all_status_restore_corrupted: "The following apps' data were not restored because they are corrupted:"
+all_status_delete_doing: "Deleting all apps' backups..."
+all_status_delete_done: "Deleted all apps' backups!"
+all_status_delete_failed: "The following apps' backups could not be deleted:"
+all_status_delete_corrupted: "The following apps' backups were not deleted because they are corrupted:"
+1_status_backup_doing: "Backing up %@'s saved data..." # %@ = app name
+1_status_backup_done: "Backed up %@'s data!" # %@ = app name
+1_status_backup_failed: "The app %@'s data could not be backed up." # %@ = app name
+1_status_restore_doing: "Restoring %@'s saved data..." # %@ = app name
+1_status_restore_done: "Restored %@'s data!" # %@ = app name
+1_status_restore_failed: "The app %@'s data could not be restored." # %@ = app name
+1_status_ignore_doing: "Ignoring %@..." # %@ = app name
+1_status_ignore_done: "Ignored %@!" # %@ = app name
+1_status_ignore_failed: "The app %@'s data could not be ignored." # %@ = app name
+1_status_unignore_doing: "Un-ignoring %@..." # %@ = app name
+1_status_unignore_done: "Un-ignored %@!" # %@ = app name
+1_status_unignore_failed: "The app %@'s data could not be un-ignored." # %@ = app name
+1_status_delete_doing: "Deleting %@'s backup..." # %@ = app name
+1_status_delete_done: "Deleted %@'s backup!" # %@ = app name
+1_status_delete_failed: "The app %@'s backup could not be deleted." # %@ = app name

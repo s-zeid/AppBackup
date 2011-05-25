@@ -23,7 +23,7 @@ Directory structure with descriptions for some files
     bundle/         - Files included in .app bundle, excluding subdirectories
     FixPermissions/ - FixPermissions (C; fixes storage directory permissions)*
     gui/            - GUI source code and third-party libraries in Objective-C
-    i18n/           - Localizations / .lproj folders
+    i18n/           - Translations in YAML and a Python script to convert them
     images/         - GIMP source files for image resources
     python/         - AppBackup CLI and Python package; other Python modules
     usr/            - /usr/bin/appbackup{,-fix-permissions} launcher scripts

@@ -1,0 +1,78 @@
+# AppBackup Translation (German, Chris Zander)
+#
+# Strings containing %@ mean that the %@ is replaced by something.  This
+# something is explained in the comment next to it.  MAKE SURE YOU PRESERVE
+# THE %@ IF YOU WANT IT TO LOOK RIGHT!!!
+#
+# This file should be saved in UTF-8 encoding.
+
+baktext_yes: "Letzte Sicherung:  %@" # %@ = last backup time
+baktext_no: "Keine Sicherung erstellt."
+baktext_ignored: "You are ignoring this app."
+app_corrupted_list: "Die Applikation ist in einem inkonsistenten Zustand"
+app_corrupted_prompt: "Die Daten dieser Applikation sind in einem inkonsistenten Zustand und können nicht gesichert werden."
+app_ignored_prompt: "You are ignoring this app, so it will not be backed up or restored."
+all_button: "Alle"
+all_apps: "Alle Applikationen"
+about_button: "Info"
+about_title: "Über %@" # %@ = AppBackup
+main_window_title: "App Store Applikationen"
+apps: "Applikationen"
+please_wait: "Einen Moment bitte..."
+ok: "OK"
+cancel: "Abbrechen"
+"yes": "Yes"
+"no": "No"
+backup: "Sichern"
+restore: "Wiederherstellen"
+delete: "Delete"
+ignore: "Ignore"
+unignore: "Un-ignore"
+are_you_sure: "Are you sure?"
+backup_1_app: "Möchten Sie die Daten dieser Applikation sichern?"
+backup_restore_1_app: "Möchten Sie die Daten dieser Applikation sichern oder wiederherstellen?"
+backup_all_apps: "Möchten Sie die Daten aller Applikationen sichern?"
+backup_restore_all_apps: "Möchten Sie die Daten aller Applikationen sichern oder wiederherstellen?"
+delete_1_app: "Do you want to delete this app's backup?"
+delete_all_apps: "Do you want to backup all apps' backups?"
+web_site: "Web Seite"
+done: "%@ fertig!" # %@ = action
+partially_done: "%@ teilweise fertig" # %@ = action
+backup_done: "Sicherung fertig!"
+backup_partially_done: "Sicherung teilweise fertig"
+backup_failed: "Sicherung gescheitert"
+restore_done: "Wiederherstellung fertig!"
+restore_partially_done: "Wiederherstellung teilweise fertig"
+restore_failed: "Wiederherstellung gescheitert"
+delete_done: "Deleted backup(s)!"
+delete_partially_done: "Some backups deleted"
+delete_failed: "Delete failed"
+ignore_failed: "Ignore failed"
+unignore_failed: "Un-ignore failed"
+all_status_backup_doing: "Sichere die Daten aller Applikationen"
+all_status_backup_done: "Die Daten aller Applikationen sind gesichert"
+all_status_backup_failed: "Die Daten folgender Applikationen konnten nicht gesichert werden"
+all_status_backup_corrupted: "Die Daten folgender Applikationen konnten nicht gesichert werden, da diese inkonsistent sind:"
+all_status_restore_doing: "Stelle die Daten aller Applikationen wieder her."
+all_status_restore_done: "Die Daten aller Applikationen sind wiederhergestellt"
+all_status_restore_failed: "Die Daten folgender Applikationen konnten nicht wiederhergestellt werden:"
+all_status_restore_corrupted: "Die Daten folgender Applikationen konnten nicht wiederhergestellt werden, da diese inkonsistent sind:"
+all_status_delete_doing: "Deleting all apps' backups..."
+all_status_delete_done: "Deleted all apps' backups!"
+all_status_delete_failed: "The following apps' backups could not be deleted:"
+all_status_delete_corrupted: "The following apps' backups were not deleted because they are corrupted:"
+1_status_backup_doing: "Sichere die Daten von %@..." # %@ = app name
+1_status_backup_done: "Die Daten von %@ sind gesichert!" # %@ = app name
+1_status_backup_failed: "Die Daten von %@ konnten nicht gesichert werden." # %@ = app name
+1_status_restore_doing: "Stelle die Daten von %@ wieder her..." # %@ = app name
+1_status_restore_done: "Die Daten von %@ sind wiederhergestellt!" # %@ = app name
+1_status_restore_failed: "Die Daten von %@ konnten nicht wiederhergestellt werden." # %@ = app name
+1_status_ignore_doing: "Ignoring %@..." # %@ = app name
+1_status_ignore_done: "Ignored %@!" # %@ = app name
+1_status_ignore_failed: "The app %@'s data could not be ignored." # %@ = app name
+1_status_unignore_doing: "Un-ignoring %@..." # %@ = app name
+1_status_unignore_done: "Un-ignored %@!" # %@ = app name
+1_status_unignore_failed: "The app %@'s data could not be un-ignored." # %@ = app name
+1_status_delete_doing: "Deleting %@'s backup..." # %@ = app name
+1_status_delete_done: "Deleted %@'s backup!" # %@ = app name
+1_status_delete_failed: "The app %@'s backup could not be deleted." # %@ = app name

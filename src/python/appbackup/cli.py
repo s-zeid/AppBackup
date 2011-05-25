@@ -246,4 +246,7 @@ def parse_argv(argv):
  return opts, cmd, args
 
 if __name__ == "__main__":
- sys.exit(main(sys.argv))
+ try:
+  sys.exit(main(sys.argv))
+ except KeyboardInterrupt:
+  pass
