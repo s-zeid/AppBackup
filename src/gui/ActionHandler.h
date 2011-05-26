@@ -29,33 +29,44 @@
  * 
  */
 
-// Backup All Apps screen (header)
+// Action handler base class (header)
 
 #import <UIKit/UIKit.h>;
 
-#import "AppBackup.h";
 #import "AppListVC.h";
 #import "MBProgressHUD.h";
 
-@interface BackupAllAppsScreen : NSObject
+@interface ActionHandler : NSObject
            <MBProgressHUDDelegate, UIAlertViewDelegate> {
- AppListVC           *vc;
- NSString            *action;
- UIAlertView         *screen;
- MBProgressHUD       *hud;
+ NSString       *action;
+ NSString       *chooserTitle;
+ NSString       *chooserPrompt;
+ NSString       *chooserCancelText;
+ NSString       *hudDetailsText;
+ MBProgressHUD  *hud;
+ UIAlertView    *screen;
+ NSMutableArray *validActions;
+ AppListVC      *vc;
 }
-@property (retain) AppListVC           *vc;
-@property (retain) NSString            *action;
-@property (retain) UIAlertView         *screen;
-@property (retain) MBProgressHUD       *hud;
+@property (retain) NSString       *action;
+@property (retain) NSString       *chooserTitle;
+@property (retain) NSString       *chooserPrompt;
+@property (retain) NSString       *chooserCancelText;
+@property (retain) MBProgressHUD  *hud;
+@property (retain) NSString       *hudDetailsText;
+@property (retain) UIAlertView    *screen;
+@property (retain) NSMutableArray *validActions;
+@property (retain) AppListVC      *vc;
 - (id)initWithVC:(AppListVC *)vc_;
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex;
 - (void)doAction;
 - (void)_doActionCallback;
 - (void)hideHUD;
+- (void)_hideHUDCallback;
 - (void)hudWasHidden:(MBProgressHUD *)hud;
-- (void)show;
-- (void)showResultWithTitleAndText:(NSArray *)array;
+- (void)showResultWithTitle:(NSString *)title text:(NSString *)text;
+- (void)start;
+- (void)_showResultWithTitleAndTextCallback:(NSArray *)array;
 - (void)dealloc;
 @end

@@ -35,9 +35,9 @@
 #import <UIKit/UIKit.h>;
 
 #import "AboutScreenVC.h";
+#import "AllAppsHandler.h";
 #import "AppBackup.h";
-#import "BackupAllAppsScreen.h";
-#import "BackupOneAppScreen.h";
+#import "OneAppHandler.h";
 #import "MBProgressHUD.h";
 #import "util.h";
 
@@ -95,7 +95,7 @@
  UIBarButtonItem *allBtn = [[UIBarButtonItem alloc]
                             initWithTitle:[_ s:@"all_button"]
                             style:UIBarButtonItemStyleBordered
-                            target:self action:@selector(showAllAppsScreen:)];
+                            target:self action:@selector(startAllAppsHandler:)];
  UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc]
                               initWithTitle:[_ s:@"about_button"]
                               style:UIBarButtonItemStyleBordered
@@ -139,19 +139,19 @@
  [aboutScreenVC release];
 }
 
-- (void)showAllAppsScreen:(id)sender {
+- (void)startAllAppsHandler:(id)sender {
  // Called when you tap the All button
- BackupAllAppsScreen *screen = [[BackupAllAppsScreen alloc] initWithVC:self];
- [screen show];
- [screen release];
+ AllAppsHandler *handler = [[AllAppsHandler alloc] initWithVC:self];
+ [handler start];
+ [handler release];
 }
 
-- (void)showBackupOneAppScreenForAppAtIndex:(NSInteger)index {
+- (void)startOneAppHandlerForAppAtIndex:(NSInteger)index {
  // Called from tableView:didSelectRowAtIndexPath:
- BackupOneAppScreen *screen = [[BackupOneAppScreen alloc] initWithVC:self
-                               appAtIndex:index];
- [screen show];
- [screen release];
+ OneAppHandler *handler = [[OneAppHandler alloc] initWithVC:self
+                           appAtIndex:index];
+ [handler start];
+ [handler release];
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
@@ -187,7 +187,7 @@
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
  // Called when a table row is selected
  [tv deselectRowAtIndexPath:ip animated:YES];
- [self showBackupOneAppScreenForAppAtIndex:ip.row];
+ [self startOneAppHandlerForAppAtIndex:ip.row];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID {

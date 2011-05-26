@@ -29,40 +29,22 @@
  * 
  */
 
-// App list view controller (header)
+// One App action handler (header)
 
-#import <CoreFoundation/CoreFoundation.h>;
-#import <UIKit/UIKit.h>;
+#import <Foundation/Foundation.h>;
 
-#import "AppBackup.h";
-#import "MBProgressHUD.h";
+#import "ActionHandler.h";
+#import "AppListVC.h";
 
-@interface AppListVC : UIViewController
-           <UITableViewDataSource, UITableViewDelegate> {
- UITableView *table;
- AppBackup   *appbackup;
- BOOL         appsLoaded;
+@interface OneAppHandler : ActionHandler {
+ NSDictionary        *app;
+ NSInteger            index;
 }
-@property (retain) UITableView *table;
-@property (retain) AppBackup   *appbackup;
-@property (assign) BOOL         appsLoaded;
-- (id)initWithAppBackup:(AppBackup *)appbackup_;
-- (void)loadView;
-- (void)viewDidAppear:(BOOL)animated;
-- (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
-- (void)showAboutScreen:(id)sender;
-- (void)startAllAppsHandler:(id)sender;
-- (void)startOneAppHandlerForAppAtIndex:(NSInteger)index;
-- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
-- (UITableViewCell *)tableView:(UITableView *)tv
-                     cellForRowAtIndexPath:(NSIndexPath *)ip;
-- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID;
-- (void)updateAppListUsingHUD:(BOOL)useHUD;
-- (void)_updateAppListCallback:(MBProgressHUD *)hud;
-- (void)updateAppAtIndex:(NSInteger)index;
-- (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
-- (void)updateAppAtIndexWithDictUsingArray:(NSArray *)array;
-- (void)updateTableAndRemoveHUD:(MBProgressHUD *)hud;
+@property (retain) NSDictionary        *app;
+@property (assign) NSInteger            index;
+- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_;
+- (void)doAction;
+- (void)_doActionCallback;
+- (void)start;
 - (void)dealloc;
 @end

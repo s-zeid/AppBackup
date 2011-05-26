@@ -29,37 +29,16 @@
  * 
  */
 
-// Backup One App screen (header)
+// All Apps action handler (header)
 
-#import <UIKit/UIKit.h>;
+#import <Foundation/Foundation.h>;
 
-#import "AppBackup.h";
+#import "ActionHandler.h";
 #import "AppListVC.h";
-#import "MBProgressHUD.h";
 
-@interface BackupOneAppScreen : NSObject
-           <MBProgressHUDDelegate, UIAlertViewDelegate> {
- AppListVC           *vc;
- NSInteger            index;
- NSDictionary        *app;
- NSString            *action;
- UIAlertView         *screen;
- MBProgressHUD       *hud;
-}
-@property (retain) AppListVC           *vc;
-@property (assign) NSInteger            index;
-@property (retain) NSDictionary        *app;
-@property (retain) NSString            *action;
-@property (retain) UIAlertView         *screen;
-@property (retain) MBProgressHUD       *hud;
-- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_;
-- (void)alertView:(UIAlertView *)alertView
-        didDismissWithButtonIndex:(NSInteger)buttonIndex;
+@interface AllAppsHandler : ActionHandler {}
+- (id)initWithVC:(AppListVC *)vc_;
 - (void)doAction;
 - (void)_doActionCallback;
-- (void)hideHUD;
-- (void)hudWasHidden:(MBProgressHUD *)hud;
-- (void)show;
-- (void)showResultWithTitleAndText:(NSArray *)array;
-- (void)dealloc;
+- (void)start;
 @end

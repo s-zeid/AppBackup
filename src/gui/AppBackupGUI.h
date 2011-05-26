@@ -29,7 +29,7 @@
  * 
  */
 
-// Main screen (header)
+// App delegate (header)
 
 #import <UIKit/UIKit.h>;
 

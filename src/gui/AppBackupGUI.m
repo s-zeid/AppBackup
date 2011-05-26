@@ -29,7 +29,7 @@
  * 
  */
 
-// Main screen
+// App delegate
 
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;

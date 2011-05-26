@@ -29,7 +29,7 @@
  * 
  */
 
-// About screen
+// About screen view controller
 
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;

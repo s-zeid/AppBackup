@@ -29,7 +29,7 @@
  * 
  */
 
-// About screen (header)
+// About screen view controller (header)
 
 #import <UIKit/UIKit.h>;
 

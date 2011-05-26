@@ -29,7 +29,7 @@
  * 
  */
 
-// Backup All Apps screen
+// Action handler base class
 
 #import <UIKit/UIKit.h>;
 
@@ -38,18 +38,27 @@
 #import "MBProgressHUD.h";
 #import "util.h";
 
-#import "BackupAllAppsScreen.h";
+#import "ActionHandler.h";
 
-@implementation BackupAllAppsScreen
-@synthesize vc;
+@implementation ActionHandler
 @synthesize action;
-@synthesize screen;
+@synthesize chooserTitle;
+@synthesize chooserPrompt;
+@synthesize chooserCancelText;
 @synthesize hud;
+@synthesize hudDetailsText;
+@synthesize screen;
+@synthesize validActions;
+@synthesize vc;
 
 - (id)initWithVC:(AppListVC *)vc_ {
  self = [super init];
  if (self) {
   self.vc = vc_;
+  self.validActions = [NSMutableArray arrayWithObjects:
+                        @"backup", @"restore", @"ignore", @"unignore",
+                        @"delete", nil];
+  self.chooserCancelText = [_ s:@"cancel"];
  }
  return self;
 }
@@ -70,16 +79,15 @@
   [self doAction];
  } else {
   // User selected action and needs to confirm it first
-  if ([buttonText isEqualToString:[_ s:@"backup"]])
-   self.action = @"backup";
-  if ([buttonText isEqualToString:[_ s:@"delete"]])
-   self.action = @"delete";
-  if ([buttonText isEqualToString:[_ s:@"ignore"]])
-   self.action = @"ignore";
-  if ([buttonText isEqualToString:[_ s:@"restore"]])
-   self.action = @"restore";
-  if ([buttonText isEqualToString:[_ s:@"unignore"]])
-   self.action = @"unignore";
+  int i;
+  NSString *t;
+  for (i = 0; i < [validActions count]; i++) {
+   t = [validActions objectAtIndex:i];
+   if ([buttonText isEqualToString:[_ s:t]]) {
+    self.action = t;
+    break;
+   }
+  }
   self.screen = [[UIAlertView alloc] init];
   screen.delegate = self;
   screen.title = [_ s:@"are_you_sure"];
@@ -94,43 +102,22 @@
  self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
  hud.delegate = self;
  hud.labelText = [_ s:@"please_wait"];
- hud.detailsLabelText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
-                                                        action]];
+ hud.detailsLabelText = hudDetailsText;
  [vc.view.window addSubview:hud];
  [hud showWhileExecuting:@selector(_doActionCallback) onTarget:self
       withObject:nil animated:YES];
 }
 
 - (void)_doActionCallback {
- NSString *title;
- NSString *text;
- BOOL      resultsBox = YES;
- NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
- [vc performSelectorOnMainThread:@selector(updateAppListUsingHUD:)
-     withObject:NO waitUntilDone:YES];
- if ([[r objectForKey:@"success"] boolValue]) {
-  title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
-  text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];
-  //if ([action isEqualToString:@"ignore"] ||
-  //    [action isEqualToString:@"unignore"])
-  // resultsBox = NO;
- } else {
-  if ([r objectForKey:@"exit_code"] == 0)
-   title = [_ s:[NSString stringWithFormat:@"%@_partially_done", action]];
-  else
-   title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
-  text = [_ s:[NSString stringWithFormat:@"all_status_%@_failed", action]];
-  text = [NSString stringWithFormat:@"%@\n\n%@",text,[r objectForKey:@"data"]];
- }
- [self performSelectorOnMainThread:@selector(hideHUD) withObject:nil
-       waitUntilDone:YES];
- if (resultsBox) {
-  [self performSelectorOnMainThread:@selector(showResultWithTitleAndText:)
-        withObject:[NSArray arrayWithObjects:title,text,nil] waitUntilDone:YES];
- }
+ [self showResultWithTitle:@"" text:@""];
 }
 
 - (void)hideHUD {
+ [self performSelectorOnMainThread:@selector(_hideHUDCallback) withObject:nil
+       waitUntilDone:YES];
+}
+
+- (void)_hideHUDCallback {
  [hud hide:YES];
  [hud autorelease];
 }
@@ -139,25 +126,14 @@
  [hud_ removeFromSuperview];
 }
 
-- (void)show {
- self.screen = [[UIAlertView alloc] init];
- screen.delegate = self;
- screen.title = [_ s:@"all_apps"];
- NSString *prompt;
- [screen addButtonWithTitle:[_ s:@"backup"]];
- if (vc.appbackup.anyBackedUp) {
-  prompt = [_ s:@"backup_restore_all_apps"];
-  [screen addButtonWithTitle:[_ s:@"restore"]];
-  [screen addButtonWithTitle:[_ s:@"delete"]];
- } else prompt = [_ s:@"backup_all_apps"];
- screen.message = prompt;
- NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:@"cancel"]];
- [screen setCancelButtonIndex:cancel_btn];
- [screen show];
- [self retain];
+- (void)showResultWithTitle:(NSString *)title text:(NSString *)text {
+ [self performSelectorOnMainThread:
+        @selector(_showResultWithTitleAndTextCallback:)
+       withObject:[NSArray arrayWithObjects:title, text, nil]
+       waitUntilDone:YES];
 }
 
-- (void)showResultWithTitleAndText:(NSArray *)array {
+- (void)_showResultWithTitleAndTextCallback:(NSArray *)array {
  self.screen = [[UIAlertView alloc] init];
  screen.title = [array objectAtIndex:0];
  screen.message = [array objectAtIndex:1];
@@ -165,11 +141,30 @@
  [screen show];
 }
 
+- (void)start {
+ self.screen = [[UIAlertView alloc] init];
+ screen.delegate = self;
+ screen.title = chooserTitle;
+ screen.message = chooserPrompt;
+ int i;
+ for (i = 0; i < [validActions count]; i++)
+  [screen addButtonWithTitle:[_ s:[validActions objectAtIndex:i]]];
+ NSInteger cancel_btn = [screen addButtonWithTitle:chooserCancelText];
+ [screen setCancelButtonIndex:cancel_btn];
+ [screen show];
+ [self retain];
+}
+
 - (void)dealloc {
- self.vc = nil;
  self.action = nil;
- self.screen = nil;
+ self.chooserTitle = nil;
+ self.chooserPrompt = nil;
+ self.chooserCancelText = nil;
  self.hud = nil;
+ self.hudDetailsText = nil;
+ self.screen = nil;
+ self.validActions = nil;
+ self.vc = nil;
  [super dealloc];
 }
 @end

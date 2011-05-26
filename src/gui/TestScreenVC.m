@@ -29,7 +29,7 @@
  * 
  */
 
-// Test screen
+// Test screen view controller
 
 #import <CoreFoundation/CoreFoundation.h>;
 #import <UIKit/UIKit.h>;

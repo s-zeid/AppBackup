@@ -29,7 +29,7 @@
  * 
  */
 
-// Test screen (header)
+// Test screen view controller (header)
 
 #import <UIKit/UIKit.h>;
 
