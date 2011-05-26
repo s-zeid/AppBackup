@@ -12,6 +12,7 @@ Changes in 2.0 (2011-05-26):
     · Chinese - goodlook8666
     · Greek - Spiros Chistoforos-Libanis
     · Japanese - Osamu
+    · Korean - Joon Ki Hong
     · Norwegian - Jan Gerhard Schøpp
  • Changed translations format in the source tree.
  • Translations are now managed on Transifex (https://www.transifex.net/) and converted to Apple's Localizable.strings format at build time.
