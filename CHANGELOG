@@ -1,14 +1,16 @@
-Changes in 2.0 (2011-05-DD):
- • AppBackup now works on iOS versions 4.3.1 and later (and it still works with older versions).
+Changes in 2.0 (2011-05-26):
+ • AppBackup now works on iOS versions 4.3.x and later (and it still works with iOS 3; untested on iOS 2).
+ • Added a confirmation screen for all actions.
+ • Redesigned About screen.
  • AppBackup has been split into two parts:
     · The GUI, written in Objective-C this time.
     · A command-line interface in the form of a Python package.  (Just type appbackup at the terminal to use it.)
-    · As a result, the back-end code has been completely rewritten and is much cleaner and object-oriented.
+    · As a result, the code has been completely rewritten and is much cleaner and object-oriented.
  • The FixPermissions utility can now be used by typing appbackup-fix-permissions at the terminal.  It is still run automatically in the GUI mode only.
  • Updated translations and added new translations for the following languages:
     · Czech - Jan Kozánek
     · Chinese - goodlook8666
-    · Greek - Spiros
+    · Greek - Spiros Chistoforos-Libanis
     · Japanese - Osamu
     · Norwegian - Jan Gerhard Schøpp
  • Changed translations format in the source tree.
