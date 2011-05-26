@@ -31,8 +31,6 @@
 
 # GUI runner
 
-DEBUG_FILE=/var/mobile/Library/Preferences/AppBackup/debug.log
-
 # Fix permissions on user directory (This is a binary with setuid root)
 # Make a blank file in /Applications/AppBackup.app called NoFixPermissions to
 # disable this.
@@ -43,8 +41,4 @@ fi
 # Run the GUI and log debug info to $DEBUG_FILE if we're mobile (which we
 # should be)
 cd "$(dirname "$0")"
-if [ "$USER" = "mobile" ]; then
- exec "$(dirname "$0")/AppBackupGUI_" "$@" &>"$DEBUG_FILE"
-else
- exec "$(dirname "$0")/AppBackupGUI_" "$@"
-fi
+exec "$(dirname "$0")/AppBackupGUI_" "$@"

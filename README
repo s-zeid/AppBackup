@@ -17,25 +17,25 @@ Contents
 Directory structure with descriptions for some files
 ====================================================
 /
-  DEBIAN/ - Debian package control files
+  DEBIAN/          - Debian package control files
+  i18n/            - Translations in INI format and some conversion scripts
   src/
     about-html/     - Generator for the HTML file used in the About screen
     bundle/         - Files included in .app bundle, excluding subdirectories
     FixPermissions/ - FixPermissions (C; fixes storage directory permissions)*
     gui/            - GUI source code and third-party libraries in Objective-C
-    i18n/           - Translations in YAML and a Python script to convert them
-    images/         - GIMP source files for image resources
-    python/         - AppBackup CLI and Python package; other Python modules
+    images/         - GIMP and SVG source files for image resources
+    python/         - AppBackup CLI Python package and 3rd-party Python modules
     usr/            - /usr/bin/appbackup{,-fix-permissions} launcher scripts
   AppBackup.geany - Geany project file; I don't use this (but I do use Geany)
   build - Build a Debian package (./build [device-hostname] [deb-file-prefix])**
-  config.dist - Configuration (path to arm-apple-darwin9-gcc) for build and test
-  test - Script to test AppBackup on your own device (./test device-address)
+  config.dist - Configuration file for build and test**
+  test - Script to test AppBackup on your own device (./test device-address)**
   ...
 
  * FixPermissions is changed to setuid root after the package is installed.
-** See Building AppBackup for details.  FixPermissions is not re-compiled by
-   default.
+** See the Building AppBackup section for details.  AppBackupGUI and
+   FixPermissions are NOT re-compiled by default.
 
 Prerequisites for building
 ==========================
