@@ -1,3 +1,9 @@
+Changes in 2.0.1 (2011-05-27):
+ • Fixed the problem where AppBackup was hanging on the Please Wait screen for many people.
+ • Fixed a cosmetic bug with the Please Wait screen.
+ • Updated Spanish translation.
+ • ini-to-strings.py now sorts the list of language files before converting them.
+
 Changes in 2.0 (2011-05-26):
  • AppBackup now works on iOS versions 4.3.x and later (and it still works with iOS 3; untested on iOS 2).
  • Added a confirmation screen for all actions.
