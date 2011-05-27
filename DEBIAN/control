@@ -1,6 +1,6 @@
 Package: net.scott-wallace.iphone.appbackup
 Name: AppBackup
-Version: 2.0-1
+Version: 2.0.1-1
 Architecture: iphoneos-arm
 Description: Back up and restore App Store apps' saved data
  An iPhoneOS application that backs up and restores the saved data and preferences of App Store apps.
@@ -10,4 +10,4 @@ Icon: http://uploads.srwz.us/AppBackup/icon.png
 Maintainer: Scott Zeid <iphone@srwz.us>
 Author: Scott Zeid <iphone@srwz.us>
 Section: Utilities
-Depends: bash, coreutils-bin, python (>= 2.5), python (<< 3.0)
+Depends: bash, coreutils, python (>= 2.5), python (<< 3.0)

@@ -33,7 +33,7 @@
 from __future__ import with_statement
 
 __author__  = "Scott Zeid <s@srwz.us>"
-__version__ = "2.0"
+__version__ = "2.0.1"
 
 from appbackup import AppBackup
 from cli import main

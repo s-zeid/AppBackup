@@ -104,12 +104,12 @@
  [runningTasks addObject:task];
  [task launch];
  // Wait for it to finish
- [task waitUntilExit];
- [runningTasks removeObject:task];
+ //[task waitUntilExit];
  // Process result
  NSFileHandle *handle = [[task standardOutput] fileHandleForReading];
  NSData *data = [handle readDataToEndOfFile];
  [handle closeFile];
+ [runningTasks removeObject:task];
  NSDictionary *dict = (NSDictionary *)[NSPropertyListSerialization
                        propertyListFromData:data
                        mutabilityOption:NSPropertyListImmutable

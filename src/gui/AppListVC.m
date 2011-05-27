@@ -228,9 +228,9 @@
 - (void)updateAppListUsingHUD:(BOOL)useHUD {
  if (useHUD) {
   MBProgressHUD *hud = [[MBProgressHUD alloc] initWithWindow:self.view.window];
-  hud.yOffset -= self.navigationController.navigationBar.frame.size.height;
   hud.labelText = [_ s:@"please_wait"];
   [self.view addSubview:hud];
+  hud.yOffset -= self.navigationController.navigationBar.frame.size.height*1.5;
   [hud showWhileExecuting:@selector(_updateAppListCallback:) onTarget:self
        withObject:hud animated:YES];
   [hud release];
