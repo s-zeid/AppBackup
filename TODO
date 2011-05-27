@@ -1,7 +1,1 @@
-* Sort language input files in ini-to-strings.py
 * Document the GUI code better
-
-git commit:
- fixed hang on startup
- fixed Please Wait HUD positioning bug
- sort language files when converting

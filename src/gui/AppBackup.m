@@ -103,9 +103,7 @@
  task.standardOutput = [NSPipe pipe];
  [runningTasks addObject:task];
  [task launch];
- // Wait for it to finish
- //[task waitUntilExit];
- // Process result
+ // Wait for it to finish and process result
  NSFileHandle *handle = [[task standardOutput] fileHandleForReading];
  NSData *data = [handle readDataToEndOfFile];
  [handle closeFile];

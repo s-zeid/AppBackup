@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Copy or rename this file to config before running build or test.
+
 # Replace the path below with the full path to your toolchain's
 # arm-apple-darwin9-gcc
 # To disable compiling AppBackupGUI and FixPermissions, leave blank or use a

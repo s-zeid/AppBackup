@@ -43,7 +43,7 @@ if len(sys.argv) != 3:
 in_dir = os.path.abspath(sys.argv[1])
 out_dir = os.path.abspath(sys.argv[2])
 
-langs = [i.rsplit(".ini", 1)[0] for i in os.listdir(in_dir)
+langs = [i.rsplit(".ini", 1)[0] for i in sorted(os.listdir(in_dir))
          if i.endswith(".ini") and
             os.path.isfile(os.path.join(in_dir, i))]
 
