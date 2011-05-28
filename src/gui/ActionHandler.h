@@ -122,6 +122,8 @@
  * MAY, but are not required to, override this selector.  You may also make
  * your own constructor, but it needs to accept an AppListVC and pass that
  * to -[super initWithVC:] in its implementation.
+ * 
+ * @param vc The AppListVC that created this ActionHandler.
  */
 - (id)initWithVC:(AppListVC *)vc_;
 
@@ -131,6 +133,8 @@
  * If the pressed button is an OK, cancel, or no button, then the action
  * handler aborts, autoreleases itself, and returns control to the parent
  * AppListVC.
+ * 
+ * Part of the UIAlertViewDelegate protocol.
  */
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex;
@@ -159,7 +163,7 @@
  */
 - (void)_hideHUDCallback;
 
-/** Part of MBProgressHUDDelegate. */
+/** Part of the MBProgressHUDDelegate protocol. */
 - (void)hudWasHidden:(MBProgressHUD *)hud;
 
 /**
