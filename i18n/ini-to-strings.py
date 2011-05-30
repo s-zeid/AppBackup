@@ -58,7 +58,8 @@ for i in langs:
       " build", "   time. */", ""]
  keys = sorted(y.keys())
  for k in keys:
-  o += ['"%s" = "%s";' % (k.replace('"', '\"'), y[k].replace('"', '\"'))]
+  if k.strip() and y[k].strip():
+   o += ['"%s" = "%s";' % (k.replace('"', '\"'), y[k].replace('"', '\"'))]
  if not os.path.isdir(os.path.join(out_dir, i+".lproj")):
   os.makedirs(os.path.join(out_dir, i+".lproj"))
  with open(os.path.join(out_dir, i+".lproj", "Localizable.strings"), "wb") as f:

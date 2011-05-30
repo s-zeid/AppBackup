@@ -60,7 +60,8 @@ y = yaml.load(t)
 o = []
 keys = sorted(y.keys())
 for k in keys:
- o += ['%s=%s' % (k, y[k])]
+ if k.strip() and y[k].strip():
+  o += ['%s=%s' % (k, y[k])]
 o = "\n".join(o)
 with open(out_file, "wb") as f:
  f.write(o.encode("utf8"))
