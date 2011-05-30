@@ -33,7 +33,11 @@
 
 import plistlib
 
+from xml.parsers.expat import ExpatError
+
 import CFPropertyList
+
+class PropertyListError(Exception): pass
 
 def load(filename):
  """Reads a binary or XML plist from the given file name and returns the resulting dictionary."""
@@ -42,7 +46,11 @@ def load(filename):
  if cfplist.value != None:
   return CFPropertyList.native_types(cfplist.value)
  else:
-  return plistlib.readPlist(filename)
+  try:
+   return plistlib.readPlist(filename)
+  except ExpatError:
+   raise PropertyListError(filename + " is not a valid binary or XML property"
+                           " list file")
 
 def save(value, filename):
  """Writes a dictionary to an XML plist with the give file name."""

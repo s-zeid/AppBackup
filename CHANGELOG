@@ -1,5 +1,6 @@
 Changes in 2.0.2 (2011-05-DD):
  • Fixed a bug with translations where if something wasn't translated then nothing would appear in the UI (expected behavior is that the English text would appear instead).
+ • AppBackup no longer crashes if backuptimes.plist is corrupted or malformed.
  • Updated the Czech, Japanese, and Korean translations.
 
 Changes in 2.0.1 (2011-05-27):

@@ -288,7 +288,11 @@ class _BackupTimes(object):
  def __init__(self, appbackup):
   self.appbackup = appbackup
   if os.path.isfile(os.path.realpath(self.filename)):
-   self.data = propertylist.load(self.filename)
+   try:
+    self.data = propertylist.load(self.filename)
+   except propertylist.PropertyListError:
+    self.data = {}
+    self.save()
   else:
    self.data = {}
    self.save()
