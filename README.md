@@ -37,11 +37,11 @@ Python 2.5 and Objective-C.
         AppBackup CLI Python package and 3rd-party Python modules
       * `usr/`
         /usr/bin/appbackup{,-fix-permissions} launcher scripts
-   * build
+   * `build`
      Build a Debian package (./build [device-hostname] [deb-file-prefix]) `**`
-   * config.dist
+   * `config.dist`
      Configuration file for build and test `**`
-   * test
+   * `test`
      Script to test AppBackup on your own device (./test device-address) `**`
    * ...
 
