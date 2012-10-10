@@ -4,7 +4,7 @@
 # An iPhoneOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
-# Copyright (C) 2008-2011 Scott Zeid
+# Copyright (C) 2008-2012 Scott Zeid
 # http://me.srwz.us/iphone/appbackup
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

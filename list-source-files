@@ -1,0 +1,23 @@
+#!/bin/bash
+
+MAINTAINER="Scott Zeid"
+
+function find_files() {
+ # find most source files
+ find "$(dirname "$0")" \
+  ! -path "*/.git/*" ! -name ".git" \( \
+   -name "*.[chm]" -o \
+   -name "*.py" -o \
+   -name "*.sh" \
+  \)
+ # find shell scripts with no extensions
+ grep -EIlr -D skip --exclude-dir=.git "#\!/bin/(ba)?sh" . \
+  | xargs grep -EIl "Scott Zeid"
+ # explicitly include these files
+ echo ./README
+ echo ./CREDITS
+ echo ./LICENSE
+}
+
+# print list of sourc files and remove files by third parties
+find_files | xargs grep -EIl "$MAINTAINER" | sort
