@@ -14,7 +14,7 @@ function find_files() {
  grep -EIlr -D skip --exclude-dir=.git "#\!/bin/(ba)?sh" . \
   | xargs grep -EIl "Scott Zeid"
  # explicitly include these files
- echo ./README
+ echo ./README.md
  echo ./CREDITS
  echo ./LICENSE
 }

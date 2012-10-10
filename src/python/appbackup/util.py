@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # AppBackup
-# An iPhoneOS application that backs up and restores the saved data and
+# An iOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
 # Copyright (C) 2008-2012 Scott Zeid

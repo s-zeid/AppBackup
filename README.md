@@ -1,91 +1,97 @@
-AppBackup
-An iPhoneOS application that backs up and restores the saved data and 
+AppBackup  
+An iOS application that backs up and restores the saved data and
 preferences of App Store apps.
 
 Copyright (C) 2008-2012 Scott Zeid
-http://me.srwz.us/projects/appbackup
+[http://me.srwz.us/projects/appbackup](http://me.srwz.us/projects/appbackup)
 
-This is the source tree for AppBackup.  AppBackup is written in Python 2.5.
+This is the source tree for AppBackup.  AppBackup is mainly written in
+Python 2.5 and Objective-C.
 
-Contents
-========
- - Directory structure with descriptions for some files
- - Prerequisites for building
- - Building AppBackup
- - License
+# Contents
 
-Directory structure with descriptions for some files
-====================================================
-/
-  DEBIAN/          - Debian package control files
-  i18n/            - Translations in INI format and some conversion scripts
-  src/
-    about-html/     - Generator for the HTML file used in the About screen
-    bundle/         - Files included in .app bundle, excluding subdirectories
-    FixPermissions/ - FixPermissions (C; fixes storage directory permissions)*
-    gui/            - GUI source code and third-party libraries in Objective-C
-    images/         - GIMP and SVG source files for image resources
-    python/         - AppBackup CLI Python package and 3rd-party Python modules
-    usr/            - /usr/bin/appbackup{,-fix-permissions} launcher scripts
-  AppBackup.geany - Geany project file; I don't use this (but I do use Geany)
-  build - Build a Debian package (./build [device-hostname] [deb-file-prefix])**
-  config.dist - Configuration file for build and test**
-  test - Script to test AppBackup on your own device (./test device-address)**
-  ...
+ * Directory structure with descriptions for some files
+ * Prerequisites for building
+ * Building AppBackup
+ * License
 
- * FixPermissions is changed to setuid root after the package is installed.
-** See the Building AppBackup section for details.  AppBackupGUI and
-   FixPermissions are NOT re-compiled by default.
+# Directory structure with descriptions for some files
 
-Prerequisites for building
-==========================
-Computer:
- - Ubuntu Linux (other distros, OS X, Cygwin, etc. may work but I haven't
-                 tested them)
- - Working iPhone toolchain that has GCC (tested with a 3.1.2 toolchain)
- - bash; dpkg; GNU make; OpenSSH client; Python 2.5 (OS X only), 2.6, or 2.7
-Device:
- - Jailbroken iPhone, iPod touch, or iPad
- - Cydia (with at least the default sources)
- - bash, dpkg, ldid
- - OpenSSH server WITH THE ROOT AND MOBILE PASSWORDS CHANGED!
- - AppBackup package dependencies:
-    - bash, coreutils-bin, python (versions >= 2.5 and < 3.0)
+ * /
+   * DEBIAN/          - Debian package control files
+   * i18n/            - Translations in INI format and some conversion scripts
+   * src/
+      * about-html/     - Generator for the HTML file used in the About screen
+      * bundle/         - Files included in .app bundle, excluding subdirectories
+      * FixPermissions/ - FixPermissions (C; fixes storage directory permissions) `*`
+      * gui/            - GUI source code and third-party libraries in Objective-C
+      * images/         - GIMP and SVG source files for image resources
+      * python/         - AppBackup CLI Python package and 3rd-party Python modules
+      * usr/            - /usr/bin/appbackup{,-fix-permissions} launcher scripts
+   * build - Build a Debian package (./build [device-hostname] [deb-file-prefix]) `**`
+   * config.dist - Configuration file for build and test `**`
+   * test - Script to test AppBackup on your own device (./test device-address) `**`
+   * ...
 
-Building AppBackup
-==================
-To build a .deb file, run build.  To build a test package and install it on
-iDevice for testing, run test.
- * Add your iDevices's IP address or hostnameat the end if CC is enabled in
-   config, or if you are running test.
- * Make sure your device has the following installed if you are compiling or
-   testing on it:
-     * OpenSSH Server (CHANGE THE ROOT AND MOBILE USERS' PASSWORDS!!!!!)
-     * ldid
- * You can add a prefix for the .deb file's name at the end if you are running
-   build and NOT test (test always uses the prefix 'test_'.)
- * test will open a shell from your iDevice when installation is finished.
+ `*` FixPermissions is changed to setuid root after the package is
+     installed.
+`**` See the Building AppBackup section for details.  AppBackupGUI and
+     FixPermissions are NOT re-compiled by default.
+
+# Prerequisites for building
+
+* Computer
+   * Ubuntu Linux (other distros, OS X, Cygwin, etc. may work but I
+     haven't tested them)
+   * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
+   * bash; dpkg; GNU make; OpenSSH client; Python 2.5 (OS X only), 2.6,
+     or 2.7
+* Device
+   * Jailbroken iPhone, iPod touch, or iPad
+   * Cydia (with at least the default sources)
+   * bash, dpkg, ldid
+   * OpenSSH server WITH THE ROOT AND MOBILE PASSWORDS CHANGED!
+   * AppBackup package dependencies:
+      * bash, coreutils-bin, python (versions >= 2.5 and < 3.0)
+
+# Building AppBackup
+
+To build a .deb file, run `build`.  To build a test package and install it
+on an iDevice for testing, run `test`.
+
+ * Add your devices's IP address or hostname at the end if `CC` is enabled
+   in `config`, or if you are running `test`.
+ * Make sure your device has the following installed if you are compiling
+   or testing on it:
+    * OpenSSH Server (CHANGE THE ROOT AND MOBILE USERS' PASSWORDS)
+    * ldid
+ * You can add a prefix for the .deb file's name at the end if you are
+   running build and NOT test (test always uses the prefix `test_`.)
+ * `test` will start an SSH session with your device when installation is
+   finished.
  * Examples:
-     $ ./build 192.168.7.16
-     $ ./build scottPhone test_
-     $ ./test scottPhone
+   
+       $ ./build 192.168.7.16
+       $ ./build scottPhone test_
+       $ ./test scottPhone
 
-Options for build and test are set in the config file.
- * Copy config.dist to config.
- * See config for available options.
+Options for `build` and `test` are set in the `config` file.
+
+ * Copy `config.dist` to `config`.
+ * See `config` for available options.
  * Compiling binaries is disabled by default; set CC in config to enable it.
  * Precompiled binaries are included in the git repository.
 
 This process has been tested on Ubuntu 11.04 with an iPhone 3.1.2 toolchain,
 and an iPhone 2G running iOS 3.1.2.
 
-License
-=======
-AppBackup
-An iPhoneOS application that backs up and restores the saved data and
+# License
+
+AppBackup  
+An iOS application that backs up and restores the saved data and
 preferences of App Store apps.
 
-Copyright (C) 2008-2012 Scott Zeid
+Copyright (C) 2008-2012 Scott Zeid  
 http://me.srwz.us/projects/appbackup
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
