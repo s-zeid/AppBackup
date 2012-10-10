@@ -47,6 +47,7 @@ Python 2.5 and Objective-C.
 
  `*` FixPermissions is changed to setuid root after the package is
      installed.
+
 `**` See the Building AppBackup section for details.  AppBackupGUI and
      FixPermissions are NOT re-compiled by default.
 
@@ -90,7 +91,8 @@ Options for `build` and `test` are set in the `config` file.
 
  * Copy `config.dist` to `config`.
  * See `config` for available options.
- * Compiling binaries is disabled by default; set CC in config to enable it.
+ * Compiling binaries is disabled by default; set `CC` in `config` to
+   enable it.
  * Precompiled binaries are included in the git repository.
 
 This process has been tested on Ubuntu 11.04 with an iPhone 3.1.2 toolchain,
