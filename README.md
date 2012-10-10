@@ -17,33 +17,32 @@ Python 2.5 and Objective-C.
 
 # Directory structure with descriptions for some files
 
- * `/`
-   * `DEBIAN/`
-     Debian package control files
-   * `i18n/`
-     Translations in INI format and some conversion scripts
-   * `src/`
-      * `about-html/`
-        Generator for the HTML file used in the About screen
-      * `bundle/`
-        Files included in .app bundle, excluding subdirectories
-      * `FixPermissions/`
-        FixPermissions (C; fixes storage directory permissions) `*`
-      * `gui/`
-        GUI source code and third-party libraries in Objective-C
-      * `images/`
-        GIMP and SVG source files for image resources
-      * `python/`
-        AppBackup CLI Python package and 3rd-party Python modules
-      * `usr/`
-        /usr/bin/appbackup{,-fix-permissions} launcher scripts
-   * `build`
-     Build a Debian package (./build [device-hostname] [deb-file-prefix]) `**`
-   * `config.dist`
-     Configuration file for build and test `**`
-   * `test`
-     Script to test AppBackup on your own device (./test device-address) `**`
-   * ...
+* `DEBIAN/`
+  Debian package control files
+* `i18n/`
+  Translations in INI format and some conversion scripts
+* `src/`
+   * `about-html/`
+     Generator for the HTML file used in the About screen
+   * `bundle/`
+     Files included in .app bundle, excluding subdirectories
+   * `FixPermissions/`
+     FixPermissions (C; fixes storage directory permissions) `*`
+   * `gui/`
+     GUI source code and third-party libraries in Objective-C
+   * `images/`
+     GIMP and SVG source files for image resources
+   * `python/`
+     AppBackup CLI Python package and 3rd-party Python modules
+   * `usr/`
+     /usr/bin/appbackup{,-fix-permissions} launcher scripts
+* `build`
+  Build a Debian package (./build [device-hostname] [deb-file-prefix]) `**`
+* `config.dist`
+  Configuration file for build and test `**`
+* `test`
+  Script to test AppBackup on your own device (./test device-address) `**`
+* ...
 
  `*` FixPermissions is changed to setuid root after the package is
      installed.
@@ -54,18 +53,18 @@ Python 2.5 and Objective-C.
 # Prerequisites for building
 
 * Computer
-   * Ubuntu Linux (other distros, OS X, Cygwin, etc. may work but I
-     haven't tested them)
-   * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
-   * bash; dpkg; GNU make; OpenSSH client; Python 2.5 (OS X only), 2.6,
-     or 2.7
+    * Ubuntu Linux (other distros, OS X, Cygwin, etc. may work but I
+      haven't tested them)
+    * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
+    * bash; dpkg; GNU make; OpenSSH client; Python 2.5 (OS X only), 2.6,
+      or 2.7
 * Device
-   * Jailbroken iPhone, iPod touch, or iPad
-   * Cydia (with at least the default sources)
-   * bash, dpkg, ldid
-   * OpenSSH server WITH THE ROOT AND MOBILE PASSWORDS CHANGED!
-   * AppBackup package dependencies:
-      * bash, coreutils-bin, python (versions >= 2.5 and < 3.0)
+    * Jailbroken iPhone, iPod touch, or iPad
+    * Cydia (with at least the default sources)
+    * bash, dpkg, ldid
+    * OpenSSH server WITH THE ROOT AND MOBILE PASSWORDS CHANGED!
+    * AppBackup package dependencies:
+        * bash, coreutils-bin, python (versions >= 2.5 and < 3.0)
 
 # Building AppBackup
 
@@ -76,16 +75,16 @@ on an iDevice for testing, run `test`.
    in `config`, or if you are running `test`.
  * Make sure your device has the following installed if you are compiling
    or testing on it:
-    * OpenSSH Server (CHANGE THE ROOT AND MOBILE USERS' PASSWORDS)
-    * ldid
+     * OpenSSH Server (CHANGE THE ROOT AND MOBILE USERS' PASSWORDS)
+     * ldid
  * You can add a prefix for the .deb file's name at the end if you are
    running build and NOT test (test always uses the prefix `test_`.)
  * `test` will start an SSH session with your device when installation is
    finished.
  * Examples:
-    * `$ ./build 192.168.7.16`
-    * `$ ./build scottPhone test`
-    * `$ ./test scottPhone`
+     * `$ ./build 192.168.7.16`
+     * `$ ./build scottPhone test`
+     * `$ ./test scottPhone`
 
 Options for `build` and `test` are set in the `config` file.
 
