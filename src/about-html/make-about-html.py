@@ -5,7 +5,7 @@
 # preferences of App Store apps.
 #
 # Copyright (C) 2008-2013 Scott Zeid
-# http://s.zeid.me/projects/appbackup
+# http://s.zeid.me/projects/appbackup/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

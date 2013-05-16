@@ -3,7 +3,7 @@ An iOS application that backs up and restores the saved data and
 preferences of App Store apps.
 
 Copyright (C) 2008-2013 Scott Zeid  
-[http://s.zeid.me/projects/appbackup](http://s.zeid.me/projects/appbackup)
+[http://s.zeid.me/projects/appbackup/](http://s.zeid.me/projects/appbackup/)
 
 This is the source tree for AppBackup.  AppBackup is mainly written in
 Python 2.5 and Objective-C.
@@ -104,7 +104,7 @@ and an iPhone 2G running iOS 3.1.2.
     preferences of App Store apps.
 
     Copyright (C) 2008-2013 Scott Zeid
-    http://s.zeid.me/projects/appbackup
+    http://s.zeid.me/projects/appbackup/
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
