@@ -2,8 +2,8 @@
 # An iOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
-# Copyright (C) 2008-2012 Scott Zeid
-# http://me.srwz.us/projects/appbackup
+# Copyright (C) 2008-2013 Scott Zeid
+# http://s.zeid.me/projects/appbackup
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@
 
 from __future__ import with_statement
 
-__author__  = "Scott Zeid <s@srwz.us>"
+__author__  = "Scott Zeid <s@zeid.me>"
 __version__ = "2.0.2"
 
 from appbackup import AppBackup
