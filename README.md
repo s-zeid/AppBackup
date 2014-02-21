@@ -2,7 +2,7 @@ AppBackup
 An iOS application that backs up and restores the saved data and
 preferences of App Store apps.
 
-Copyright (C) 2008-2013 Scott Zeid  
+Copyright (C) 2008-2014 Scott Zeid  
 [http://s.zeid.me/projects/appbackup/](http://s.zeid.me/projects/appbackup/)
 
 This is the source tree for AppBackup.  AppBackup is mainly written in
@@ -53,8 +53,8 @@ Python 2.5 and Objective-C.
 # Prerequisites for building
 
 * Computer
-    * Ubuntu Linux (other distros, OS X, Cygwin, etc. may work but I
-      haven't tested them)
+    * Linux (tested with Fedora and Ubuntu; other distros, OS X, Cygwin,
+      etc. may work but I haven't tested them)
     * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
     * bash; dpkg; GNU make; OpenSSH client; Python 2.5 (OS X only), 2.6,
       or 2.7
@@ -94,8 +94,8 @@ Options for `build` and `test` are set in the `config` file.
    enable it.
  * Precompiled binaries are included in the git repository.
 
-This process has been tested on Ubuntu 11.04 with an iPhone 3.1.2 toolchain,
-and an iPhone 2G running iOS 3.1.2.
+This process has been tested on Fedora 20 and Ubuntu 11.04 with an iPhone
+3.1.2 toolchain, and an iPhone 2G running iOS 3.1.2.
 
 # License
 
@@ -103,7 +103,7 @@ and an iPhone 2G running iOS 3.1.2.
     An iOS application that backs up and restores the saved data and
     preferences of App Store apps.
 
-    Copyright (C) 2008-2013 Scott Zeid
+    Copyright (C) 2008-2014 Scott Zeid
     http://s.zeid.me/projects/appbackup/
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
