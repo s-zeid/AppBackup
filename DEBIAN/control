@@ -4,10 +4,10 @@ Version: 2.0.3-1
 Architecture: iphoneos-arm
 Description: Back up and restore App Store apps' saved data
  An iPhoneOS application that backs up and restores the saved data and preferences of App Store apps.
-Depiction: http://iphone.srwz.us/depiction/net.scott-wallace.iphone.appbackup
-Homepage: http://me.srwz.us/iphone/appbackup
-Icon: http://uploads.srwz.us/AppBackup/icon.png
-Maintainer: Scott Zeid <iphone@srwz.us>
-Author: Scott Zeid <iphone@srwz.us>
+Depiction: http://apt.srwz.us/ios/depiction/net.scott-wallace.iphone.appbackup
+Homepage: https://s.zeid.me/projects/appbackup/
+Icon: https://uploads.s.zeid.me/AppBackup/icon.png
+Maintainer: Scott Zeid <support@s.zeid.me>
+Author: Scott Zeid <support@s.zeid.me>
 Section: Utilities
 Depends: bash, coreutils, python (>= 2.5), python (<< 3.0)
