@@ -3,7 +3,7 @@
  * preferences of App Store apps.
  * 
  * Copyright (C) 2008-2014 Scott Zeid
- * http://s.zeid.me/projects/appbackup/
+ * https://s.zeid.me/projects/appbackup/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@
 #import "AboutScreenVC.h"
 #import "util.h"
 
-#define WEB_SITE @"http://s.zeid.me/projects/appbackup/"
+#define WEB_SITE @"https://s.zeid.me/projects/appbackup/"
 
 @implementation AboutScreenVC
 @synthesize webView;
