@@ -4,7 +4,7 @@
 # An iOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
-# Copyright (C) 2008-2013 Scott Zeid
+# Copyright (C) 2008-2014 Scott Zeid
 # http://s.zeid.me/projects/appbackup/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -64,9 +64,9 @@ fi
 
 # Clean up old deb files if $OLD_DEBS is set
 if [ "$OLD_DEBS" = "/dev/null" ]; then
- rm ./*.deb
+ rm out/*.deb
 elif [ ! "$OLD_DEBS" = "" -a -d "$OLD_DEBS" ]; then
- mv ./*.deb "$OLD_DEBS" &>/dev/null
+ mv out/*.deb "$OLD_DEBS" &>/dev/null
 fi
 
 # Temporary directory for .deb building
@@ -99,7 +99,7 @@ touch files/Applications/AppBackup.app/about.html
 # Build .deb and move it
 dpkg-deb -b files .
 DEBFILE=`ls | grep .deb`
-mv $DEBFILE ../$PREFIX$DEBFILE
+mv $DEBFILE ../out/$PREFIX$DEBFILE
 cd ..
 
 # Clean up

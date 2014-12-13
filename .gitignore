@@ -3,3 +3,5 @@
 *.pyo
 .*.swp
 config
+out/*
+!out/.gitinclude
