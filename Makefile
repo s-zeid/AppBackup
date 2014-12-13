@@ -1,6 +1,6 @@
 include config
 
-LD         = $(CC)
+LD         = ${CC}
 
 CFLAGS     = -arch armv6 -Wall
 LDFLAGS    = -lobjc -arch armv6 \
@@ -16,11 +16,11 @@ all: deb
 
 
 src/gui/AppBackupGUI: src/gui/*.m
-	[ x"${CC}" == x"" ] && true || $(CC) $(LDFLAGS) $(FRAMEWORKS) -o $@ $^
+	[ x"${CC}" == x"" ] && true || "${CC}" ${LDFLAGS} ${FRAMEWORKS} -o $@ $^
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 src/FixPermissions/FixPermissions: src/FixPermissions/*.c
-	[ x"${CC}" == x"" ] && true || $(CC) $(LDFLAGS) -o $@ $^
+	[ x"${CC}" == x"" ] && true || "${CC}" ${LDFLAGS} -o $@ $^
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 
