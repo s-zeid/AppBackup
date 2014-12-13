@@ -22,32 +22,32 @@ Contents
 Directory structure with descriptions for some files
 ----------------------------------------------------
 
-* `DEBIAN/`
+* `DEBIAN/`  
   Debian package control files
-* `i18n/`
+* `i18n/`  
   Translations in INI format and some conversion scripts
-* `src/`
-   * `about-html/`
+* `src/`  
+   * `about-html/`  
      Generator for the HTML file used in the About screen
-   * `bundle/`
+   * `bundle/`  
      Files included in .app bundle, excluding subdirectories
-   * `FixPermissions/` \*
+   * `FixPermissions/` \*  
      FixPermissions (C; fixes storage directory permissions)
-   * `gui/`
+   * `gui/`  
      GUI source code and third-party libraries in Objective-C
-   * `images/`
+   * `images/`  
      GIMP and SVG source files for image resources
-   * `python/`
+   * `python/`  
      AppBackup CLI Python package and 3rd-party Python modules
-   * `usr/`
+   * `usr/`  
      /usr/bin/appbackup{,-fix-permissions} launcher scripts
-* `Makefile` \*\*
+* `Makefile` \*\*  
   Builds AppBackup and the Debian package.  Can also install AppBackup
   on an iDevice via SSH.
-* `config.dist` \*\*
+* `config.dist` \*\*  
   Sample configuration file for the Makefile.  Should be copied to `config`,
   and then `config` should be modified as necessary.
-* ...
+* ...  
 
  `*` FixPermissions is changed to setuid root after the package is
      installed.
