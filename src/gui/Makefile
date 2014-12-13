@@ -26,9 +26,6 @@ AppBackupGUI: util.o BDSKTask.o AppBackup.o MBProgressHUD.o \
 	 $(LD) $(LDFLAGS) -o $@ $^
 
 sign:
-	 #scp AppBackupGUI mobile@$(DEVICE):/tmp
-	 #ssh mobile@$(DEVICE) ldid -S /tmp/AppBackupGUI
-	 #scp mobile@$(DEVICE):/tmp/AppBackupGUI .
 	 ldid -S AppBackupGUI
 
 %.o:     %.m

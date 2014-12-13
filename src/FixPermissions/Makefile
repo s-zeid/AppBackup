@@ -14,9 +14,7 @@ LDFLAGS= -lobjc \
 all:     FixPermissions sign
 
 sign:
-	scp FixPermissions mobile@$(DEVICE):/tmp
-	ssh mobile@$(DEVICE) ldid -S /tmp/FixPermissions
-	scp mobile@$(DEVICE):/tmp/FixPermissions .
+	ldid -S FixPermissions
 
 clean:
 	@rm -Rf FixPermissions
