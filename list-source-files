@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 MAINTAINER="Scott Zeid"
 
-function find_files() {
+find_files() {
  # find most source files
  find "$(dirname "$0")" \
   ! -path "*/.git/*" ! -name ".git" \( \
@@ -12,7 +12,7 @@ function find_files() {
   \)
  # find shell scripts with no extensions
  grep -EIlr -D skip --exclude-dir=.git "#\!/bin/(ba)?sh" . \
-  | xargs grep -EIl "Scott Zeid"
+  | xargs grep -FIl "$MAINTAINER"
  # explicitly include these files
  echo ./README.md
  echo ./CREDITS
