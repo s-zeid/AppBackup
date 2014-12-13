@@ -39,10 +39,10 @@ cd "$(dirname "$0")"
 
 # Build .deb
 ./build $DEVICE test_
-DEBFILE=`ls | grep "^test_.*\.deb$"`
+DEBFILE=`ls out | grep "^test_.*\.deb$"`
 
 # Test on device
-scp "$DEBFILE" mobile@$DEVICE:/tmp
+scp out/"$DEBFILE" mobile@$DEVICE:/tmp
 ssh root@$DEVICE "dpkg -i /tmp/$DEBFILE && rm /tmp/$DEBFILE"
 #ssh mobile@$DEVICE "tail -fn0 ~/Library/Preferences/AppBackup/debug.log"
 ssh mobile@$DEVICE
