@@ -48,6 +48,7 @@
 @synthesize hud;
 @synthesize hudDetailsText;
 @synthesize screen;
+@synthesize stage;
 @synthesize validActions;
 @synthesize vc;
 
@@ -59,6 +60,7 @@
                         @"backup", @"restore", @"ignore", @"unignore",
                         @"delete", nil];
   self.chooserCancelText = [_ s:@"cancel"];
+  self.stage = AppBackupActionHandlerStageClosed;
  }
  return self;
 }
@@ -68,17 +70,23 @@
  // What to do when you close the backup all apps prompt
  NSString *buttonText = [alertView buttonTitleAtIndex:buttonIndex];
  [screen autorelease];
- if ([buttonText isEqualToString:[_ s:@"cancel"]] ||
-     [buttonText isEqualToString:[_ s:@"ok"]] ||
-     [buttonText isEqualToString:[_ s:@"no"]]) {
+ if ((stage == AppBackupActionHandlerStageChoose &&
+      [buttonText isEqualToString:[_ s:@"cancel"]]) ||
+     (stage == AppBackupActionHandlerStageConfirm &&
+      [buttonText isEqualToString:[_ s:@"no"]]) ||
+     (stage == AppBackupActionHandlerStageResultScreen &&
+      [buttonText isEqualToString:[_ s:@"ok"]])) {
   // User canceled action or clicked OK
+  self.stage = AppBackupActionHandlerStageClosed;
   [self autorelease];
   return;
  } else if ([buttonText isEqualToString:[_ s:@"yes"]]) {
   // User confirmed action
+  self.stage = AppBackupActionHandlerStageInProgress;
   [self doAction];
  } else {
   // User selected action and needs to confirm it first
+  self.stage = AppBackupActionHandlerStageConfirm;
   int i;
   NSString *t;
   for (i = 0; i < [validActions count]; i++) {
@@ -134,6 +142,7 @@
 }
 
 - (void)_showResultWithTitleAndTextCallback:(NSArray *)array {
+ self.stage = AppBackupActionHandlerStageResultScreen;
  self.screen = [[UIAlertView alloc] init];
  screen.title = [array objectAtIndex:0];
  screen.message = [array objectAtIndex:1];
@@ -142,6 +151,7 @@
 }
 
 - (void)start {
+ self.stage = AppBackupActionHandlerStageChoose;
  self.screen = [[UIAlertView alloc] init];
  screen.delegate = self;
  screen.title = chooserTitle;

@@ -57,6 +57,14 @@
  * you must determine in your subclass which actions are possible.
  */
 
+typedef enum {
+ AppBackupActionHandlerStageClosed,
+ AppBackupActionHandlerStageChoose,
+ AppBackupActionHandlerStageConfirm,
+ AppBackupActionHandlerStageInProgress,
+ AppBackupActionHandlerStageResultScreen
+} AppBackupActionHandlerStage;
+
 @interface ActionHandler : NSObject
            <MBProgressHUDDelegate, UIAlertViewDelegate> {
  NSString       *action;
@@ -68,6 +76,7 @@
  UIAlertView    *screen;
  NSMutableArray *validActions;
  AppListVC      *vc;
+ AppBackupActionHandlerStage stage;
 }
 
 /* Properties */
@@ -114,6 +123,9 @@
 
 /** The parent App List view controller. */
 @property (retain) AppListVC      *vc;
+
+/** The current stage of the ActionHandler. */
+@property (assign) AppBackupActionHandlerStage stage;
 
 /* Selectors */
 
