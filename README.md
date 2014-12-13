@@ -1,21 +1,26 @@
 AppBackup  
+=========
 An iOS application that backs up and restores the saved data and
 preferences of App Store apps.
 
 Copyright (C) 2008-2014 Scott Zeid  
-[http://s.zeid.me/projects/appbackup/](http://s.zeid.me/projects/appbackup/)
+<https://s.zeid.me/projects/appbackup/>
 
 This is the source tree for AppBackup.  AppBackup is mainly written in
 Python 2.5 and Objective-C.
 
-# Contents
+
+Contents
+--------
 
  * Directory structure with descriptions for some files
  * Prerequisites for building
  * Building AppBackup
  * License
 
-# Directory structure with descriptions for some files
+
+Directory structure with descriptions for some files
+----------------------------------------------------
 
 * `DEBIAN/`
   Debian package control files
@@ -50,23 +55,18 @@ Python 2.5 and Objective-C.
 `**` See the Building AppBackup section for details.  AppBackupGUI and
      FixPermissions are re-compiled by default, but that can be changed.
 
-# Prerequisites for building
 
-* Computer
-    * Linux (tested with Fedora and Ubuntu; other distros, OS X, Cygwin,
-      etc. may work but I haven't tested them)
-    * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
-    * bash; dpkg; GNU make; OpenSSH client; Python 2.5 (OS X only), 2.6,
-      or 2.7
-* Device
-    * Jailbroken iPhone, iPod touch, or iPad
-    * Cydia (with at least the default sources)
-    * bash, dpkg, ldid
-    * OpenSSH server WITH THE ROOT AND MOBILE PASSWORDS CHANGED!
-    * AppBackup package dependencies:
-        * bash, coreutils-bin, python (versions >= 2.5 and < 3.0)
+Prerequisites for building
+--------------------------
 
-# Building AppBackup
+ * Linux (tested with Fedora and Ubuntu; other distros, OS X, Cygwin,
+   etc. may work but I haven't tested them)
+ * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
+ * bash; dpkg; GNU make; Python 2.5 (OS X only), 2.6, or 2.7
+
+
+Building AppBackup
+------------------
 
 Options for the build process are set in the `config` file.  You must create
 the `config` file before building for the first time:
@@ -77,18 +77,36 @@ the `config` file before building for the first time:
    to disable that.
  * Precompiled binaries are included in the git repository.
 
-To build a .deb file, run `make`.  To build a test package and install it
-on an iDevice for testing, run `make test DEVICE=<hostname/address>`.
+AppBackup is built using a Makefile.  The most common invocations are:
 
- * If you wish to use `make test`, make sure your device has an SSH server
-   installed, and CHANGE THE ROOT AND MOBILE USERS' PASSWORDS.
- * `make test` will start an SSH session with your device when installation
-   is finished.
+ * `make`  
+   Compiles the binaries (if enabled) and builds the .deb file.
+ 
+ * `make install DEVICE=<hostname/address>`  
+   Installs the most recently built .deb file onto the given device.
+   (If DEVICE is set in your `config` file, then you can omit the DEVICE
+   argument if you want to install onto that device.)
+ 
+ * `make test DEVICE=<hostname/address>`  
+   Compiles the binaries (if enabled), builds the .deb file, installs the
+   .deb file onto the given device, and then runs `ssh mobile@<DEVICE>`.
+   (If DEVICE is set in your `config` file, then you can omit the DEVICE
+   argument if you want to install onto that device.)
+
+If you wish to use `make install` or `make test`, make sure your device
+has an SSH server installed, and CHANGE THE ROOT AND MOBILE USERS' PASSWORDS.
+You will also need to manually install the AppBackup package dependencies:
+
+    $ sudo apt-get install bash coreutils-bin python
+
+The Python version on your device must be at 2.5, 2.6, or 2.7.
 
 This process has been tested on Fedora 20 and Ubuntu 11.04 with an iPhone
 3.1.2 toolchain, and an iPhone 2G running iOS 3.1.2.
 
-# License
+
+License
+-------
 
     AppBackup
     An iOS application that backs up and restores the saved data and
