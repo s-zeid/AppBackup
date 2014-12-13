@@ -1,11 +1,10 @@
 include config
 
-LD = $(CC)
+LD         = $(CC)
 
 CFLAGS     = -arch armv6 -Wall
 LDFLAGS    = -lobjc -arch armv6 \
 	     -bind_at_load
-
 FRAMEWORKS = -framework Foundation \
 	     -framework CoreFoundation \
 	     -framework CoreGraphics \
@@ -13,9 +12,8 @@ FRAMEWORKS = -framework Foundation \
 
 DEB_TMP    = out/deb-build
 
-.PHONY: deb test clean
-
 all: deb
+
 
 src/gui/AppBackupGUI: src/gui/*.m
 	[ x"${CC}" == x"" ] && true || $(CC) $(LDFLAGS) $(FRAMEWORKS) -o $@ $^
@@ -24,6 +22,9 @@ src/gui/AppBackupGUI: src/gui/*.m
 src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 	[ x"${CC}" == x"" ] && true || $(CC) $(LDFLAGS) -o $@ $^
 	[ x"${CC}" == x"" ] && true || ldid -S $@
+
+
+.PHONY: deb install test clean
 
 deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
 	rm -rf "${DEB_TMP}"
@@ -51,11 +52,15 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
 	dpkg-deb -b "${DEB_TMP}" out
 	rm -r "${DEB_TMP}"
 
+install:
+	@[ x"${DEVICE}" = x"" ] && { echo "Usage: make install DEVICE=<hostname/address>" >&2; exit 2; } || true
+	scp -p "`ls -rt out/*.deb | tail -n 1`" mobile@${DEVICE}:/tmp/appbackup-test.deb
+	ssh root@${DEVICE} "dpkg -i /tmp/appbackup-test.deb && rm /tmp/appbackup-test.deb"
+
 test:
 	@[ x"${DEVICE}" = x"" ] && { echo "Usage: make test DEVICE=<hostname/address>" >&2; exit 2; } || true
 	make
-	scp -p "`ls -rt out/*.deb | tail -n 1`" mobile@${DEVICE}:/tmp/appbackup-test.deb
-	ssh root@${DEVICE} "dpkg -i /tmp/appbackup-test.deb && rm /tmp/appbackup-test.deb"
+	make install
 	ssh mobile@${DEVICE}
 
 clean:
