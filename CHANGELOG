@@ -1,3 +1,10 @@
+Changes in 2.0.3 (YYYY-MM-DD):
+ • Fixed a bug when the device is using a language for which the Yes and OK buttons have the same label:  the ActionHandler would fail to perform the requested action after the user confirmed the action.
+ • Use a new URL for the app's page on my site.
+ • Use HTTPS for links to the Web site.
+ • The about page is now valid HTML 5.
+ • Changes to the build process.  This should not affect users.
+
 Changes in 2.0.2 (2011-05-31):
  • Fixed a bug with translations where if something wasn't translated then nothing would appear in the UI (expected behavior is that the English text would appear instead).
  • AppBackup no longer crashes if backuptimes.plist is corrupted or malformed.
