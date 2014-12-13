@@ -59,10 +59,15 @@ Directory structure with descriptions for some files
 Prerequisites for building
 --------------------------
 
- * Linux (tested with Fedora and Ubuntu; other distros, OS X, Cygwin,
-   etc. may work but I haven't tested them)
+ * Linux (tested with Fedora; other distros, OS X, Cygwin, etc. may work
+   but I haven't tested them)
  * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
  * bash; dpkg; GNU make; Python 2.5 (OS X only), 2.6, or 2.7
+
+At the time of this writing, I am using Fedora 20 and
+[this toolchain](https://code.google.com/p/ios-toolchain-based-on-clang-for-linux/)
+with the iOS 3.1.2 SDK to develop AppBackup.  The iOS device I use for
+testing runs iOS 3.1.3.
 
 
 Building AppBackup
@@ -100,9 +105,6 @@ You will also need to manually install the AppBackup package dependencies:
     $ sudo apt-get install bash coreutils-bin python
 
 The Python version on your device must be at 2.5, 2.6, or 2.7.
-
-This process has been tested on Fedora 20 and Ubuntu 11.04 with an iPhone
-3.1.2 toolchain, and an iPhone 2G running iOS 3.1.2.
 
 
 License
