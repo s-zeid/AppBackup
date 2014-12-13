@@ -2,7 +2,7 @@
  * An iOS application that backs up and restores the saved data and
  * preferences of App Store apps.
  * 
- * Copyright (C) 2008-2013 Scott Zeid
+ * Copyright (C) 2008-2014 Scott Zeid
  * http://s.zeid.me/projects/appbackup/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,16 +31,16 @@
 
 // App delegate
 
-#import <CoreFoundation/CoreFoundation.h>;
-#import <UIKit/UIKit.h>;
+#import <CoreFoundation/CoreFoundation.h>
+#import <UIKit/UIKit.h>
 
-#import "AppBackup.h";
-#import "AppListVC.h";
-#import "AboutScreenVC.h";
-#import "TestScreenVC.h";
-#import "util.h";
+#import "AppBackup.h"
+#import "AppListVC.h"
+#import "AboutScreenVC.h"
+#import "TestScreenVC.h"
+#import "util.h"
 
-#import "AppBackupGUI.h";
+#import "AppBackupGUI.h"
 
 @implementation AppBackupGUI
 @synthesize window;

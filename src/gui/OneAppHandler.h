@@ -2,7 +2,7 @@
  * An iOS application that backs up and restores the saved data and
  * preferences of App Store apps.
  * 
- * Copyright (C) 2008-2013 Scott Zeid
+ * Copyright (C) 2008-2014 Scott Zeid
  * http://s.zeid.me/projects/appbackup/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,10 +31,10 @@
 
 // One App action handler (header)
 
-#import <Foundation/Foundation.h>;
+#import <Foundation/Foundation.h>
 
-#import "ActionHandler.h";
-#import "AppListVC.h";
+#import "ActionHandler.h"
+#import "AppListVC.h"
 
 @interface OneAppHandler : ActionHandler {
  NSDictionary        *app;

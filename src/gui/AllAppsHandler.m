@@ -2,7 +2,7 @@
  * An iOS application that backs up and restores the saved data and
  * preferences of App Store apps.
  * 
- * Copyright (C) 2008-2013 Scott Zeid
+ * Copyright (C) 2008-2014 Scott Zeid
  * http://s.zeid.me/projects/appbackup/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,13 +31,13 @@
 
 // All Apps action handler
 
-#import <Foundation/Foundation.h>;
+#import <Foundation/Foundation.h>
 
-#import "AppBackup.h";
-#import "AppListVC.h";
-#import "util.h";
+#import "AppBackup.h"
+#import "AppListVC.h"
+#import "util.h"
 
-#import "AllAppsHandler.h";
+#import "AllAppsHandler.h"
 
 @implementation AllAppsHandler
 - (id)initWithVC:(AppListVC *)vc_ {
@@ -62,7 +62,7 @@
  BOOL      resultsBox = YES;
  NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
  [vc performSelectorOnMainThread:@selector(updateAppListUsingHUD:)
-     withObject:NO waitUntilDone:YES];
+     withObject:nil waitUntilDone:YES];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
   text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];

@@ -2,7 +2,7 @@
  * An iOS application that backs up and restores the saved data and
  * preferences of App Store apps.
  * 
- * Copyright (C) 2008-2013 Scott Zeid
+ * Copyright (C) 2008-2014 Scott Zeid
  * http://s.zeid.me/projects/appbackup/
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,10 +31,10 @@
 
 // AppBackup CLI Bridge
 
-#import "BDSKTask.h";
-#import "util.h";
+#import "BDSKTask.h"
+#import "util.h"
 
-#import "AppBackup.h";
+#import "AppBackup.h"
 
 @implementation AppBackup
 @synthesize apps;

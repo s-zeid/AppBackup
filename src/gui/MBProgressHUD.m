@@ -4,6 +4,10 @@
 // Created by Matej Bukovinski on 2.4.09.
 //
 
+// Modified by Scott Zeid <s@zeid.me> in 2014:
+// * In `setTransformForCurrentOrientation:`, explicitly cast the
+//   device orientation.
+
 #import "MBProgressHUD.h"
 
 @interface MBProgressHUD ()
@@ -599,7 +603,7 @@
 }
 
 - (void)setTransformForCurrentOrientation:(BOOL)animated {
-	UIDeviceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	UIDeviceOrientation orientation = (UIDeviceOrientation) [UIApplication sharedApplication].statusBarOrientation;  // Scott Zeid <s@zeid.me>:  explicitly cast the value
 	NSInteger degrees = 0;
 	
 	if (UIInterfaceOrientationIsLandscape(orientation)) {
