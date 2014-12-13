@@ -45,13 +45,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-void exit_if_not_dir(char *path) {
- if (!isdir(path)) {
-  printf("error: %s is not a directory\n", path);
-  exit(EXIT_FAILURE);
- }
-}
-
 int isdir(char *path) {
  struct stat sb;
  if (lstat(path, &sb) == -1) {
@@ -64,34 +57,11 @@ int isdir(char *path) {
  return 0;
 }
 
-int main(int argc, char **argv) {
- struct passwd *mobile_pwnam;
- struct group  *mobile_group;
- uid_t          mobile_uid;
- gid_t          mobile_gid;
- int            dirfd, ret;
- 
- mobile_pwnam = getpwnam("mobile");
- mobile_group = getgrnam("mobile");
- if (mobile_pwnam == NULL || mobile_group == NULL) {
-  return 2;
+void exit_if_not_dir(char *path) {
+ if (!isdir(path)) {
+  printf("error: %s is not a directory\n", path);
+  exit(EXIT_FAILURE);
  }
- mobile_uid   = mobile_pwnam->pw_uid;
- mobile_gid   = mobile_group->gr_gid;
- 
- exit_if_not_dir("/var/mobile");
- exit_if_not_dir("/var/mobile/Library");
- exit_if_not_dir("/var/mobile/Library/Preferences");
- if ((dirfd = open(APPBACKUP_CONFIG_DIR, O_RDONLY)) == -1) {
-  mkdir(APPBACKUP_CONFIG_DIR, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP |
-                              S_IROTH | S_IXOTH);
- } else {
-  close(dirfd);
- }
- exit_if_not_dir(APPBACKUP_CONFIG_DIR);
- 
- ret = walk(APPBACKUP_CONFIG_DIR, mobile_uid, mobile_gid);
- return ret;
 }
 
 int walk(char *name, uid_t uid, gid_t gid) {
@@ -132,4 +102,34 @@ int walk(char *name, uid_t uid, gid_t gid) {
  chdir(cwd);
  free(cwd);
  return 0;
+}
+
+int main(int argc, char **argv) {
+ struct passwd *mobile_pwnam;
+ struct group  *mobile_group;
+ uid_t          mobile_uid;
+ gid_t          mobile_gid;
+ int            dirfd, ret;
+ 
+ mobile_pwnam = getpwnam("mobile");
+ mobile_group = getgrnam("mobile");
+ if (mobile_pwnam == NULL || mobile_group == NULL) {
+  return 2;
+ }
+ mobile_uid   = mobile_pwnam->pw_uid;
+ mobile_gid   = mobile_group->gr_gid;
+ 
+ exit_if_not_dir("/var/mobile");
+ exit_if_not_dir("/var/mobile/Library");
+ exit_if_not_dir("/var/mobile/Library/Preferences");
+ if ((dirfd = open(APPBACKUP_CONFIG_DIR, O_RDONLY)) == -1) {
+  mkdir(APPBACKUP_CONFIG_DIR, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP |
+                              S_IROTH | S_IXOTH);
+ } else {
+  close(dirfd);
+ }
+ exit_if_not_dir(APPBACKUP_CONFIG_DIR);
+ 
+ ret = walk(APPBACKUP_CONFIG_DIR, mobile_uid, mobile_gid);
+ return ret;
 }
