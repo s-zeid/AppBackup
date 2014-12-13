@@ -26,8 +26,8 @@ Python 2.5 and Objective-C.
      Generator for the HTML file used in the About screen
    * `bundle/`
      Files included in .app bundle, excluding subdirectories
-   * `FixPermissions/`
-     FixPermissions (C; fixes storage directory permissions) `*`
+   * `FixPermissions/` \*
+     FixPermissions (C; fixes storage directory permissions)
    * `gui/`
      GUI source code and third-party libraries in Objective-C
    * `images/`
@@ -36,19 +36,19 @@ Python 2.5 and Objective-C.
      AppBackup CLI Python package and 3rd-party Python modules
    * `usr/`
      /usr/bin/appbackup{,-fix-permissions} launcher scripts
-* `build`
-  Build a Debian package (./build [device-hostname] [deb-file-prefix]) `**`
-* `config.dist`
-  Configuration file for build and test `**`
-* `test`
-  Script to test AppBackup on your own device (./test device-address) `**`
+* `Makefile` \*\*
+  Builds AppBackup and the Debian package.  Can also install AppBackup
+  on an iDevice via SSH.
+* `config.dist` \*\*
+  Sample configuration file for the Makefile.  Should be copied to `config`,
+  and then `config` should be modified as necessary.
 * ...
 
  `*` FixPermissions is changed to setuid root after the package is
      installed.
 
 `**` See the Building AppBackup section for details.  AppBackupGUI and
-     FixPermissions are NOT re-compiled by default.
+     FixPermissions are re-compiled by default, but that can be changed.
 
 # Prerequisites for building
 
@@ -68,31 +68,22 @@ Python 2.5 and Objective-C.
 
 # Building AppBackup
 
-To build a .deb file, run `build`.  To build a test package and install it
-on an iDevice for testing, run `test`.
-
- * Add your devices's IP address or hostname at the end if `CC` is enabled
-   in `config`, or if you are running `test`.
- * Make sure your device has the following installed if you are compiling
-   or testing on it:
-     * OpenSSH Server (CHANGE THE ROOT AND MOBILE USERS' PASSWORDS)
-     * ldid
- * You can add a prefix for the .deb file's name at the end if you are
-   running build and NOT test (test always uses the prefix `test_`.)
- * `test` will start an SSH session with your device when installation is
-   finished.
- * Examples:
-     * `$ ./build 192.168.7.16`
-     * `$ ./build scottPhone test`
-     * `$ ./test scottPhone`
-
-Options for `build` and `test` are set in the `config` file.
+Options for the build process are set in the `config` file.  You must create
+the `config` file before building for the first time:
 
  * Copy `config.dist` to `config`.
- * See `config` for available options.
- * Compiling binaries is disabled by default; set `CC` in `config` to
-   enable it.
+ * Edit `config` as necessary.
+ * Compiling binaries is enabled by default; make `CC` in `config` be blank
+   to disable that.
  * Precompiled binaries are included in the git repository.
+
+To build a .deb file, run `make`.  To build a test package and install it
+on an iDevice for testing, run `make test DEVICE=<hostname/address>`.
+
+ * If you wish to use `make test`, make sure your device has an SSH server
+   installed, and CHANGE THE ROOT AND MOBILE USERS' PASSWORDS.
+ * `make test` will start an SSH session with your device when installation
+   is finished.
 
 This process has been tested on Fedora 20 and Ubuntu 11.04 with an iPhone
 3.1.2 toolchain, and an iPhone 2G running iOS 3.1.2.

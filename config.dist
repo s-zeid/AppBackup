@@ -1,13 +1,10 @@
-#!/bin/bash
+# vim: set ft=make:
 
-# Copy or rename this file to config before running build or test.
+# Copy or rename this file to config before running make.
 
-# Replace the path below with the full path to your toolchain's
-# arm-apple-darwin9-gcc
-# To disable compiling AppBackupGUI and FixPermissions, leave blank or use a
-# value that isn't an executable file or doesn't exist.
-CC=/path/to/iphone-toolchain/pre/bin/arm-apple-darwin9-gcc
+# If the compiler isn't `ios-clang` and/or not on your $PATH, set its path here.
+# To disable compiling AppBackupGUI and FixPermissions, leave this blank.
+CC=ios-clang
 
-# Path to move old .deb files to; leave blank to leave them alone
-# Set to /dev/null to delete old .deb files
-OLD_DEBS=
+# Default device to use for testing (hostname or IP address)
+DEVICE=
