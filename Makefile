@@ -54,13 +54,13 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
 
 install:
 	@[ x"${DEVICE}" != x"" ] && true || \
-	 { echo "Usage: make install DEVICE=<hostname/address>" >&2; exit 2; }
+	  { echo "Usage: make install DEVICE=<hostname/address>" >&2; exit 2; }
 	scp -p "`ls -rt out/*.deb | tail -n 1`" mobile@${DEVICE}:/tmp/appbackup.deb
 	ssh root@${DEVICE} "dpkg -i /tmp/appbackup.deb && rm /tmp/appbackup.deb"
 
 test:
 	@[ x"${DEVICE}" != x"" ] && true || \
-	 { echo "Usage: make test DEVICE=<hostname/address>" >&2; exit 2; }
+	  { echo "Usage: make test DEVICE=<hostname/address>" >&2; exit 2; }
 	make
 	make install
 	ssh mobile@${DEVICE}
