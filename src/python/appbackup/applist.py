@@ -232,7 +232,7 @@ apps.
    "as_list":      apps
   }
   
-  return apps
+  return self
  
  @classmethod
  def sorted(cls, l, key="sort_key"):
