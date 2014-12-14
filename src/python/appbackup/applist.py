@@ -96,7 +96,7 @@ the constructor of app_class each time an app_class instance is made.
   raise KeyError(repr(item))
  
  def __iter__(self):
-  return self.__list().__getitem__(item)
+  return self.__list().__iter__()
  
  def __len__(self):
   if self.__cache:
