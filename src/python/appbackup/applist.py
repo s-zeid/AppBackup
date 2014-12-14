@@ -217,7 +217,7 @@ apps.
    tmp_entry = index_by_bundle_id[bundle_id]
    try:
     app = self.app_class(tmp_entry["bundle"], tmp_entry["data"],
-                         *app_args, **app_kwargs)
+                         *self.app_args, **self.app_kwargs)
     index_by_bundle_id[bundle_id] = app
     if tmp_entry["bundle"].uuid:
      index_by_uuid[tmp_entry["bundle"].uuid.upper()] = app

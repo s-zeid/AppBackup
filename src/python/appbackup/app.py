@@ -123,7 +123,7 @@ each other and should have the ContainerClass LEGACY.
   self.bundle_id = "invalid.appbackup.corrupted"
   self.friendly  = to_unicode(self.name.rsplit(u".app", 1)[0], errors="ignore")
   self.sort_key  = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
-                               self.bundle)
+                               self.bundle_id)
   self.useable   = False
   
   try:
@@ -137,7 +137,7 @@ each other and should have the ContainerClass LEGACY.
      self.friendly  = to_unicode(pl.get("CFBundleDisplayName", "").strip() or
                                  self.name.rsplit(u".app", 1)[0], errors="ignore")
      self.sort_key  = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
-                                  self.bundle)
+                                  self.bundle_id)
      self.useable   = True
   except propertylist.PropertyListError:
    pass

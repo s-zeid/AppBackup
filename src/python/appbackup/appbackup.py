@@ -120,7 +120,7 @@ class AppBackup(object):
   self.any_backed_up = self.any_corrupted = False
   for app in self.apps:
    if app.useable:
-    if app.bundle in self._backup_times and app.bundle not in self._ignore_list:
+    if app.bundle_id in self._backup_times and app.bundle_id not in self._ignore_list:
      self.any_backed_up = True
     else:
      self.all_backed_up = False
@@ -193,7 +193,7 @@ appbackup is an AppBackup instance.
    self.ignored = self.bundle_id in appbackup._ignore_list
    # self._backup_time
    if self.bundle_id in appbackup._backup_times:
-    self._backup_time = appbackup._backup_times[self.bundle]
+    self._backup_time = appbackup._backup_times[self.bundle_id]
    elif os.path.isfile(os.path.realpath(self.tarpath)):
     try:
      self._backup_time = time.localtime(float(os.stat(self.tarpath).st_mtime))
@@ -328,13 +328,13 @@ class _BackupTimes(object):
  def get(self, item):
   return self.__getitem__(item)
  def remove(self, app, quick=False):
-  if app.bundle in self.data: del self.data[app.bundle]
+  if app.bundle_id in self.data: del self.data[app.bundle_id]
   self.save()
   if not quick: self.appbackup._update_backup_info()
  def save(self):
   propertylist.save(self.data, self.filename)
  def update(self, app, quick=False):
-  self.data[app.bundle] = str(app.backup_time_unix)
+  self.data[app.bundle_id] = str(app.backup_time_unix)
   self.save()
   if not quick: self.appbackup._update_backup_info()
 
@@ -356,14 +356,14 @@ class _IgnoreList(object):
  def get(self, item):
   return self.__getitem__(item)
  def add(self, app, quick=False):
-  if app.bundle not in self.data:
-   self.data.append(app.bundle)
+  if app.bundle_id not in self.data:
+   self.data.append(app.bundle_id)
    self.data.sort()
    self.save()
   if not quick: self.appbackup._update_backup_info()
  def remove(self, app, quick=False):
-  if app.bundle in self.data:
-   self.data.remove(app.bundle)
+  if app.bundle_id in self.data:
+   self.data.remove(app.bundle_id)
    self.save()
   if not quick: self.appbackup._update_backup_info()
  def save(self):
