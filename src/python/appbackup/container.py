@@ -258,7 +258,7 @@ directory from iOS <= 7.x, or a directory with an eqivalent structure to any
 of those (e.g. the "data" directory from an iOS Simulator instance).
 
 """
-  self.input       = os.path.abspath(to_unicode(path))
+  self.input       = os.path.abspath(to_unicode(input))
   self.min_ios     = None
   self.path = path = input
   self.bundle_root = None
@@ -288,7 +288,6 @@ of those (e.g. the "data" directory from an iOS Simulator instance).
       if self.has_uuids(bundle_dir) or self.has_uuids(data_dir):
        self.min_ios = 8
        self.path = grandparent
-       break
     elif parent_name == "Data":
      bundle_dir = os.path.join(grandparent, "Bundle")
      data_dir = parent
@@ -296,7 +295,6 @@ of those (e.g. the "data" directory from an iOS Simulator instance).
       if self.has_uuids(data_dir) or self.has_uuids(bundle_dir):
        self.min_ios = 8
        self.path = grandparent
-       break
     if self.min_ios == None:
      self.min_ios = 2
      self.path = path
@@ -307,7 +305,6 @@ of those (e.g. the "data" directory from an iOS Simulator instance).
      if self.has_uuids(bundle_dir) or self.has_uuids(data_dir):
       self.min_ios = 8
       self.path = parent
-      break
    elif input_name == "Data":
     bundle_dir = os.path.join(parent, "Bundle")
     data_dir = path
@@ -315,7 +312,6 @@ of those (e.g. the "data" directory from an iOS Simulator instance).
      if self.has_uuids(data_dir) or self.has_uuids(bundle_dir):
       self.min_ios = 8
       self.path = parent
-      break
    if self.min_ios == None:
     self.min_ios = 2
     self.path = path

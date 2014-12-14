@@ -60,7 +60,7 @@ the constructor of app_class each time an app_class instance is made.
 
 """
   self.root = root if isinstance(root, ContainerRoot) else ContainerRoot(root)
-  self.app_class = cls
+  self.app_class = app_class
   self.app_args = args
   self.app_kwargs = kwargs
   self.__cache = {}
@@ -151,6 +151,8 @@ that bundle ID if so.)
      if not match and not made_cache:
       self.find_all()
       match = self.__cache["by_bundle_id"].get(container.bundle_id, None)
+   except ContainerError:
+    pass
   elif bundle_id:
    match = self.__cache["by_bundle_id"].get(bundle_id, None)
    if not match and not made_cache:
@@ -228,7 +230,7 @@ apps.
      del index_by_uuid[tmp_entry["bundle"].uuid.upper()]
     if tmp_entry["data"].uuid:
      if tmp_entry["data"].uuid != tmp_entry["bundle"].uuid:
-      del index_by_uuid[tmp_entry["data"].uuid.upper()] = app
+      del index_by_uuid[tmp_entry["data"].uuid.upper()]
     continue
   
   self.__cache = {
