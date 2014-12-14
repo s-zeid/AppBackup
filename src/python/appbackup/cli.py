@@ -75,7 +75,6 @@ from util import *
 
 def app_info(app, human_readable=False, verbose=True, found_key=True):
  info = dict(friendly=app.friendly, bundle=app.bundle_id,
-             guid=app.containers.data.uuid,
              bundle_uuid=app.containers.bundle.uuid,
              data_uuid=app.containers.data.uuid,
              useable=app.useable, ignored=app.ignored,
@@ -90,13 +89,13 @@ def app_info(app, human_readable=False, verbose=True, found_key=True):
   info["ignored"] = "Yes" if info["ignored"] else "No"
   info["useable"] = "Yes" if info["useable"] else "No"
   tpl = u"""$friendly ($bundle):
-    Bundle container UUID:  $bundle_uuid
-    Data container UUID:    $data_uuid
-    Ignored:                $ignored
-    Backup time:            $backup_time
     Bundle container path:  $bundle_path
-    Data container path:    $data_path
-    Useable:                $useable"""
+    Bundle container UUID:  $bundle_uuid
+      Data container path:  $data_path
+      Data container UUID:  $data_uuid
+                  Useable:  $useable
+              Backup time:  $backup_time
+                  Ignored:  $ignored"""
   return Template(tpl).substitute(info)
  else:
   return info
