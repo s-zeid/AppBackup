@@ -182,9 +182,9 @@ apps.
   root = self.root
   if root.min_ios >= 8:
    for type_root in (root.bundle_root, root.data_root):
-    for container_dir in os.listdir(type_root):
+    for container_dir_base in os.listdir(type_root):
      try:
-      container = Container(container_dir)
+      container = Container(os.path.join(type_root, container_dir_base))
       if container.bundle_id:
        class_name = container.class_.name.lower()
        if container.bundle_id not in index_by_bundle_id:
@@ -201,9 +201,9 @@ apps.
      except ContainerError:
       pass
   else:
-   for container_dir in os.listdir(root.legacy_root):
+   for container_dir_base in os.listdir(root.legacy_root):
     try:
-     container = Container(container_dir)
+     container = Container(os.path.join(root.legacy_root, container_dir_base))
      if container.bundle_id:
       tmp_entry = {"bundle": container, "data": container}
       index_by_bundle_id[container.bundle_id] = tmp_entry
