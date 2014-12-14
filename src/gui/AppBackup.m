@@ -74,8 +74,8 @@
 
 - (NSDictionary *)doAction:(NSString *)action
                   onApp:(NSDictionary *)app {
- NSString *guid = [app objectForKey:@"guid"];
- NSArray *args = [NSArray arrayWithObjects:@"--guid", guid, nil];
+ NSString *data_uuid = [app objectForKey:@"data_uuid"];
+ NSArray *args = [NSArray arrayWithObjects:@"--uuid", data_uuid, nil];
  NSDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
@@ -140,8 +140,8 @@
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
  NSDictionary *app = [apps objectAtIndex:index];
- NSArray *args = [NSArray arrayWithObjects:@"--guid",
-                  [app objectForKey:@"guid"], nil];
+ NSArray *args = [NSArray arrayWithObjects:@"--uuid",
+                  [app objectForKey:@"data_uuid"], nil];
  NSDictionary *r = [self runCmd:@"list" withArgs:args];
  NSDictionary *d = [NSDictionary dictionaryWithDictionary:
                     [[r objectForKey:@"data"] objectAtIndex:0]];
