@@ -159,6 +159,8 @@ that bundle ID if so.)
    if not match and not made_cache:
     self.find_all()
     match = self.__cache["by_uuid"].get(uuid, None)
+  
+  return match
  
  def find_all(self):
   """Finds all App Store apps.
