@@ -1,7 +1,10 @@
 *.deb
+*.o
 *.pyc
 *.pyo
 .*.swp
 config
 out/*
 !out/.gitinclude
+src/gui/AppBackupGUI
+src/FixPermissions/FixPermissions
