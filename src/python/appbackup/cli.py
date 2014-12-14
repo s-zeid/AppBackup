@@ -53,7 +53,7 @@ Arguments for all commands:
  -a / --all      Perform the specified action on all App Store apps (not needed
                  for list).
  -u / --uuid     A UUID is given as <app> instead of a bundle ID.
- <app>           The bundle IDs (or UUIDs if -g / --uuid is set) for each app
+ <app>           The bundle IDs (or UUIDs if -u / --uuid is set) for each app
                  you want to work with.
  -v / --verbose  Show more information for each app (implied when <app> is
                  given.)"""
