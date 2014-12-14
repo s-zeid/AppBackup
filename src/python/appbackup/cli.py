@@ -81,7 +81,8 @@ def app_info(app, human_readable=False, verbose=True, found_key=True):
              useable=app.useable, ignored=app.ignored,
              backup_time=app.backup_time_str)
  if verbose or human_readable:
-  info["path"] = app.path
+  info["bundle_path"] = app.containers.bundle.path
+  info["data_path"] = app.containers.data.path
  if found_key:
   info["found"] = True
  if human_readable:
@@ -89,12 +90,13 @@ def app_info(app, human_readable=False, verbose=True, found_key=True):
   info["ignored"] = "Yes" if info["ignored"] else "No"
   info["useable"] = "Yes" if info["useable"] else "No"
   tpl = u"""$friendly ($bundle):
-    Bundle UUID:  $bundle_uuid
-    Data UUID:    $data_uuid
-    Ignored:      $ignored
-    Backup time:  $backup_time
-    Path:         $path
-    Useable:      $useable"""
+    Bundle container UUID:  $bundle_uuid
+    Data container UUID:    $data_uuid
+    Ignored:                $ignored
+    Backup time:            $backup_time
+    Bundle container path:  $bundle_path
+    Data container path:    $data_path
+    Useable:                $useable"""
   return Template(tpl).substitute(info)
  else:
   return info
