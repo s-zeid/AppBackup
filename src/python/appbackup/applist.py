@@ -66,7 +66,7 @@ the constructor of app_class each time an app_class instance is made.
   self.__cache = {}
  
  def __list(self):
-  if not self.__cache:
+  if not self:
    self.find_all()
   return self.__cache["as_list"]
  
@@ -99,9 +99,12 @@ the constructor of app_class each time an app_class instance is made.
   return self.__list().__iter__()
  
  def __len__(self):
-  if self.__cache:
+  if self:
    return self.__list().__len__()
   return 0
+ 
+ def __nonzero__(self):
+  return bool(self.__cache)
  
  def find(self, query=None, mode=None, path=None, bundle_id=None, uuid=None,
           root="/var/mobile", *args, **kwargs):
@@ -135,7 +138,7 @@ that bundle ID if so.)
    root = ContainerRoot(root)
   
   made_cache = False
-  if not self.__cache:
+  if not self:
    self.find_all()
    made_cache = True
   
