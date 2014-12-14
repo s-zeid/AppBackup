@@ -100,6 +100,7 @@ have their normal values, depending on the mood of the iOS developers.
    except propertylist.PropertyListError, exc:
     raise ContainerError(exc)
   else:
+   self.plist     = None
    self.class_raw = ContainerClass.LEGACY.value
    self.class_    = ContainerClass.LEGACY
    for i in os.listdir(self.path):
