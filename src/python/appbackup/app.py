@@ -35,23 +35,25 @@ import os
 
 import propertylist
 
+from container import ContainerError, Container, ContainerClass, ContainerRoot
 from util import *
 
-__all__ = ["IOS_APP_STORE_APPS_ROOT", "App"]
+__all__ = ["AppError", "App"]
 
-IOS_APP_STORE_APPS_ROOT    = u"/var/mobile/Applications"
 
 class AppError(Exception): pass
+
 
 class App(object):
  """Describes an App Store app.
 
 Attributes:
- bundle:    the bundle ID of the app
+ bundle_id: the bundle ID of the app
  friendly:  the display name of the app
- guid:      the name of the .app folder's parent directory
+ containers:
+  bundle:   the Container object for the app's bundle container
+  data:     the Container object for the app's data container
  name:      the name of the .app folder
- path:      the path to the .app folder's parent directory
  sort_key:  useful for sorting
  useable:   True if the app can be accessed; False otherwise
 
@@ -59,96 +61,83 @@ sort_key is the friendly name, converted to lowercase, with diacritical marks
 stripped using strip_latin_diacritics, an underscore, and the bundle name.
 Example:  facebook_com.facebook.Facebook
 
+On iOS <= 7.x, containers.bundle and containers.data will be the same object,
+and they will both have the psuedo-ContainerClass LEGACY.
+
 """
- def __init__(self, path):
+ 
+ __cache = {}
+ 
+ def __init__(self, bundle_container, data_container):
   """Loads the app's info.
 
-path is the directory which the app's .app folder is contained in.
+bundle_container is the Container object or directory of the app's
+Bundle container.
+
+data_container is the Container object or directory of the app's
+Data container.
+
+On iOS <= 7.x, bundle_container and data_container should be equal to
+each other and should have the ContainerClass LEGACY.
 
 """
-  self.path = path
-  self.guid = os.path.basename(self.path)
-  plist_file = ""
-  for name in os.listdir(self.path):
-   if (os.path.isdir(os.path.realpath(os.path.join(self.path, name))) and
-       name.endswith(u".app")):
-    self.name = name
-    plist_file = os.path.join(self.path, self.name, u"Info.plist")
+  try:
+   if not isinstance(bundle_container, Container):
+    bundle_container = Container(bundle_container)
+   if not isinstance(data_container, Container):
+    data_container = Container(data_container)
+  except ContainerError, exc:
+   raise AppError(exc)
+  
+  class containers(object):
+   bundle = bundle_container
+   data   = data_container
+  self.containers = containers = containers()
+  
+  # sanity-check the container(s)
+  if containers.bundle.class_ not in (ContainerClass.BUNDLE, ContainerClass.LEGACY):
+   if isinstance(containers.bundle.class_, ContainerClass):
+    raise AppError("bundle_container must be a bundle or legacy container,"
+                   " not a/an %s container" % containers.bundle.class_.name.lower())
+   else:
+    raise AppError("The Python object for the app's bundle container is malformed.")
+  if containers.data.class_ not in (ContainerClass.DATA, ContainerClass.LEGACY):
+   if isinstance(containers.data.class_, ContainerClass):
+    raise AppError("data_container must be a data or legacy container,"
+                   " not a/an %s container" % containers.data.class_.name.lower())
+   else:
+    raise AppError("The Python object for the app's data container is malformed.")
+  if containers.bundle.bundle_id != containers.data.bundle_id:
+   raise AppError("The bundle and data containers have different bundle IDs.")
+  
+  # find the Info.plist file
+  info_plist = ""
+  for i in os.listdir(containers.bundle.path):
+   app_dir = os.path.realpath(os.path.join(containers.bundle.path, i))
+   if (os.path.isdir(app_dir) and i.endswith(u".app")):
+    self.name = i
+    info_plist = os.path.join(app_dir, u"Info.plist")
     break
-  if not plist_file: raise AppError("This is not a valid iOS App Store app.")
-  if os.path.exists(plist_file):
-   pl = propertylist.load(plist_file)
-   self.bundle   = pl["CFBundleIdentifier"]
-   self.friendly = to_unicode(pl.get("CFBundleDisplayName", "").strip() or
-                              self.name.rsplit(u".app", 1)[0], errors="ignore")
-   self.sort_key = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
+  if not info_plist: raise AppError("This is not a valid iOS App Store app.")
+  
+  self.bundle_id = "invalid.appbackup.corrupted"
+  self.friendly  = to_unicode(self.name.rsplit(u".app", 1)[0], errors="ignore")
+  self.sort_key  = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
                                self.bundle)
-   self.useable  = True
-  else:
-   self.bundle   = "invalid.appbackup.corrupted"
-   self.friendly = to_unicode(self.name.rsplit(u".app", 1)[0], errors="ignore")
-   self.sort_key = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
-                               self.bundle)
-   self.useable  = False
- @classmethod
- def find(cls, app=None, mode=None, path=None, bundle=None, guid=None,
-          root=IOS_APP_STORE_APPS_ROOT, *args, **kwargs):
-  """Returns a new AppBackupApp for the given path, bundle, or GUID.
-
-mode can be one of "path", "bundle", or "guid" and takes the place of the
-corresponding keyword arguments if set.  Extra arguments are passed to the
-class's constuctor.
-
-"""
-  if len([i for i in (path, bundle, guid, mode) if i]) is not 1:
-   raise ValueError("Please specify only one of path, bundle, guid, or mode.")
-  if mode not in ("path", "bundle", "guid", None):
-   raise ValueError(repr(mode) + " is not a valid mode.")
-  if mode:
-   if not app: raise ValueError("Please specify an app to find.")
-   if mode == "path":     path = app
-   elif mode == "bundle": bundle = app
-   elif mode == "guid":   guid = app
-  if path:
-   try: cls(path, appbackup=self)
-   except: return
-  elif bundle:
-   for i in os.listdir(root):
-    if os.path.isdir(os.path.realpath(os.path.join(root, i))):
-     for name in os.listdir(os.path.join(root, i)):
-      plist_file = os.path.join(root, i, name, u"Info.plist")
-      if name.endswith(".app") and os.path.isfile(os.path.realpath(plist_file)):
-       this_bundle = propertylist.load(plist_file).get("CFBundleIdentifier")
-       if bundle == this_bundle:
-        try: return cls(os.path.join(root, i), *args, **kwargs)
-        except AppError: continue
-  elif guid:
-   for i in os.listdir(root):
-    if i == guid and os.path.isdir(os.path.realpath(os.path.join(root, i))):
-     try: return cls(os.path.join(root, i), *args, **kwargs)
-     except AppError: continue
- @classmethod
- def find_all(cls, root=IOS_APP_STORE_APPS_ROOT, *args, **kwargs):
-  """Finds all App Store apps.
-
-Returns a dictionary of instances of this method's class which represent the
-apps.  Extra arguments are passed to the class's constructor.
-
-"""
-  ret = []
-  for i in os.listdir(root):
-   if os.path.isdir(os.path.realpath(os.path.join(root, i))):
-    try: app = cls(os.path.join(root, i), *args, **kwargs)
-    except AppError: continue
-    ret += [app]
-  return ret
- @classmethod
- def sorted(cls, l, key="sort_key"):
-  """Returns a given list of Apps sorted according to key.
-
-key is either a string that tells which App attribute should be used as a sort
-key, or a callable that is passed an App and returns a sort key.
-
-"""
-  if callable(key): return sorted(l, key=key)
-  else: return sorted(l, key=lambda app: getattr(app, key))
+  self.useable   = False
+  
+  try:
+   if os.path.isfile(os.path.realpath(info_plist)):
+    pl = propertylist.load(info_plist)
+    if "CFBundleIdentifier" in pl:
+     self.bundle_id = pl["CFBundleIdentifier"]
+     if self.bundle_id != containers.bundle.bundle_id:
+      raise AppError("The bundle ID in Info.plist does not match the bundle ID"
+	             " of the bundle container.")
+     self.friendly  = to_unicode(pl.get("CFBundleDisplayName", "").strip() or
+                                 self.name.rsplit(u".app", 1)[0], errors="ignore")
+     self.sort_key  = u"%s_%s" % (strip_latin_diacritics(self.friendly.lower()),
+                                  self.bundle)
+     self.useable   = True
+  except propertylist.PropertyListError:
+   pass

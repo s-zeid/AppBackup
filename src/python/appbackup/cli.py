@@ -52,8 +52,8 @@ Commands:
 Arguments for all commands:
  -a / --all      Perform the specified action on all App Store apps (not needed
                  for list).
- -g / --guid     A GUID is given as <app> instead of a bundle ID.
- <app>           The bundle IDs (or GUIDs if -g / --guid is set) for each app
+ -u / --uuid     A UUID is given as <app> instead of a bundle ID.
+ <app>           The bundle IDs (or UUIDs if -g / --uuid is set) for each app
                  you want to work with.
  -v / --verbose  Show more information for each app (implied when <app> is
                  given.)"""
@@ -74,7 +74,10 @@ from justifiedbool import *
 from util import *
 
 def app_info(app, human_readable=False, verbose=True, found_key=True):
- info = dict(friendly=app.friendly, bundle=app.bundle, guid=app.guid,
+ info = dict(friendly=app.friendly, bundle=app.bundle_id,
+             guid=app.containers.data.uuid,
+             bundle_uuid=app.containers.bundle.uuid,
+             data_uuid=app.containers.data.uuid,
              useable=app.useable, ignored=app.ignored,
              backup_time=app.backup_time_str)
  if verbose or human_readable:
@@ -86,7 +89,8 @@ def app_info(app, human_readable=False, verbose=True, found_key=True):
   info["ignored"] = "Yes" if info["ignored"] else "No"
   info["useable"] = "Yes" if info["useable"] else "No"
   tpl = u"""$friendly ($bundle):
-    GUID:         $guid
+    Bundle UUID:  $bundle_uuid
+    Data UUID:    $data_uuid
     Ignored:      $ignored
     Backup time:  $backup_time
     Path:         $path
@@ -135,12 +139,12 @@ def main(argv):
      if not i.useable: info = "(not useable)"
      else: info = "(not backed up)"
     if i.ignored: info = (info + " (ignored)").lstrip()
-    safe_print(u"%s (%s): %s" % (i.friendly, (i.bundle if i.useable else i),
+    safe_print(u"%s (%s): %s" % (i.friendly, (i.bundle_id if i.useable else i),
                                  info))
   return 0
  elif cmd == "list" and ("v" in args or "verbose" in args or len(args[""])):
   # Show verbose app info
-  use_guid = "g" in args or "guid" in args
+  use_uuid = "u" in args or "uuid" in args or ("g" in args or "guid" in args)
   all_apps = not len(args[""]) or "a" in args or "all" in args
   verbose  = "v" in args or "verbose" in args
   apps = args[""]
@@ -154,7 +158,7 @@ def main(argv):
     else: safe_print(app_info(app, True) + "\n")
   else:
    # List some apps
-   search_mode = "guid" if use_guid else "bundle"
+   search_mode = "uuid" if use_uuid else "bundle_id"
    for i in apps:
     app = appbackup.find_app(i, search_mode)
     if app:
@@ -169,7 +173,7 @@ def main(argv):
   return int(not success)
  elif cmd in ("backup", "restore", "delete", "ignore", "unignore"):
   # Other commands
-  use_guid = "g" in args or "guid" in args
+  use_uuid = "u" in args or "uuid" in args or ("g" in args or "guid" in args)
   all_apps = "a" in args or "all" in args
   verbose  = "v" in args or "verbose" in args
   apps = args[""]
@@ -193,7 +197,7 @@ def main(argv):
               if not result[i]]
   else:
    # Not all apps
-   search_mode = "guid" if use_guid else "bundle"
+   search_mode = "uuid" if use_uuid else "bundle_id"
    for i in apps:
     app = appbackup.find_app(i, search_mode)
     if app:

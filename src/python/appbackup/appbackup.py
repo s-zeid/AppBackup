@@ -44,22 +44,35 @@ import UserDict
 import propertylist
 
 from app import *
+from applist import *
+from container import ContainerRoot
 from justifiedbool import JustifiedBool
 from util import *
 
+
 __all__ = ["AppBackup", "AppBackupApp", "AppBackupError"]
 
+
 APPBACKUP_CONFIG_DIRECTORY = u"/var/mobile/Library/Preferences/AppBackup"
+
 
 class AppBackup(object):
  """The main class of the AppBackup library."""
  def __init__(self, find_apps=True, config_dir=None, apps_root=None):
+  dir_mask = stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH
+  
   if config_dir == None:
    config_dir = APPBACKUP_CONFIG_DIRECTORY
    self._migrate_old_config_dir()
-  if apps_root == None: apps_root = IOS_APP_STORE_APPS_ROOT
-  dir_mask = stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH
   self.config_dir = config_dir
+  
+  if apps_root == None:
+   apps_root = ContainerRoot("/var/mobile")
+  elif not isinstance(apps_root, ContainerRoot):
+   apps_root = ContainerRoot(apps_root)
+  else:
+   apps_root = apps_root
+  
   self._tarballs_dir = os.path.join(config_dir, "tarballs")
   self._backuptimes_plist = os.path.join(config_dir, "backuptimes.plist")
   self._ignore_txt = os.path.join(config_dir, "ignore.txt")
@@ -67,10 +80,12 @@ class AppBackup(object):
    os.mkdir(self.config_dir, dir_mask)
   if not os.path.isdir(os.path.realpath(self._tarballs_dir)):
    os.mkdir(self._tarballs_dir, dir_mask)
+  
   self._backup_times = _BackupTimes(self)
   self._ignore_list = _IgnoreList(self)
-  self.apps = []
-  self.find_app = functools.partial(AppBackupApp.find, appbackup=self)
+  
+  self.apps = AppList(apps_root, app_class=AppBackupApp, appbackup=self)
+  self.find_app = lambda *args, **kwargs: self.apps.find(*args, **kwargs)
   if find_apps: self.find_apps()
   else: self._update_backup_info()
  def _do_on_all(self, action):
@@ -121,7 +136,7 @@ class AppBackup(object):
  def find_apps(self, force=False):
   """Initializes self.apps if it doesn't already exist."""
   if force or not hasattr(self, "apps") or not len(self.apps):
-   self.apps = AppBackupApp.find_all(appbackup=self)
+   self.apps = self.apps.find_all()
    self._update_backup_info()
  def ignore_all(self):
   """Tells AppBackup to ignore this app."""
@@ -136,7 +151,7 @@ See App.sorted for information about key.
 
 """
   self.find_apps()
-  return AppBackupApp.sorted(self.apps, key)
+  return AppList.sorted(self.apps, key)
  def starbucks(self):
   """STARBUCKS!!!!!111!11!!!one!!1!"""
   return u"STARBUCKS!!!!!111!11!!!one!!1!"
@@ -156,20 +171,28 @@ Attributes (in addition to those defined in the App class):
  tarpath:          the full path to the .tar.gz backup of the app's data
 
 """
- def __init__(self, path, appbackup):
+ def __init__(self, bundle_container, data_container, appbackup):
   """Loads the app's info.
 
-path is the path to the .app folder's parent directory.
+bundle_container is the Container object or directory of the app's
+Bundle container.
+
+data_container is the Container object or directory of the app's
+Data container.
+
+On iOS <= 7.x, bundle_container and data_container should be equal to
+each other and should have the ContainerClass LEGACY.
+
 appbackup is an AppBackup instance.
 
 """
-  super(AppBackupApp, self).__init__(path)
+  super(AppBackupApp, self).__init__(bundle_container, data_container)
   self.appbackup = appbackup
   if self.useable:
-   self.tarpath = os.path.join(appbackup._tarballs_dir, self.bundle + ".tar.gz")
-   self.ignored = self.bundle in appbackup._ignore_list
+   self.tarpath = os.path.join(appbackup._tarballs_dir, self.bundle_id + ".tar.gz")
+   self.ignored = self.bundle_id in appbackup._ignore_list
    # self._backup_time
-   if self.bundle in appbackup._backup_times:
+   if self.bundle_id in appbackup._backup_times:
     self._backup_time = appbackup._backup_times[self.bundle]
    elif os.path.isfile(os.path.realpath(self.tarpath)):
     try:
@@ -200,9 +223,8 @@ appbackup is an AppBackup instance.
    f = open(self.tarpath, "w")
    f.close()
   tar = tarfile.open(self.tarpath.encode("utf8"), "w:gz")
-  tar.add(os.path.join(self.path, "Documents").encode("utf8"),
-          arcname="Documents")
-  tar.add(os.path.join(self.path, "Library").encode("utf8"), arcname="Library")
+  for i in ("Documents", "Library"):
+   tar.add(os.path.join(self.containers.data.path, i).encode("utf8"), arcname=i)
   tar.close()
   self._backup_time = time.localtime()
   self.appbackup._backup_times.update(self, quick)
@@ -232,7 +254,7 @@ exists for compatibility with the other action methods in this class.
   if not self.useable: raise AppBackupError("This app is not useable.")
   if os.path.exists(self.tarpath):
    tar = tarfile.open(self.tarpath.encode("utf8"))
-   tar.extractall(self.path.encode("utf8"))
+   tar.extractall(self.containers.data.path.encode("utf8"))
    tar.close()
  def unignore(self, quick=False):
   """Tells AppBackup to quit ignoring this app."""
