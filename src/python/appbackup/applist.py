@@ -124,7 +124,7 @@ instance for it and see if that has a bundle ID, and then it will look up
 that bundle ID if so.)
 
 """
-  if len([i for i in (path, bundle, uuid, mode) if i]) is not 1:
+  if len([i for i in (path, bundle_id, uuid, mode) if i]) is not 1:
    raise ValueError("Please specify only one of path, bundle_id, uuid, or mode.")
   if mode not in ("path", "bundle_id", "uuid", None):
    raise ValueError(repr(mode) + " is not a valid mode.")
