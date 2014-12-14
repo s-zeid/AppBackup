@@ -74,7 +74,7 @@ from justifiedbool import *
 from util import *
 
 def app_info(app, human_readable=False, verbose=True, found_key=True):
- info = dict(friendly=app.friendly, bundle=app.bundle_id,
+ info = dict(friendly=app.friendly, bundle_id=app.bundle_id,
              bundle_uuid=app.containers.bundle.uuid,
              data_uuid=app.containers.data.uuid,
              useable=app.useable, ignored=app.ignored,
@@ -88,7 +88,7 @@ def app_info(app, human_readable=False, verbose=True, found_key=True):
   if not info["backup_time"]: info["backup_time"] = "(not backed up)"
   info["ignored"] = "Yes" if info["ignored"] else "No"
   info["useable"] = "Yes" if info["useable"] else "No"
-  tpl = u"""$friendly ($bundle):
+  tpl = u"""$friendly ($bundle_id):
     Bundle container path:  $bundle_path
     Bundle container UUID:  $bundle_uuid
       Data container path:  $data_path

@@ -87,7 +87,7 @@
 }
 
 - (void)start {
- NSString *prompt = [app objectForKey:@"bundle"];
+ NSString *prompt = [app objectForKey:@"bundle_id"];
  if ([prompt length] > 30)
   prompt = [[prompt substringWithRange:NSMakeRange(0, 30)]
             stringByAppendingString:@"..."];
