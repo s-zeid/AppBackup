@@ -38,6 +38,10 @@ Backs up and restores saved data and settings from iOS App Store apps.
 Options:
  -j / --json     Output (and shell input) should be a JSON document.
  -p / --plist    Output (and shell input) should be an XML property list.
+ --root          The path to the directory containing app containers or
+                 a mobile home directory (defaults to "/var/mobile").
+ --config-dir    The path to the AppBackup configuration directory (defaults
+                 to "<container-root>/../Library/Preferences/AppBackup").
 
 Commands:
  -h / --help     Display this help information and exit.
@@ -77,6 +81,7 @@ except ImportError:
  import simplejson as json
 
 from appbackup import *
+from container import ContainerRoot
 from justifiedbool import *
 from util import *
 
@@ -128,11 +133,14 @@ def main(argv):
  use_json = "j" in opts or "json" in opts
  use_plist = "p" in opts or "plist" in opts
  out_mode = ("json" if use_json else "plist") if use_json or use_plist else ""
+ root = ContainerRoot(opts.get("root", "/var/mobile"))
+ default_config_dir = (root.path, "..", "Library", "Preferences", "AppBackup")
+ config_dir = opts.get("config-dir", os.path.join(*default_config_dir))
  if use_json and use_plist:
   safe_print("Please choose only one or neither of -j / --json or -p /"
              " --plist.")
   return 2
- appbackup = AppBackup(find_apps=False)
+ appbackup = AppBackup(find_apps=False, config_dir=config_dir, apps_root=root)
  run_cmd(cmd, args, appbackup, out_mode)
 
 def shell(args, appbackup, out_mode):
