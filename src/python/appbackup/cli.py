@@ -48,6 +48,8 @@ Commands:
  delete <app>    Delete the specified app's backup.
  ignore <app>    Ignore the specified app.
  unignore <app>  Stop ignoring the specified app.
+ shell           Start an interactive shell.
+ python-repl     Start an interactive Python prompt with an appbackup object.
 
 Arguments for all commands:
  -a / --all      Perform the specified action on all App Store apps (not needed
@@ -58,9 +60,12 @@ Arguments for all commands:
  -v / --verbose  Show more information for each app (implied when <app> is
                  given.)"""
 
+import code
 import os
 import plistlib
+import shlex
 import sys
+import types
 
 from string import Template
 
@@ -126,6 +131,49 @@ def main(argv):
              " --plist.")
   return 2
  appbackup = AppBackup(find_apps=False)
+ run_cmd(cmd, args, appbackup, out_mode)
+
+def shell(args, appbackup, out_mode):
+ while True:
+  _, cmd, args = parse_argv(shlex.split(raw_input(">>> ")))
+  if cmd == "exit":
+   return 0
+  run_cmd(cmd, args, appbackup, out_mode)
+ return 0
+
+def python_repl(args, appbackup):
+ def _make_scope():
+  src_scope = globals()
+  scope = dict([(k, src_scope[k]) for k in src_scope
+                if (not (k.startswith("_") and k not in "__doc__") and
+                    not k in ("decimal", "inject", "main") and
+                    not isinstance(src_scope[k],types.ModuleType))])
+  scope["__builtins__"] = __builtins__
+  return scope
+ def _console_banner():
+  banner = []
+  dummy_console = code.InteractiveConsole()
+  def dummy_write(data):
+   banner.append(data)
+  dummy_console.write = dummy_write
+  def dummy_input(prompt):
+   raise EOFError()
+  dummy_console.raw_input = dummy_input
+  dummy_console.interact()
+  return "\n".join("".join(banner).rstrip().splitlines()[:-1]) + "\n"
+ scope  = _make_scope()
+ ps1    = getattr(sys, "ps1", None) or ">>> "
+ usage  = ps1 + "appbackup = AppBackup(find_apps=False)\n"
+ banner = "\n".join((_console_banner(), usage))
+ scope["appbackup"] = appbackup
+ code.interact(banner, None, scope)
+ return 0
+
+def run_cmd(cmd, args, appbackup, out_mode):
+ if cmd == "shell":
+  return shell(args, appbackup, out_mode)
+ if cmd == "python-repl":
+  return python_repl(args, appbackup)
  if (cmd == "list" and
      "v" not in args and "verbose" not in args and not len(args[""])):
   # List App Store apps and their backup statuses
