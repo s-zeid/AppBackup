@@ -63,6 +63,7 @@ Arguments for all commands:
 import code
 import os
 import plistlib
+import readline
 import shlex
 import sys
 import traceback
