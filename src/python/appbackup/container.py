@@ -259,9 +259,9 @@ directory from iOS <= 7.x, or a directory with an eqivalent structure to any
 of those (e.g. the "data" directory from an iOS Simulator instance).
 
 """
-  self.input       = os.path.abspath(to_unicode(input))
+  self.input       = to_unicode(input)
   self.min_ios     = None
-  self.path = path = input
+  self.path = path = os.path.abspath(input)
   self.bundle_root = None
   self.data_root   = None
   self.legacy_root = None
