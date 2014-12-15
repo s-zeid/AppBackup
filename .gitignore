@@ -8,3 +8,4 @@ out/*
 !out/.gitinclude
 src/gui/AppBackupGUI
 src/FixPermissions/FixPermissions
+test
