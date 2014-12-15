@@ -145,13 +145,14 @@ class AppBackup(object):
   """Restores all apps' saved data."""
   return self._do_on_all("restore")
  def sort_apps(self, key="sort_key"):
-  """Returns a list of apps sorted by key.
+  """Returns an iterator that yields each app in the cache sorted according to key.
 
-See App.sorted for information about key.
+key is either a string that tells which App attribute should be used as a sort
+key, or a callable that is passed an App and returns a sort key.
 
 """
   self.find_apps()
-  return AppList.sorted(self.apps, key)
+  return self.apps.sorted(key)
  def starbucks(self):
   """STARBUCKS!!!!!111!11!!!one!!1!"""
   return u"STARBUCKS!!!!!111!11!!!one!!1!"

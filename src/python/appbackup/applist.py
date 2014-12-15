@@ -240,13 +240,13 @@ apps.
   
   return self
  
- @classmethod
- def sorted(cls, l, key="sort_key"):
-  """Returns a given Python list of Apps sorted according to key.
+ def sorted(self, key="sort_key"):
+  """Returns an iterator that yields each app in the cache sorted according to key.
 
 key is either a string that tells which App attribute should be used as a sort
 key, or a callable that is passed an App and returns a sort key.
 
 """
+  l = self.__cache["as_list"] if self else []
   if callable(key): return sorted(l, key=key)
   else: return sorted(l, key=lambda app: getattr(app, key))
