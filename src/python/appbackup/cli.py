@@ -65,6 +65,7 @@ import os
 import plistlib
 import shlex
 import sys
+import traceback
 import types
 
 from string import Template
@@ -135,10 +136,15 @@ def main(argv):
 
 def shell(args, appbackup, out_mode):
  while True:
-  _, cmd, args = parse_argv(shlex.split(raw_input(">>> ")))
-  if cmd == "exit":
+  try:
+   _, cmd, args = parse_argv(shlex.split(raw_input(">>> ")))
+   if cmd == "exit":
+    return 0
+   run_cmd(cmd, args, appbackup, out_mode)
+  except EOFError:
    return 0
-  run_cmd(cmd, args, appbackup, out_mode)
+  except Exception, exc:
+   traceback.print_exc(exc)
  return 0
 
 def python_repl(args, appbackup):
