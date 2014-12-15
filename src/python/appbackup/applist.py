@@ -79,8 +79,8 @@ the constructor of app_class each time an app_class instance is made.
   return False
  
  def __getitem__(self, item, _recursing=False):
-  if not self.__cache or _recursing:
-   if isinstance(self, item, (int, long)):
+  if self.__cache:
+   if isinstance(item, (int, long)):
     return self.__cache["as_list"][item]
    else:
     match = self.__cache["by_bundle_id"].get(item, None)
