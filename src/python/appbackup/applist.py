@@ -105,8 +105,7 @@ the constructor of app_class each time an app_class instance is made.
  def __nonzero__(self):
   return bool(self.__cache)
  
- def find(self, query=None, mode=None, path=None, bundle_id=None, uuid=None,
-          root="/var/mobile", *args, **kwargs):
+ def find(self, query=None, mode=None, path=None, bundle_id=None, uuid=None):
   """Finds an App (or subclass) instance for the given path, bundle ID, or UUID.
 
 This method will use a cache to service the query, creating or re-creating
@@ -132,9 +131,6 @@ that bundle ID if so.)
    if   mode == "path":      path      = query
    elif mode == "bundle_id": bundle_id = query
    elif mode == "uuid":      uuid      = query
-  
-  if not isinstance(root, ContainerRoot):
-   root = ContainerRoot(root)
   
   made_cache = False
   if not self:
@@ -169,7 +165,7 @@ that bundle ID if so.)
  def find_all(self):
   """Finds all App Store apps.
 
-Returns self.  Extra arguments are passed to app_class's constructor.
+Returns self.
 
 This also creates (or re-creates) a memory-backed cache of all apps in
 the given root, and this cache is used to service searches for individual
