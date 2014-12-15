@@ -67,7 +67,7 @@ the constructor of app_class each time an app_class instance is made.
  
  def __list(self):
   if not self:
-   self.find_all()
+   return []
   return self.__cache["as_list"]
  
  def __contains__(self, item):
@@ -78,21 +78,20 @@ the constructor of app_class each time an app_class instance is made.
    pass
   return False
  
- def __getitem__(self, item, _recache=True):
-  if not self.__cache and _recache:
-   self.find_all()
-  if isinstance(self, item, (int, long)):
-   return self.__cache["as_list"][item]
-  else:
-   match = self.__cache["by_bundle_id"].get(item, None)
-   if match:
-    return match
-   match = self.__cache["by_uuid"].get(item, None)
-   if match:
-    return match
-   if _recache:
-    self.find_all()
-    return self.__getitem__(item, _recache=False)
+ def __getitem__(self, item, _recursing=False):
+  if not self.__cache or _recursing:
+   if isinstance(self, item, (int, long)):
+    return self.__cache["as_list"][item]
+   else:
+    match = self.__cache["by_bundle_id"].get(item, None)
+    if match:
+     return match
+    match = self.__cache["by_uuid"].get(item, None)
+    if match:
+     return match
+    if not _recursing:
+     self.find_all()
+     return self.__getitem__(item, _recursing=True)
   raise KeyError(repr(item))
  
  def __iter__(self):
