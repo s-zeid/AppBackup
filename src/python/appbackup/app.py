@@ -66,9 +66,25 @@ and they will both have the psuedo-ContainerClass LEGACY.
 
 """
  
- __cache = {}
+ __ready = False
  
- def __init__(self, bundle_container, data_container):
+ def __nonzero__(self):
+  return bool(self.__ready)
+ 
+ def __new__(cls, bundle_container, data_container, *args, **kwargs):
+  # This exists to allow AppList.find_all() to not have to use a temporary
+  # intermediate object when scanning for apps on iOS >= 8, thus eliminating
+  # the need to have to iterate through the cache to make the App objects
+  # once the containers are discovered and then replace each cache entry
+  # with the App.
+  self = super(App, cls).__new__(cls, bundle_container, data_container)
+  class containers(object):
+   bundle = bundle_container
+   data   = data_container
+  self.containers = containers = containers()
+  return self
+ 
+ def __init__(self, bundle_container, data_container, *args, **kwargs):
   """Loads the app's info.
 
 bundle_container is the Container object or directory of the app's
@@ -89,10 +105,9 @@ each other and should have the ContainerClass LEGACY.
   except ContainerError, exc:
    raise AppError(exc)
   
-  class containers(object):
-   bundle = bundle_container
-   data   = data_container
-  self.containers = containers = containers()
+  containers = self.containers
+  containers.bundle = bundle_container
+  containers.data   = data_container
   
   # sanity-check the container(s)
   if containers.bundle.class_ not in (ContainerClass.BUNDLE, ContainerClass.LEGACY):
@@ -141,3 +156,5 @@ each other and should have the ContainerClass LEGACY.
      self.useable   = True
   except propertylist.PropertyListError:
    pass
+  
+  self.__ready = True

@@ -178,59 +178,62 @@ apps.
 """
   index_by_bundle_id = {}
   index_by_uuid      = {}
+  apps               = []
   root = self.root
   if root.min_ios >= 8:
-   for type_root in (root.bundle_root, root.data_root):
+   search_roots = (root.bundle_root, root.data_root)
+   for type_root in search_roots:
     for container_dir_base in os.listdir(type_root):
+     app = None
      try:
       container = Container(os.path.join(type_root, container_dir_base))
       if container.bundle_id:
        class_name = container.class_.name.lower()
-       if container.bundle_id not in index_by_bundle_id:
+       app = index_by_bundle_id.get(container.bundle_id, None)
+       if not app:
         if class_name == "bundle":
-         tmp_entry = index_by_bundle_id[container.bundle_id] = {}
+         app = self.app_class.__new__(None, None,
+                                      *self.app_args, **self.app_kwargs)
+         index_by_bundle_id[container.bundle_id] = app
+	 apps += [app]
         else:
          continue  # data containers can also be for built-in apps
-       else: 
-        tmp_entry = index_by_bundle_id[container.bundle_id]
        if class_name in ("bundle", "data"):
-        tmp_entry[class_name] = container
-	if container.uuid:
-	 index_by_uuid[container.uuid.upper()] = tmp_entry
+        setattr(app.containers, class_name, container)
+        if container.uuid:
+         index_by_uuid[container.uuid.upper()] = app
      except ContainerError:
       pass
+   for app in apps:
+    try:
+     app = self.app_class.__init__(app.containers.bundle, app.containers.data,
+                                   *self.app_args, **self.app_kwargs)
+    except AppError:
+     del index_by_bundle_id[app.bundle_id]
+     bundle_id = getattr(app.containers.bundle, "uuid", None)
+     data_id   = getattr(app.containers.data, "uuid", None)
+     if bundle_id:
+      del index_by_uuid[app.containers.bundle.uuid.upper()]
+     if data_id and data_id != bundle_id:
+      del index_by_uuid[app.containers.data.uuid.upper()]
+     continue
+   apps = [app for app in apps if app]
   else:
    for container_dir_base in os.listdir(root.legacy_root):
     try:
      container = Container(os.path.join(root.legacy_root, container_dir_base))
      if container.bundle_id:
-      tmp_entry = {"bundle": container, "data": container}
-      index_by_bundle_id[container.bundle_id] = tmp_entry
-      if container.uuid:
-       index_by_uuid[container.uuid.upper()] = tmp_entry
+      try:
+       app = self.app_class(container, container,
+                            *self.app_args, **self.app_kwargs)
+       index_by_bundle_id[container.bundle_id] = app
+       if container.uuid:
+        index_by_uuid[container.uuid.upper()] = app
+       apps += [app]
+      except AppError:
+       pass
     except ContainerError:
      pass
-  
-  apps = []
-  for bundle_id in index_by_bundle_id:
-   tmp_entry = index_by_bundle_id[bundle_id]
-   try:
-    app = self.app_class(tmp_entry["bundle"], tmp_entry["data"],
-                         *self.app_args, **self.app_kwargs)
-    index_by_bundle_id[bundle_id] = app
-    if tmp_entry["bundle"].uuid:
-     index_by_uuid[tmp_entry["bundle"].uuid.upper()] = app
-    if tmp_entry["data"].uuid:
-     index_by_uuid[tmp_entry["data"].uuid.upper()] = app
-    apps += [app]
-   except AppError:
-    del index_by_bundle_id[bundle_id]
-    if tmp_entry["bundle"].uuid:
-     del index_by_uuid[tmp_entry["bundle"].uuid.upper()]
-    if tmp_entry["data"].uuid:
-     if tmp_entry["data"].uuid != tmp_entry["bundle"].uuid:
-      del index_by_uuid[tmp_entry["data"].uuid.upper()]
-    continue
   
   self.__cache = {
    "by_bundle_id": index_by_bundle_id,
