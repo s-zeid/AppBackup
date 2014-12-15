@@ -36,8 +36,8 @@ usage = """Usage: appbackup [options] command [args]
 Backs up and restores saved data and settings from iOS App Store apps.
 
 Options:
- -j / --json     Output should be a JSON object.
- -p / --plist    Output should be an XML property list.
+ -j / --json     Output (and shell input) should be a JSON document.
+ -p / --plist    Output (and shell input) should be an XML property list.
 
 Commands:
  -h / --help     Display this help information and exit.
@@ -136,9 +136,21 @@ def main(argv):
  run_cmd(cmd, args, appbackup, out_mode)
 
 def shell(args, appbackup, out_mode):
+ build = ""
  while True:
   try:
-   _, cmd, args = parse_argv(shlex.split(raw_input(">>> ")))
+   line = raw_input(">>> " if not build else "... ")
+   if out_mode == "plist":
+    build += line + "\n"
+    if "</plist>" in line:
+     _, cmd, args = parse_argv(plistlib.readPlistFromString(build))
+     build = ""
+    else:
+     continue
+   elif out_mode == "json":
+    _, cmd, args = parse_argv(json.loads(line))
+   else:
+    _, cmd, args = parse_argv(shlex.split(line))
    if cmd == "exit":
     return 0
    run_cmd(cmd, args, appbackup, out_mode)
