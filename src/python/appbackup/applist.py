@@ -186,10 +186,11 @@ apps.
       if container.bundle_id:
        class_name = container.class_.name.lower()
        app = index_by_bundle_id.get(container.bundle_id, None)
-       if not app:
+       if app == None:
         if class_name == "bundle":
-         app = self.app_class.__new__(None, None,
+         app = self.app_class.__new__(self.app_class, None, None,
                                       *self.app_args, **self.app_kwargs)
+	 app.bundle_id = container.bundle_id
          index_by_bundle_id[container.bundle_id] = app
 	 apps += [app]
         else:
@@ -202,8 +203,10 @@ apps.
       pass
    for app in apps:
     try:
-     app = self.app_class.__init__(app.containers.bundle, app.containers.data,
-                                   *self.app_args, **self.app_kwargs)
+     if None in (app.containers.bundle, app.containers.data):
+      raise AppError()
+     app = app.__init__(app.containers.bundle, app.containers.data,
+                        *self.app_args, **self.app_kwargs)
     except AppError:
      del index_by_bundle_id[app.bundle_id]
      bundle_id = getattr(app.containers.bundle, "uuid", None)

@@ -82,6 +82,7 @@ and they will both have the psuedo-ContainerClass LEGACY.
    bundle = bundle_container
    data   = data_container
   self.containers = containers = containers()
+  self.bundle_id = None
   return self
  
  def __init__(self, bundle_container, data_container, *args, **kwargs):
