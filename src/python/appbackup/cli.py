@@ -133,9 +133,6 @@ def main(argv):
  use_json = "j" in opts or "json" in opts
  use_plist = "p" in opts or "plist" in opts
  out_mode = ("json" if use_json else "plist") if use_json or use_plist else ""
- root = ContainerRoot(opts.get("root", "/var/mobile"))
- default_config_dir = (root.path, "..", "Library", "Preferences", "AppBackup")
- config_dir = opts.get("config-dir", os.path.join(*default_config_dir))
  if use_json and use_plist:
   safe_print("Please choose only one or neither of -j / --json or -p /"
              " --plist.")
@@ -146,6 +143,9 @@ def main(argv):
   if out_mode: print fmt_result(out_mode, cmd, True, 0, out)
   else: safe_print('%s "%s"' % out)
   return 0
+ root = ContainerRoot(opts.get("root", "/var/mobile"))
+ default_config_dir = (root.path, "..", "Library", "Preferences", "AppBackup")
+ config_dir = opts.get("config-dir", os.path.join(*default_config_dir))
  appbackup = AppBackup(find_apps=False, config_dir=config_dir, apps_root=root)
  run_cmd(cmd, args, appbackup, out_mode)
 
