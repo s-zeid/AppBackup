@@ -140,6 +140,12 @@ def main(argv):
   safe_print("Please choose only one or neither of -j / --json or -p /"
              " --plist.")
   return 2
+ if "version" in opts:
+  from . import __version__, codename
+  out = (__version__, codename)
+  if out_mode: print fmt_result(out_mode, cmd, True, 0, out)
+  else: safe_print('%s "%s"' % out)
+  return 0
  appbackup = AppBackup(find_apps=False, config_dir=config_dir, apps_root=root)
  run_cmd(cmd, args, appbackup, out_mode)
 
@@ -299,6 +305,12 @@ def run_cmd(cmd, args, appbackup, out_mode):
   starbucks = appbackup.starbucks()
   if out_mode: print fmt_result(out_mode, cmd, True, 0, starbucks)
   else: safe_print(starbucks)
+  return 0
+ elif cmd == "version":
+  from . import __version__, codename
+  out = (__version__, codename)
+  if out_mode: print fmt_result(out_mode, cmd, True, 0, out)
+  else: safe_print('%s "%s"' % out)
   return 0
  else:
   # Invalid command
