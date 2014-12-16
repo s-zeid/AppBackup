@@ -147,7 +147,7 @@ def main(argv):
  default_config_dir = (root.path, "..", "Library", "Preferences", "AppBackup")
  config_dir = opts.get("config-dir", os.path.join(*default_config_dir))
  appbackup = AppBackup(find_apps=False, config_dir=config_dir, apps_root=root)
- run_cmd(cmd, args, appbackup, out_mode)
+ return run_cmd(cmd, args, appbackup, out_mode)
 
 def shell(args, appbackup, out_mode):
  build = ""
