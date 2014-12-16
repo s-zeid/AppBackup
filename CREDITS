@@ -5,6 +5,7 @@ https://s.zeid.me/projects/appbackup/
 AppBackup is released under the X11 License.
 
 This program contains the following libraries or portions of them:
+ • iosapplist (me; http://code.s.zeid.me/iosapplist)
  • BDSKTask (Adam Maxwell; http://code.google.com/p/mactlmgr/)
  • CFPropertyList (Ben Cochran; https://github.com/bencochran/CFPropertyList)
  • simplejson (Bob Ippolito; http://pypi.python.org/pypi/simplejson/)
@@ -35,6 +36,7 @@ released under the Creative Commons Attribution Share-Alike license.
 In addition to everyone listed above, I would like to thank the following
 people who paid me lots of money to see their names in lights:
  • The Python developers.
+ • Linus Torvalds et al. for the Linux kernel and Git version control system.
  • Jay Freeman (saurik) for packaging Python for iOS.
  • Dustin L. Howett (https://github.com/DHowett/theos), Dave Arter,
    gojohnnyboi, Jim Beesley (http://code.google.com/p/iphonetextreader/),
