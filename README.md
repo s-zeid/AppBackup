@@ -9,6 +9,16 @@ Copyright (C) 2008-2014 Scott Zeid
 This is the source tree for AppBackup.  AppBackup is mainly written in
 Python 2.5 and Objective-C.
 
+This repository has submodules.  Run
+
+    git submodule init
+
+when you clone for the first time and
+
+    git submodule update
+
+every time you clone or pull.
+
 
 Contents
 --------
