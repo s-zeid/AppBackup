@@ -122,7 +122,7 @@ def fmt_result(mode, cmd, success=False, exit_code=0, data=None, **kwargs):
  else:
   raise ValueError("mode must be one of json or plist, not %s." % repr(mode))
 
-def main(argv):
+def main(argv=sys.argv):
  prog = argv[0]
  if len(argv) < 2:
   safe_print(usage)
