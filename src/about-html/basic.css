@@ -1,0 +1,504 @@
+/* This stylesheet is automatically generated using Stylus.  See the
+   original source at <http://code.s.zeid.me/site-design/src/master/_styles/basic.styl>. */
+/* base.css - rules specific to basic.css are at the bottom */
+url("https://fonts.googleapis.com/css?family=Ubuntu:normal,bold,italic,bolditalic");
+url("https://fonts.googleapis.com/css?family=Ubuntu+Mono:normal,bold,italic,bolditalic");
+url("syntax.css");
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1.25em;
+  background: #e0e0e0;
+  color: #222;
+}
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
+body,
+input,
+select,
+textarea {
+  font-family: "Ubuntu", "Droid Sans", "Trebuchet MS", "DejaVu Sans", "Bitstream Vera Sans", "Verdana", sans-serif;
+  font-size: 12pt;
+}
+pre,
+code,
+kbd,
+samp,
+var,
+tt {
+  font-family: "Ubuntu Mono", "Droid Sans Mono", "DejaVu Sans Mono", "Consolas", "Courier New", "Courier", monospace;
+  font-size: 12pt;
+  font-size-adjust: 0.5;
+}
+blockquote,
+pre {
+  background: #efefef;
+  margin: 0.5em 0 0 0;
+  padding: 0.5em;
+  overflow-x: auto;
+}
+blockquote blockquote,
+pre blockquote,
+blockquote pre,
+pre pre {
+  background: #fff;
+}
+blockquote blockquote blockquote,
+pre blockquote blockquote,
+blockquote pre blockquote,
+pre pre blockquote,
+blockquote blockquote pre,
+pre blockquote pre,
+blockquote pre pre,
+pre pre pre {
+  background: #efefef;
+}
+blockquote blockquote blockquote blockquote,
+pre blockquote blockquote blockquote,
+blockquote pre blockquote blockquote,
+pre pre blockquote blockquote,
+blockquote blockquote pre blockquote,
+pre blockquote pre blockquote,
+blockquote pre pre blockquote,
+pre pre pre blockquote,
+blockquote blockquote blockquote pre,
+pre blockquote blockquote pre,
+blockquote pre blockquote pre,
+pre pre blockquote pre,
+blockquote blockquote pre pre,
+pre blockquote pre pre,
+blockquote pre pre pre,
+pre pre pre pre {
+  background: #fff;
+}
+blockquote blockquote blockquote blockquote blockquote,
+pre blockquote blockquote blockquote blockquote,
+blockquote pre blockquote blockquote blockquote,
+pre pre blockquote blockquote blockquote,
+blockquote blockquote pre blockquote blockquote,
+pre blockquote pre blockquote blockquote,
+blockquote pre pre blockquote blockquote,
+pre pre pre blockquote blockquote,
+blockquote blockquote blockquote pre blockquote,
+pre blockquote blockquote pre blockquote,
+blockquote pre blockquote pre blockquote,
+pre pre blockquote pre blockquote,
+blockquote blockquote pre pre blockquote,
+pre blockquote pre pre blockquote,
+blockquote pre pre pre blockquote,
+pre pre pre pre blockquote,
+blockquote blockquote blockquote blockquote pre,
+pre blockquote blockquote blockquote pre,
+blockquote pre blockquote blockquote pre,
+pre pre blockquote blockquote pre,
+blockquote blockquote pre blockquote pre,
+pre blockquote pre blockquote pre,
+blockquote pre pre blockquote pre,
+pre pre pre blockquote pre,
+blockquote blockquote blockquote pre pre,
+pre blockquote blockquote pre pre,
+blockquote pre blockquote pre pre,
+pre pre blockquote pre pre,
+blockquote blockquote pre pre pre,
+pre blockquote pre pre pre,
+blockquote pre pre pre pre,
+pre pre pre pre pre {
+  background: #efefef;
+}
+code {
+  display: inline-block;
+}
+::selection {
+  background: #800;
+  color: #fff;
+  text-shadow: none !important;
+}
+::-moz-selection {
+  background: #800;
+  color: #fff;
+  text-shadow: none !important;
+}
+a {
+  color: #800;
+  text-decoration: none;
+}
+a.darker {
+  color: #600;
+}
+a:hover,
+a:focus {
+  outline: none;
+  text-decoration: underline;
+}
+a img {
+  border-style: none;
+}
+em em {
+  font-style: normal;
+}
+em em em {
+  font-style: italic;
+}
+h1,
+.h1,
+body > header {
+  font-size: 2em;
+  margin: 0.5em 0 0.25em 0;
+  line-height: 1.25em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+}
+h1.plain,
+.h1.plain,
+body > header.plain {
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: normal;
+}
+h2,
+.h2 {
+  font-size: 1.5em;
+  margin: 0.67em 0 0.33em 0;
+  line-height: 1.25em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.33em;
+}
+h2.plain,
+.h2.plain {
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: normal;
+}
+h3,
+.h3 {
+  font-size: 1.25em;
+  margin: 0.8em 0 0.4em 0;
+  line-height: 1.25em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+}
+h3.plain,
+.h3.plain {
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: normal;
+}
+h4,
+.h4 {
+  font-size: 1em;
+  margin: 1em 0 0.5em 0;
+  line-height: 1.25em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+}
+h4.plain,
+.h4.plain {
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: normal;
+}
+h5,
+.h5 {
+  font-size: 0.8em;
+  margin: 1.25em 0 0.63em 0;
+  line-height: 1.25em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.63em;
+}
+h5.plain,
+.h5.plain {
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: normal;
+}
+h6,
+.h6 {
+  font-size: 0.67em;
+  margin: 1.5em 0 0.75em 0;
+  line-height: 1.25em;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.75em;
+}
+h6.plain,
+.h6.plain {
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: normal;
+}
+hr,
+hr.fancy,
+.fancy-hr hr,
+.plain-hr .fancy-hr hr,
+.plain-hr hr.fancy {
+  border-style: none;
+  margin: 1em 0;
+}
+hr:after,
+hr.fancy:after,
+.fancy-hr hr:after,
+.plain-hr .fancy-hr hr:after,
+.plain-hr hr.fancy:after {
+  content: '•                                    •                                    •                                    •';
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  cursor: default;
+  white-space: pre;
+  text-align: center;
+  line-height: 0.25em;
+  letter-spacing: 0;
+}
+@media (max-width: 575px), (max-device-width: 575px), handheld, tv {
+  hr:after,
+  hr.fancy:after,
+  .fancy-hr hr:after,
+  .plain-hr .fancy-hr hr:after,
+  .plain-hr hr.fancy:after {
+    content: '•                    •                    •                    •';
+  }
+}
+@media (max-width: 359px), (max-device-width: 359px) {
+  hr:after,
+  hr.fancy:after,
+  .fancy-hr hr:after,
+  .plain-hr .fancy-hr hr:after,
+  .plain-hr hr.fancy:after {
+    content: '•                •                •                •';
+  }
+}
+@media (max-width: 319px), (max-device-width: 319px) {
+  hr:after,
+  hr.fancy:after,
+  .fancy-hr hr:after,
+  .plain-hr .fancy-hr hr:after,
+  .plain-hr hr.fancy:after {
+    content: '•            •            •            •';
+  }
+}
+@media (max-width: 219px), (max-device-width: 219px) {
+  hr:after,
+  hr.fancy:after,
+  .fancy-hr hr:after,
+  .plain-hr .fancy-hr hr:after,
+  .plain-hr hr.fancy:after {
+    content: '•        •        •        •';
+  }
+}
+hr.plain,
+.plain-hr hr {
+  border-style: none;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #555;
+  margin: 1em 3em;
+}
+hr.plain:after,
+.plain-hr hr:after {
+  content: "";
+  display: none;
+}
+img.left {
+  float: left;
+}
+img.right {
+  float: right;
+}
+ol,
+ul,
+menu,
+dir {
+  margin: 0.5em 0 0 0;
+  padding-left: 1.5em;
+}
+p,
+p + table {
+  margin: 0.6em 0 0 0;
+}
+.hide {
+  display: none;
+}
+.inline-block {
+  display: inline-block;
+}
+body > h1:first-child,
+body > .h1:first-child {
+  margin-top: 0;
+}
+body > h2:first-child,
+body > .h2:first-child {
+  margin-top: 0;
+}
+body > h3:first-child,
+body > .h3:first-child {
+  margin-top: 0;
+}
+body > h4:first-child,
+body > .h4:first-child {
+  margin-top: 0;
+}
+body > h5:first-child,
+body > .h5:first-child {
+  margin-top: 0;
+}
+body > h6:first-child,
+body > .h6:first-child {
+  margin-top: 0;
+}
+main {
+  clear: both;
+}
+main > article > :first-child,
+main article:first-child > :first-child,
+main blockquote > :first-child,
+main > article > :first-child > :first-child,
+main article:first-child > :first-child > :first-child,
+main blockquote > :first-child > :first-child {
+  margin-top: 0;
+}
+main > article img,
+main article:first-child img,
+main blockquote img {
+  max-width: 100%;
+}
+main article header:not(.freecomment-header) p,
+main article header:not(.freecomment-header) div,
+main article header:not(.freecomment-header) section {
+  font-size: smaller;
+  color: #555;
+}
+nav li time {
+  display: block;
+  font-size: smaller;
+  color: #555;
+}
+body > footer {
+  font-size: 0.8em;
+}
+body > footer > aside {
+  display: inline-block;
+  margin-bottom: 0.5em;
+}
+form {
+  display: table;
+  margin-top: 1em;
+}
+form section {
+  display: table-row;
+}
+form section label,
+form section select,
+form section textarea,
+form section input {
+  margin: 0.5em 0.5em 0 0;
+}
+form section label,
+form section select,
+form section textarea,
+form section input[type="text"],
+form section input[type="password"],
+form section input[type="file"] {
+  width: 25em;
+}
+form section textarea {
+  margin-top: 0.54em;
+}
+form section textarea {
+  height: 12em;
+}
+form section input[type="text"],
+form section input[type="password"],
+form section select,
+form section textarea {
+  font-size: 12pt;
+  border-width: 0 0 1px 0;
+  border-style: none none solid none;
+  border-color: #aaa;
+  background: #fff;
+}
+form section input[type="submit"],
+form section input[type="reset"],
+form section input[type="button"] {
+  padding-top: 0;
+}
+form section label {
+  position: relative;
+  top: -0.16em;
+}
+form section label:first-child,
+form section span:first-child {
+  position: static;
+  top: 0;
+  display: table-cell;
+  width: auto;
+  padding: 0.5em 1em 0 0;
+  vertical-align: top;
+}
+.freecomment-time {
+  color: #555;
+}
+.liquid-render-error {
+  display: none;
+}
+#lightbox {
+  font-family: inherit !important;
+}
+/* basic.css rules */
+body {
+  max-width: 720px;
+  margin: 1em auto;
+  padding: 0 1em;
+  line-height: 1.5em;
+}
+ul,
+ol {
+  line-height: 1.25em;
+}
+.plain-header body > header,
+body.plain-header > header,
+body > header.plain {
+  font-size: inherit;
+  margin: 0;
+  line-height: inherit;
+  font-weight: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+main {
+  margin: 1em 0;
+}
+main article header:not(.freecomment-header) p,
+main article header:not(.freecomment-header) div,
+main article header:not(.freecomment-header) section {
+  font-size: inherit;
+  color: inherit;
+}
+body > footer {
+  color: #606060;
+}
+.freecomment-time {
+  color: inherit;
+}
+.liquid-render-error {
+  display: block;
+}
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  main:first-child {
+    margin-top: 0;
+  }
+  main:last-child {
+    margin-bottom: 0;
+  }
+}

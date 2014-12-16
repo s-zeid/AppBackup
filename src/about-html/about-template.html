@@ -36,6 +36,8 @@
    About screen HTML $template
   -->
   <title>About $app_name</title>
+  <meta name="viewport" content="width=device-width; minimum-scale=1.0; initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="basic.css" />
   <style type="text/css">
    body {
     margin: 0 .5em .5em .5em;
@@ -51,41 +53,49 @@
    h1 {
     font-size: 17px;
    }
+   pre, blockquote {
+    margin-left: -0.5em; margin-right: -0.5em;
+   }
    pre {
     font-family: "Helvetica", "Arial", sans-serif;
     white-space: pre-wrap;
    }
+   #contents pre {
+    white-space: normal;
+    padding-top: 0;
+   }
    #license pre {
     font-family: "Courier New", "Courier", monospace;
-    font-size: 8px;
+    font-size: 12px;
    }
   </style>
   <meta name="format-detection" content="telephone=no" />
  </head>
- <body>
-  <div id="top"></div>
-  <h1>Contents</h1>
-  <div>
-   <ul>
-    <li><p><a href="#credits">Credits</a></p></li>
-    <li><p><a href="#changelog">Change Log</a></p></li>
-    <li><p><a href="#license">License</a></p></li>
-   </ul>
-  </div>
-  <div id="credits">
+ <body id="top">
+  <section id="contents">
+   <h1>Contents</h1>
+   <pre>
+    <ul>
+     <li><p><a href="#credits">Credits</a></p></li>
+     <li><p><a href="#changelog">Change Log</a></p></li>
+     <li><p><a href="#license">License</a></p></li>
+    </ul>
+   </pre>
+  </section>
+  <section id="credits">
    <h1>Credits</h1>
    <pre>$credits</pre>
    <p><a href="#top">Back to top</a></p>
-  </div>
-  <div id="changelog">
+  </section>
+  <section id="changelog">
    <h1>Change Log</h1>
    <pre>$changelog</pre>
    <p><a href="#top">Back to top</a></p>
-  </div>
-  <div id="license">
+  </section>
+  <section id="license">
    <h1>License</h1>
    <pre>$license</pre>
    <p><a href="#top">Back to top</a></p>
-  </div>
+  </section>
  </body>
 </html>

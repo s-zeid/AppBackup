@@ -50,6 +50,7 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
 	chmod +x "${DEB_TMP}"/usr/bin/appbackup{,-fix-permissions}
 	touch "${DEB_TMP}"/Applications/AppBackup.app/about.html
 	src/about-html/make-about-html.py > "${DEB_TMP}"/Applications/AppBackup.app/about.html
+	cp -a src/about-html/basic.css "${DEB_TMP}"/Applications/AppBackup.app/basic.css
 	dpkg-deb -b "${DEB_TMP}" out
 	rm -r "${DEB_TMP}"
 
