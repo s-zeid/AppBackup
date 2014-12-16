@@ -43,6 +43,7 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/*/*.py[co]
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/*.py[co]
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/setup.py
+	rm -rf "${DEB_TMP}"/Applications/AppBackup.app/python/simplejson/tests
 	chmod +x "${DEB_TMP}"/Applications/AppBackup.app/appbackup-cli
 	chmod +x "${DEB_TMP}"/Applications/AppBackup.app/AppBackupGUI{,_}
 	chmod +x "${DEB_TMP}"/usr/bin/appbackup{,-fix-permissions}

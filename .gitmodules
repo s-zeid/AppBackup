@@ -1,3 +1,9 @@
 [submodule "lib/iosapplist"]
 	path = lib/python/iosapplist
 	url = https://bitbucket.org/scottywz/iosapplist.git
+[submodule "lib/CFPropertyList"]
+	path = lib/python/CFPropertyList
+	url = https://github.com/bencochran/CFPropertyList.git
+[submodule "lib/simplejson"]
+	path = lib/python/simplejson
+	url = https://github.com/simplejson/simplejson.git
