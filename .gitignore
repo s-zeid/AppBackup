@@ -2,7 +2,7 @@
 *.o
 *.pyc
 *.pyo
-.*.swp
+*.swp
 config
 out/*
 !out/.gitinclude
