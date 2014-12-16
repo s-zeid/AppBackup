@@ -36,7 +36,8 @@ Directory structure with descriptions for some files
     * `AppBackup.app/`  
       Files included in .app bundle, excluding subdirectories
        * `python/`  
-         3rd-party or other external Python packages
+       Symbolic links to 3rd-party or other external Python packages in
+       `lib/python/`; these will be derefernced when the .deb is generated
     * `DEBIAN/`  
       Debian package control files
     * `images/`  
@@ -47,10 +48,13 @@ Directory structure with descriptions for some files
    Translations in INI format and some conversion scripts
  * `lib/`
    3rd-party or other external libraries
-    * `iosapplist`  
-      Git submodule for `iosapplist`
     * `obj-c/`  
       BDSKTask and MBProgressHUD
+    * `python/`  
+      3rd-party or other external Python packages
+       * `iosapplist`  
+         Git submodule for `iosapplist`
+       * ...
  * `out/`  
    Directory where generated .deb files (and temporary files from the build
    process) are stored.
