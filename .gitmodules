@@ -1,0 +1,3 @@
+[submodule "lib/iosapplist"]
+	path = lib/iosapplist
+	url = https://scottywz@bitbucket.org/scottywz/iosapplist.git

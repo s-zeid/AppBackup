@@ -43,9 +43,9 @@ import UserDict
 
 import propertylist
 
-from app import *
-from applist import *
-from container import ContainerRoot
+from iosapplist.app import *
+from iosapplist.applist import *
+from iosapplist.container import ContainerRoot
 from justifiedbool import JustifiedBool
 from util import *
 

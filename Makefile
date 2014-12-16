@@ -39,6 +39,7 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
 	cp -a src/gui/AppBackupGUI "${DEB_TMP}"/Applications/AppBackup.app/AppBackupGUI_
 	i18n/ini-to-strings.py i18n "${DEB_TMP}"/Applications/AppBackup.app
 	cp -a src/python/* "${DEB_TMP}"/Applications/AppBackup.app/python
+	cp -a lib/iosapplist/iosapplist "${DEB_TMP}"/Applications/AppBackup.app/python/
 	cp -a src/usr/* "${DEB_TMP}"/usr/
 	cp -a CHANGELOG "${DEB_TMP}"/Applications/AppBackup.app/
 	cp -a CREDITS "${DEB_TMP}"/Applications/AppBackup.app/

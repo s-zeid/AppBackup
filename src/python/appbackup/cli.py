@@ -81,7 +81,7 @@ except ImportError:
  import simplejson as json
 
 from appbackup import *
-from container import ContainerRoot
+from iosapplist.container import ContainerRoot
 from justifiedbool import *
 from util import *
 
