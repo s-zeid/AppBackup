@@ -59,7 +59,7 @@ Directory structure with descriptions for some files
       FixPermissions (C; fixes storage directory permissions)
     * `gui/`  
       GUI source code and third-party libraries in Objective-C
-       * `about-html/`  
+       * `about.html/`  
          Generator for the HTML file used in the About screen
     * `python/`  
       Python packages that are part of AppBackup
