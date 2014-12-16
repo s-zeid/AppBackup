@@ -32,25 +32,39 @@ Contents
 Directory structure with descriptions for some files
 ----------------------------------------------------
 
- * `DEBIAN/`  
-   Debian package control files
+ * `data/`
+    * `AppBackup.app/`  
+      Files included in .app bundle, excluding subdirectories
+       * `python/`  
+         3rd-party or other external Python packages
+    * `DEBIAN/`  
+      Debian package control files
+    * `images/`  
+      GIMP and SVG source files for image resources
+    * `usr/`  
+      /usr/bin/appbackup{,-fix-permissions} launcher scripts
  * `i18n/`  
    Translations in INI format and some conversion scripts
+ * `lib/`
+   3rd-party or other external libraries
+    * `iosapplist`  
+      Git submodule for `iosapplist`
+    * `obj-c/`  
+      BDSKTask and MBProgressHUD
+ * `out/`  
+   Directory where generated .deb files (and temporary files from the build
+   process) are stored.
  * `src/`  
-    * `about-html/`  
-      Generator for the HTML file used in the About screen
-    * `bundle/`  
-      Files included in .app bundle, excluding subdirectories
     * `FixPermissions/` \*  
       FixPermissions (C; fixes storage directory permissions)
     * `gui/`  
       GUI source code and third-party libraries in Objective-C
-    * `images/`  
-      GIMP and SVG source files for image resources
+       * `about-html/`  
+         Generator for the HTML file used in the About screen
     * `python/`  
-      AppBackup CLI Python package and 3rd-party Python modules
-    * `usr/`  
-      /usr/bin/appbackup{,-fix-permissions} launcher scripts
+      Python packages that are part of AppBackup
+       * `appbackup/`  
+         AppBackup CLI Python package
  * `Makefile` \*\*  
    Builds AppBackup and the Debian package.  Can also install AppBackup
    on an iDevice via SSH.
