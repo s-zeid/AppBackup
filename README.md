@@ -32,50 +32,50 @@ Contents
 Directory structure with descriptions for some files
 ----------------------------------------------------
 
- * `data/`
+* `data/`
     * `AppBackup.app/`  
       Files included in .app bundle, excluding subdirectories
-       * `python/`  
-       Symbolic links to 3rd-party or other external Python packages in
-       `lib/python/`; these will be derefernced when the .deb is generated
+        * `python/`  
+        Symbolic links to 3rd-party or other external Python packages in
+        `lib/python/`; these will be derefernced when the .deb is generated
     * `DEBIAN/`  
       Debian package control files
     * `images/`  
       GIMP and SVG source files for image resources
     * `usr/`  
       /usr/bin/appbackup{,-fix-permissions} launcher scripts
- * `i18n/`  
+* `i18n/`  
    Translations in INI format and some conversion scripts
- * `lib/`
+* `lib/`  
    3rd-party or other external libraries
     * `obj-c/`  
       BDSKTask and MBProgressHUD
     * `python/`  
       3rd-party or other external Python packages
-       * `iosapplist`  
-         Git submodule for `iosapplist`
-       * ...
- * `out/`  
-   Directory where generated .deb files (and temporary files from the build
-   process) are stored.
- * `src/`  
+        * `iosapplist`  
+          Git submodule for `iosapplist`
+        * ...
+* `out/`  
+  Directory where generated .deb files (and temporary files from the build
+  process) are stored.
+* `src/`  
     * `FixPermissions/` \*  
       FixPermissions (C; fixes storage directory permissions)
     * `gui/`  
       GUI source code and third-party libraries in Objective-C
-       * `about.html/`  
-         Generator for the HTML file used in the About screen
+        * `about.html/`  
+          Generator for the HTML file used in the About screen
     * `python/`  
       Python packages that are part of AppBackup
-       * `appbackup/`  
-         AppBackup CLI Python package
- * `Makefile` \*\*  
-   Builds AppBackup and the Debian package.  Can also install AppBackup
-   on an iDevice via SSH.
- * `config.dist` \*\*  
-   Sample configuration file for the Makefile.  Should be copied to `config`,
-   and then `config` should be modified as necessary.
- * ...  
+        * `appbackup/`  
+          AppBackup CLI Python package
+* `Makefile` \*\*  
+  Builds AppBackup and the Debian package.  Can also install AppBackup
+  on an iDevice via SSH.
+* `config.dist` \*\*  
+  Sample configuration file for the Makefile.  Should be copied to `config`,
+  and then `config` should be modified as necessary.
+* ...  
 
  `*` FixPermissions is changed to setuid root after the package is
      installed.
