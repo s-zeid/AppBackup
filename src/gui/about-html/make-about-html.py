@@ -69,9 +69,13 @@ htmlspecialchars = functools.partial(htmlentities, exclude="",
                                             62: "gt"})
 
 script = os.path.abspath(sys.argv[0])
-os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(script))))
+repo_root = os.path.dirname(script)
+for i in xrange(3):
+ repo_root = os.path.dirname(repo_root)
 
-info_plist = plistlib.readPlist(os.path.join("src", "bundle", "Info.plist"))
+os.chdir(repo_root)
+
+info_plist = plistlib.readPlist(os.path.join("data", "AppBackup.app", "Info.plist"))
 app_name   = htmlentities(info_plist["CFBundleDisplayName"], exclude="")
 version    = htmlentities(info_plist["CFBundleShortVersionString"], exclude="")
 tplvars    = dict(app_name=app_name, changelog="", credits="", license="",
