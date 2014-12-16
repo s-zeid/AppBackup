@@ -19,5 +19,5 @@ find_files() {
  echo ./LICENSE
 }
 
-# print list of sourc files and remove files by third parties
+# print list of source files and remove files by third parties
 find_files | xargs grep -EIl "$MAINTAINER" | sort
