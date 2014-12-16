@@ -45,6 +45,7 @@ Options:
 
 Commands:
  -h / --help     Display this help information and exit.
+ --version       Display the version number and codename, and then exit.
  list [<app>]    Shows information about one or more App Store apps (all apps
                  if <app> is omitted).
  backup <app>    Back up the specified app's data.
@@ -305,12 +306,6 @@ def run_cmd(cmd, args, appbackup, out_mode):
   starbucks = appbackup.starbucks()
   if out_mode: print fmt_result(out_mode, cmd, True, 0, starbucks)
   else: safe_print(starbucks)
-  return 0
- elif cmd == "version":
-  from . import __version__, codename
-  out = (__version__, codename)
-  if out_mode: print fmt_result(out_mode, cmd, True, 0, out)
-  else: safe_print('%s "%s"' % out)
   return 0
  else:
   # Invalid command
