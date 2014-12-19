@@ -8,4 +8,8 @@ out/*
 !out/.gitinclude
 src/gui/AppBackupGUI
 src/FixPermissions/FixPermissions
+src/python/build
+src/python/dist
+src/python/*.egg-info
+src/python/temp
 test
