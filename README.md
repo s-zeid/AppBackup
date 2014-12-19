@@ -50,14 +50,13 @@ Directory structure with descriptions for some files
    3rd-party or other external libraries
     * `obj-c/`  
       BDSKTask and MBProgressHUD
-    * `python/`  
-      3rd-party or other external Python packages
-        * `iosapplist`  
-          Git submodule for `iosapplist`
-        * ...
 * `out/`  
   Directory where generated .deb files (and temporary files from the build
   process) are stored.
+    * `python/`  
+        * `path/`  
+          Contains the `easy_install`-ed Python packages that will be copied
+          into the .deb file
 * `src/`  
     * `FixPermissions/` \*  
       FixPermissions (C; fixes storage directory permissions)
@@ -67,10 +66,13 @@ Directory structure with descriptions for some files
           Generator for the HTML file used in the About screen
     * `python/`  
       Python packages that are part of AppBackup
-        * `appbackup/`  
+        * `iosappbackup/`  
           AppBackup CLI Python package
+        * `setup.py`  
+          Defines dependencies, etc. for the Python package
 * `Makefile` \*\*  
-  Builds AppBackup and the Debian package.  Can also install AppBackup
+  Builds the AppBackup GUI, uses `easy_install` to download the Python
+  dependencies, and builds the Debian package.  Can also install AppBackup
   on an iDevice via SSH.
 * `config.dist` \*\*  
   Sample configuration file for the Makefile.  Should be copied to `config`,
@@ -91,6 +93,7 @@ Prerequisites for building
    but I haven't tested them)
  * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
  * bash; dpkg; GNU make; Python 2.5 (OS X only), 2.6, or 2.7
+ * Python setuptools
 
 At the time of this writing, I am using Fedora 20 and
 [this toolchain](https://code.google.com/p/ios-toolchain-based-on-clang-for-linux/)

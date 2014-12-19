@@ -33,5 +33,4 @@
 
 export PYTHONPATH="$(dirname "$0")/python:"
 
-cd "$(dirname "$0")/python"
-python -O appbackup/cli.py "$@"
+python -O "$(dirname "$0")/python/iosappbackup" "$@"

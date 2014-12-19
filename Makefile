@@ -24,19 +24,26 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 
-.PHONY: deb install test clean
+.PHONY: python-path deb install test clean
 
-deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions
+python/path: src/python/setup.py
+	mkdir -p out/$@ out/$@/../src
+	cp -a $(dir $^) out/$@/../src
+	cd out/$@/..; \
+	 PYTHONPATH=$(notdir $@): $^ easy_install -d $(notdir $@) -Z -N -a -O2 $(dir $^)
+	rm -rf out/$@/../src
+
+deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions python/path
 	rm -rf "${DEB_TMP}"
 	mkdir "${DEB_TMP}"
-	mkdir -p "${DEB_TMP}"/Applications/AppBackup.app/python
+	mkdir -p "${DEB_TMP}"/Applications/AppBackup.app
 	cp -a data/DEBIAN "${DEB_TMP}"/
-	cp -pRL data/AppBackup.app "${DEB_TMP}"/Applications/
+	cp -a data/AppBackup.app "${DEB_TMP}"/Applications/
 	cp -a data/usr "${DEB_TMP}"/
+	cp -a out/python/path "${DEB_TMP}"/Applications/AppBackup.app/python
 	cp -a src/gui/AppBackupGUI "${DEB_TMP}"/Applications/AppBackup.app/AppBackupGUI_
 	cp -a src/FixPermissions/FixPermissions "${DEB_TMP}"/Applications/AppBackup.app/
 	i18n/ini-to-strings.py i18n "${DEB_TMP}"/Applications/AppBackup.app
-	cp -a src/python/* "${DEB_TMP}"/Applications/AppBackup.app/python
 	cp -a CHANGELOG "${DEB_TMP}"/Applications/AppBackup.app/
 	cp -a CREDITS "${DEB_TMP}"/Applications/AppBackup.app/
 	cp -a LICENSE "${DEB_TMP}"/Applications/AppBackup.app/
