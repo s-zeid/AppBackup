@@ -26,14 +26,14 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 
 .PHONY: python-path deb install test clean
 
-python/path: src/python/setup.py
+out/python/path: src/python/setup.py
 	mkdir -p out/$@ out/$@/../src
 	cp -a $(dir $^) out/$@/../src
 	cd out/$@/..; \
 	 PYTHONPATH=$(notdir $@): $^ easy_install -d $(notdir $@) -Z -N -a -O2 $(dir $^)
 	rm -rf out/$@/../src
 
-deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions python/path
+deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	rm -rf "${DEB_TMP}"
 	mkdir "${DEB_TMP}"
 	mkdir -p "${DEB_TMP}"/Applications/AppBackup.app
