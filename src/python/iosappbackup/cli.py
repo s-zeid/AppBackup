@@ -104,7 +104,7 @@ class PythonReplCommand(PythonReplCommand):
 CLI.commands.register(PythonReplCommand)
 
 
-class AppBackupCommand(Command):
+class AppBackupCommands(Command):
  """Performs an action on one or more apps."""
  
  names = ["backup", "restore", "delete", "ignore", "unignore"]
@@ -171,7 +171,7 @@ class AppBackupCommand(Command):
    return_code = 0 if success else (1 if len(apps) == 1 else 0)
   yield output.stop(return_code)
 
-CLI.commands.register(AppBackupCommand)
+CLI.commands.register(AppBackupCommands)
 
 
 class StarbucksCommand(Command):
