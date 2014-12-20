@@ -24,7 +24,7 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 
-.PHONY: python-path deb install test clean
+.PHONY: out/python/path deb install test clean
 
 out/python/path: src/python/setup.py
 	mkdir -p $@ $@/../src
