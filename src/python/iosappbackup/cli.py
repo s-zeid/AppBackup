@@ -42,14 +42,7 @@ from util import *
 
 
 __all__ = ["CLI", "Command", "main"]
-# tpl = u"""$friendly ($bundle_id):
-#   Bundle container path:  $bundle_path
-#   Bundle container UUID:  $bundle_uuid
-#     Data container path:  $data_path
-#     Data container UUID:  $data_uuid
-#                 Useable:  $useable
-#             Backup time:  $backup_time
-#                 Ignored:  $ignored"""
+
 
 def main(argv=sys.argv):
  return CLI()(["command"] + argv[1:])
