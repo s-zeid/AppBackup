@@ -24,16 +24,7 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 
-.PHONY: sdist out/python/path deb install test clean
-
-sdist: src/python/setup.py
-	mkdir -p out/python/sdist/src
-	cp -a "$(dir $^)" out/python/sdist/src
-	cd out/python/sdist; \
-	 "$^" sdist && \
-	 rm -f ../"$$("$^" --name)"-*.tar.gz && \
-	 cp -a dist/"$$("$^" --fullname)".tar.gz ..
-	rm -rf out/python/sdist
+.PHONY: out/python/path deb install test sdist clean
 
 out/python/path: src/python/setup.py
 	mkdir -p $@ $@/../src
@@ -80,6 +71,15 @@ test:
 	make
 	make install
 	ssh mobile@${DEVICE}
+
+sdist: src/python/setup.py
+	mkdir -p out/python/sdist/src
+	cp -a "$(dir $^)" out/python/sdist/src
+	cd out/python/sdist; \
+	 "$^" sdist && \
+	 rm -f ../"$$("$^" --name)"-*.tar.gz && \
+	 cp -a dist/"$$("$^" --fullname)".tar.gz ..
+	rm -rf out/python/sdist
 
 clean:
 	 rm -f src/gui/AppBackupGUI src/gui/*.o
