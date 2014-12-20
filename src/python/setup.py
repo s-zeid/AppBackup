@@ -17,7 +17,7 @@ setup(
  classifiers=[
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
-  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
   "Intended Audience :: System Administrators",
   "Natural Language :: English",
   "Operating System :: iOS",
@@ -29,6 +29,8 @@ setup(
   "Programming Language :: Python :: 2 :: Only",
   "Topic :: Software Development :: Libraries",
   "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: System :: Archiving :: Backup",
+  "Topic :: System :: Recovery Tools",
   "Topic :: System :: Systems Administration",
   "Topic :: Utilities",
  ],
