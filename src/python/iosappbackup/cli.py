@@ -110,6 +110,7 @@ class AppBackupCommand(Command):
  names = ["backup", "restore", "delete", "ignore", "unignore"]
  names_are_aliases = False
  sort_group = 1
+ usage = "[-h] [--all] [<bundle-id-or-uuid> [...]]"
  
  @classmethod
  def description(self, name):
