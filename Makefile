@@ -28,6 +28,7 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 
 out/python/path: src/python/setup.py
 	mkdir -p $@ $@/../src
+	rm -rf $@/iosappbackup $@/iosappbackup-*
 	cp -a $(dir $^) $@/../src
 	cd $@/..; \
 	 PYTHONPATH=$(notdir $@): $^ easy_install -d $(notdir $@) -Z -N -a -O2 $(dir $^)
