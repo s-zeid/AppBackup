@@ -110,7 +110,7 @@ class AppBackupCommands(Command):
  names = ["backup", "restore", "delete", "ignore", "unignore"]
  names_are_aliases = False
  sort_group = 1
- usage = "[-h] [--all] [<bundle-id-or-uuid> [...]]"
+ usage = "[-h] [-a] [<bundle-id-or-uuid> [...]]"
  
  @classmethod
  def description(self, name):
@@ -120,7 +120,7 @@ class AppBackupCommands(Command):
   return "%s one or more apps." % human[name]
  
  def add_args(self, p, cli):
-  p.add_argument("--all", "-a", action="store_true",
+  p.add_argument("-a", "--all", action="store_true",
                  help="Perform the action on all apps.")
   return p.parse_known_args
  
