@@ -61,8 +61,11 @@
  NSString *text;
  BOOL      resultsBox = YES;
  NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
- [vc performSelectorOnMainThread:@selector(updateAppListUsingHUD:)
-     withObject:nil waitUntilDone:YES];
+ //NSDictionary *o = [r objectForKey:@"output"];
+ NSNumber *no = [NSNumber numberWithBool:NO];
+ [vc performSelectorOnMainThread:@selector(updateAppListUsingHUDFindAppsUsingArray:)
+     withObject:[NSArray arrayWithObjects:no, no, nil]
+     waitUntilDone:YES];
  if ([[r objectForKey:@"success"] boolValue]) {
   title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
   text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];
@@ -70,7 +73,7 @@
   //    [action isEqualToString:@"unignore"])
   // resultsBox = NO;
  } else {
-  if ([r objectForKey:@"exit_code"] == 0)
+  if ([r objectForKey:@"return_code"] == 0)
    title = [_ s:[NSString stringWithFormat:@"%@_partially_done", action]];
   else
    title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];

@@ -59,7 +59,9 @@
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID;
 - (void)updateAppListUsingHUD:(BOOL)useHUD;
-- (void)_updateAppListCallback:(MBProgressHUD *)hud;
+- (void)updateAppListUsingHUD:(BOOL)useHUD findApps:(BOOL)findApps;
+- (void)updateAppListUsingHUDFindAppsUsingArray:(NSArray *)array;
+- (void)_updateAppListCallbackWithHUD:(MBProgressHUD *)hud findApps:(BOOL)findApps;
 - (void)updateAppAtIndex:(NSInteger)index;
 - (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)updateAppAtIndexWithDictUsingArray:(NSArray *)array;

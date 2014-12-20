@@ -65,7 +65,8 @@
  NSString *text;
  BOOL      resultsBox  = YES;
  NSDictionary *r = [vc.appbackup doAction:action onApp:app];
- NSDictionary *d = [[r objectForKey:@"apps"] objectAtIndex:0];
+ NSDictionary *o = [r objectForKey:@"output"];
+ NSDictionary *d = [[o objectForKey:@"normal"] objectAtIndex:0];
  NSNumber     *i = [NSNumber numberWithInt:index];
  [vc performSelectorOnMainThread:@selector(updateAppAtIndexWithDictUsingArray:)
      withObject:[NSArray arrayWithObjects:i, d, nil] waitUntilDone:YES];
@@ -104,7 +105,7 @@
   prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
             [_ s:@"app_ignored_prompt"]];
   [validActions setArray:[NSArray arrayWithObject:@"unignore"]];
- } else if ([[app objectForKey:@"backup_time"] length]) {
+ } else if ([[app objectForKey:@"backup_time_unix"] doubleValue] != 0.0) {
   // App is backed up
   [validActions removeObject:@"unignore"];
  } else {

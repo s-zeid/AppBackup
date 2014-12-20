@@ -60,30 +60,45 @@
   return [_ s:@"app_corrupted_list"];
  if ([[app objectForKey:@"ignored"] boolValue])
   return [_ s:@"baktext_ignored"];
- NSString *d = [app objectForKey:@"backup_time"];
- if (d != nil && [d length])
-  return [NSString stringWithFormat:[_ s:@"baktext_yes"], [_ localizeDate:d]];
+ double t = [[app objectForKey:@"backup_time_unix"] doubleValue];
+ if (t != 0.0) {
+  NSString *d = [app objectForKey:@"backup_time_str"];
+  if (d != nil && [d length])
+   return [NSString stringWithFormat:[_ s:@"baktext_yes"], [_ localizeDate:d]];
+ }
  return [_ s:@"baktext_no"];
 }
 
 - (NSDictionary *)doActionOnAllApps:(NSString *)action {
  NSArray *args = [NSArray arrayWithObject:@"--all"];
  NSDictionary *r = [self runCmd:action withArgs:args];
+ NSDictionary *o = [r objectForKey:@"output"];
+ NSArray *array = [o objectForKey:@"normal"];
+ if ([array count] > 0 && [[r objectForKey:@"return_code"] intValue] == 0)
+  [self _setAppsWithArray:array];
  return r;
 }
 
 - (NSDictionary *)doAction:(NSString *)action
                   onApp:(NSDictionary *)app {
  NSString *data_uuid = [app objectForKey:@"data_uuid"];
- NSArray *args = [NSArray arrayWithObjects:@"--uuid", data_uuid, nil];
+ NSArray *args = [NSArray arrayWithObjects:/*@"--uuid", */data_uuid, nil];
  NSDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
 
 - (void)findApps {
  NSDictionary *r = [self runCmd:@"list"];
+ NSDictionary *o = [r objectForKey:@"output"];
  if ([r objectForKey:@"success"])
-  self.apps = [NSMutableArray arrayWithArray:[r objectForKey:@"data"]];
+  [self _setAppsWithArray:[o objectForKey:@"normal"]];
+ else
+  [self _setAppsWithArray:nil];
+}
+
+- (void)_setAppsWithArray:(NSArray *)array {
+ if (array != nil)
+  self.apps = [NSMutableArray arrayWithArray:array];
  else
   self.apps = [NSMutableArray array];
  [self updateBackupInfo];
@@ -98,7 +113,7 @@
  // Start task
  BDSKTask *task = [[BDSKTask alloc] init];
  task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
- task.arguments = [[NSArray arrayWithObjects:@"--plist", cmd, nil]
+ task.arguments = [[NSArray arrayWithObjects:@"--robot=plist", cmd, nil]
                    arrayByAddingObjectsFromArray:args];
  task.standardOutput = [NSPipe pipe];
  [runningTasks addObject:task];
@@ -119,8 +134,9 @@
 - (NSString *)starbucks {
  NSString *starbucks;
  NSDictionary *r = [self runCmd:@"starbucks"];
+ NSDictionary *o = [r objectForKey:@"output"];
  if ([r objectForKey:@"success"])
-  starbucks = [NSString stringWithString:[r objectForKey:@"data"]];
+  starbucks = [NSString stringWithString:[o objectForKey:@"normal"]];
  else
   starbucks = @"";
  return starbucks;
@@ -140,19 +156,19 @@
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
  NSDictionary *app = [apps objectAtIndex:index];
- NSArray *args = [NSArray arrayWithObjects:@"--uuid",
+ NSArray *args = [NSArray arrayWithObjects:/*@"--uuid",*/
                   [app objectForKey:@"data_uuid"], nil];
  NSDictionary *r = [self runCmd:@"list" withArgs:args];
+ NSDictionary *o = [r objectForKey:@"output"];
  NSDictionary *d = [NSDictionary dictionaryWithDictionary:
-                    [[r objectForKey:@"data"] objectAtIndex:0]];
+                    [[o objectForKey:@"normal"] objectAtIndex:0]];
  BOOL ret = [self updateAppAtIndex:index withDictionary:d];
  return ret;
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict {
- NSDictionary *app = [apps objectAtIndex:index];
  NSMutableDictionary *md = [NSMutableDictionary dictionaryWithDictionary:dict];
- if ([[md objectForKey:@"found"] boolValue]) {
+ if (true) {//[[md objectForKey:@"found"] boolValue]) {
   [md removeObjectForKey:@"found"];
   NSDictionary *d = [NSDictionary dictionaryWithDictionary:md];
   [apps replaceObjectAtIndex:index withObject:d];
@@ -174,7 +190,7 @@
  for (i = 0; i < [apps count]; i++) {
   app = [apps objectAtIndex:i];
   if ([[app objectForKey:@"useable"] boolValue]) {
-   if ([[app objectForKey:@"backup_time"] length] &&
+   if ([[app objectForKey:@"backup_time_unix"] doubleValue] &&
        ![[app objectForKey:@"ignored"] boolValue])
     self.anyBackedUp = YES;
    else self.allBackedUp = NO;

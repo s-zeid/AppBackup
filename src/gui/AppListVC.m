@@ -226,23 +226,40 @@
 }
 
 - (void)updateAppListUsingHUD:(BOOL)useHUD {
+ [self updateAppListUsingHUD:useHUD findApps:YES];
+}
+
+- (void)updateAppListUsingHUD:(BOOL)useHUD findApps:(BOOL)findApps {
  if (useHUD) {
+  NSNumber *findAppsObject = [NSNumber numberWithBool:findApps];
   MBProgressHUD *hud = [[MBProgressHUD alloc] initWithWindow:self.view.window];
   [self.view addSubview:hud];
   hud.yOffset -= self.navigationController.navigationBar.frame.size.height*1.5;
   [hud performSelector:@selector(setLabelText:) withObject:[_ s:@"please_wait"]
        afterDelay:0.2];
-  [hud showWhileExecuting:@selector(_updateAppListCallback:) onTarget:self
-       withObject:hud animated:YES];
+  [hud showWhileExecuting:@selector(_updateAppListCallbackWithHUDFindAppsUsingArray:)
+       onTarget:self withObject:[NSArray arrayWithObjects:hud, findAppsObject, nil]
+       animated:YES];
   [hud release];
- } else [self _updateAppListCallback:nil];
+ } else [self _updateAppListCallbackWithHUD:nil findApps:findApps];
 }
 
-- (void)_updateAppListCallback:(MBProgressHUD *)hud {
- [appbackup findApps];
+- (void)updateAppListUsingHUDFindAppsUsingArray:(NSArray *)array {
+ [self updateAppListUsingHUD:[[array objectAtIndex:0] boolValue]
+       findApps:[[array objectAtIndex:1] boolValue]];
+}
+
+- (void)_updateAppListCallbackWithHUD:(MBProgressHUD *)hud findApps:(BOOL)findApps {
+ if (findApps)
+  [appbackup findApps];
  [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
        withObject:hud waitUntilDone:YES];
  
+}
+
+- (void)_updateAppListCallbackWithHUDFindAppsUsingArray:(NSArray *)array {
+ [self _updateAppListCallbackWithHUD:[array objectAtIndex:0]
+       findApps:[[array objectAtIndex:1] boolValue]];
 }
 
 - (void)updateAppAtIndex:(NSInteger)index {
