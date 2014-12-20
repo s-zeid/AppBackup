@@ -32,4 +32,4 @@
 # CLI wrapper for the source distribution
 
 export PYTHONPATH="$(dirname "$0")/src/python:$PYTHONPATH"
-exec python -m appbackup.cli "$@"
+exec python -m iosappbackup.cli "$@"
