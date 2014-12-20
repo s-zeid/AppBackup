@@ -27,12 +27,12 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 .PHONY: out/python/path deb install test sdist clean
 
 out/python/path: src/python/setup.py
-	mkdir -p $@ $@/../src
-	rm -rf $@/iosappbackup $@/iosappbackup-*
-	cp -a $(dir $^) $@/../src
-	cd $@/..; \
-	 PYTHONPATH=$(notdir $@): $^ easy_install -d $(notdir $@) -Z -N -a -O2 $(dir $^)
-	rm -rf $@/../src
+	mkdir -p "$@" "$@"/../src
+	rm -rf "$@"/iosappbackup "$@"/iosappbackup-*
+	cp -a "$(dir $^)" "$@/../src"
+	cd "$@"/..; export PYTHONPATH="$(notdir $@):"; \
+	 "$^" easy_install -d "$(notdir $@)" -Z -N -a -O2 "$(dir $^)"
+	rm -rf "$@"/../src
 
 deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	rm -rf "${DEB_TMP}"
@@ -62,15 +62,15 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 install:
 	@[ x"${DEVICE}" != x"" ] && true || \
 	  { echo "Usage: make install DEVICE=<hostname/address>" >&2; exit 2; }
-	scp -p "`ls -rt out/*.deb | tail -n 1`" mobile@${DEVICE}:/tmp/appbackup.deb
-	ssh root@${DEVICE} "dpkg -i /tmp/appbackup.deb && rm /tmp/appbackup.deb"
+	scp -p "`ls -rt out/*.deb | tail -n 1`" mobile@"${DEVICE}":/tmp/appbackup.deb
+	ssh root@"${DEVICE}" "dpkg -i /tmp/appbackup.deb && rm /tmp/appbackup.deb"
 
 test:
 	@[ x"${DEVICE}" != x"" ] && true || \
 	  { echo "Usage: make test DEVICE=<hostname/address>" >&2; exit 2; }
 	make
 	make install
-	ssh mobile@${DEVICE}
+	ssh mobile@"${DEVICE}"
 
 sdist: src/python/setup.py
 	mkdir -p out/python/sdist/src
