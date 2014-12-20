@@ -2,13 +2,13 @@ include config
 
 LD         = ${CC}
 
-CFLAGS     = -arch armv6 -Wall
-LDFLAGS    = -lobjc -arch armv6 \
-	     -bind_at_load
+CFLAGS     = -lobjc -arch armv6 -Wall
+LDFLAGS    = -bind_at_load
 FRAMEWORKS = -framework Foundation \
 	     -framework CoreFoundation \
 	     -framework CoreGraphics \
-	     -framework UIKit
+	     -framework UIKit \
+	     -I lib/obj-c
 
 DEB_TMP    = out/deb-build
 
@@ -16,11 +16,11 @@ all: deb
 
 
 src/gui/AppBackupGUI: lib/obj-c/*.m src/gui/*.m
-	[ x"${CC}" == x"" ] && true || "${CC}" ${LDFLAGS} ${FRAMEWORKS} -o $@ $^
+	[ x"${CC}" == x"" ] && true || "${CC}" ${CFLAGS} ${LDFLAGS} ${FRAMEWORKS} -o $@ $^
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 src/FixPermissions/FixPermissions: src/FixPermissions/*.c
-	[ x"${CC}" == x"" ] && true || "${CC}" ${LDFLAGS} -o $@ $^
+	[ x"${CC}" == x"" ] && true || "${CC}" ${CFLAGS} ${LDFLAGS} -o $@ $^
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 
@@ -49,8 +49,6 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	cp -a LICENSE "${DEB_TMP}"/Applications/AppBackup.app/
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/*/*.py[co]
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/*.py[co]
-	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/setup.py
-	rm -rf "${DEB_TMP}"/Applications/AppBackup.app/python/simplejson/tests
 	chmod +x "${DEB_TMP}"/Applications/AppBackup.app/appbackup-cli
 	chmod +x "${DEB_TMP}"/Applications/AppBackup.app/AppBackupGUI{,_}
 	chmod +x "${DEB_TMP}"/usr/bin/appbackup{,-fix-permissions}
