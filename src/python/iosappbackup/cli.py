@@ -48,6 +48,7 @@ __all__ = ["CLI", "Command", "main"]
 def main(argv=sys.argv):
  return CLI()(["command"] + argv[1:])
 
+
 class CLI(CLI):
  default_command = None
  program = "iosappbackup"
