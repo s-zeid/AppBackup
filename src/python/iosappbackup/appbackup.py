@@ -91,15 +91,17 @@ class AppBackup(object):
  def _do_on_all(self, action):
   # Performs the specified action on all apps.
   self.find_apps()
-  results = {}
+  results = []
   if action in ("backup", "delete", "ignore", "restore", "unignore"):
-   for app in self.apps:
+   for app in self.apps.sorted():
     if not app.ignored or "ignore" in action:
      try:
       getattr(app, action)(quick=True)
-      results[app] = True
+      results += [(app, True)]
      except AppBackupError, error:
-      results[app] = JustifiedBool(False, str(error))
+      results += [(app, JustifiedBool(False, str(error)))]
+    else:
+     results += [(app, JustifiedBool(False, "ignored"))]
    self._update_backup_info()
    return AllAppsResult(action, results)
   else:
@@ -153,6 +155,7 @@ key, or a callable that is passed an App and returns a sort key.
 """
   self.find_apps()
   return self.apps.sorted(key)
+ @classmethod
  def starbucks(self):
   """STARBUCKS!!!!!111!11!!!one!!1!"""
   return u"STARBUCKS!!!!!111!11!!!one!!1!"
@@ -160,18 +163,40 @@ key, or a callable that is passed an App and returns a sort key.
   """Tells AppBackup to quit ignoring all apps."""
   return self._do_on_all("unignore")
 
+
 class AppBackupApp(App):
  """Describes an App Store app, along with AppBackup-specific properties.
 
 Attributes (in addition to those defined in the App class):
  appbackup:        the AppBackup instance passed to the constructor
- backup_time:      the last time the app was backed up, as a struct_time
- backup_time_str:  backup_time as a string in ISO 8601 format
- backup_time_unix: backup_time as a Unix timestamp
- ignore:           True if the user wants to ignore this app; False otherwise
+ backup_time_str:  the last time the app was backed up, as a string in
+                    ISO 8601 format, "(not backed up)" if no such time,
+                    or "(ignored)" if the app is being ignored
+ backup_time_unix: the last time the app was backed up, as a Unix timestamp
+ ignored:          True if the user wants to ignore this app; False otherwise
  tarpath:          the full path to the .tar.gz backup of the app's data
 
 """
+ 
+ __slots__ = [
+  "appbackup",
+  "ignored",
+  "backup_time_str", "backup_time_unix", "_backup_time", "__backup_time",
+  "tarpath",
+ ]
+ info_tpl = App.info_tpl + ":  $backup_time_str"
+ 
+ @classmethod
+ def slot_names(cls):
+  """Returns a mapping of attribute names to human-readable descriptions."""
+  r = super(AppBackupApp, cls).slot_names()
+  r.update(dict(
+   backup_time_str  = "Backup time",
+   ignored          = "Ignored",
+   tarpath          = "Backup path",
+  ))
+  return r
+ 
  def __init__(self, bundle_container, data_container, appbackup):
   """Loads the app's info.
 
@@ -192,30 +217,34 @@ appbackup is an AppBackup instance.
   if self.useable:
    self.tarpath = os.path.join(appbackup._tarballs_dir, self.bundle_id + ".tar.gz")
    self.ignored = self.bundle_id in appbackup._ignore_list
-   # self._backup_time
+   # self.__backup_time
    if self.bundle_id in appbackup._backup_times:
-    self._backup_time = appbackup._backup_times[self.bundle_id]
+    self.__backup_time = appbackup._backup_times[self.bundle_id]
    elif os.path.isfile(os.path.realpath(self.tarpath)):
     try:
-     self._backup_time = time.localtime(float(os.stat(self.tarpath).st_mtime))
-    except EnvironmentError: self._backup_time = time.localtime(0)
+     self.__backup_time = time.localtime(float(os.stat(self.tarpath).st_mtime))
+    except EnvironmentError: self.__backup_time = time.localtime(0)
     appbackup._backup_times.update(self)
    else:
-    self._backup_time = None
+    self.__backup_time = None
     appbackup._backup_times.remove(self)
   else:
    self.tarpath = ""
    self.ignored = False
-   self._backup_time = None
+   self.__backup_time = None
  @property
- def backup_time(self):
-  return self._backup_time
+ def _backup_time(self):
+  return self.__backup_time
  @property
  def backup_time_str(self):
-  return self.format_backup_time()
+  if self.ignored:
+   return "(ignored)"
+  if self.__backup_time:
+   return self.format_backup_time()
+  return "(not backed up)"
  @property
  def backup_time_unix(self):
-  return float(time.mktime(self.backup_time)) if self.backup_time else 0.0
+  return float(time.mktime(self._backup_time)) if self._backup_time else 0.0
  def backup(self, quick=False):
   """Backs up this app's saved data."""
   if self.ignored: raise AppBackupError("This app is being ignored.")
@@ -227,7 +256,7 @@ appbackup is an AppBackup instance.
   for i in ("Documents", "Library"):
    tar.add(os.path.join(self.containers.data.path, i).encode("utf8"), arcname=i)
   tar.close()
-  self._backup_time = time.localtime()
+  self.__backup_time = time.localtime()
   self.appbackup._backup_times.update(self, quick)
  def delete(self, quick=False):
   """Deletes this app's BACKUP."""
@@ -235,11 +264,11 @@ appbackup is an AppBackup instance.
   if not self.useable: raise AppBackupError("This app is not useable.")
   if os.path.exists(self.tarpath):
    os.remove(self.tarpath)
-   self._backup_time = None
+   self.__backup_time = None
    self.appbackup._backup_times.remove(self, quick)
  def format_backup_time(self, fmt="%Y-%m-%d %H:%M:%S"):
   """Formats the backup time, in ISO 8601 format by default."""
-  return time.strftime(fmt, self.backup_time) if self.backup_time else ""
+  return time.strftime(fmt, self._backup_time) if self._backup_time else ""
  def ignore(self, quick=False):
   """Tells AppBackup to ignore this app."""
   self.appbackup._ignore_list.add(self, quick)
@@ -272,12 +301,12 @@ class AppBackupError(Exception):
  def __unicode__(self):
   return to_unicode(self.message)
 
-class AllAppsResult(UserDict.DictMixin):
+class AllAppsResult(object):
  def __init__(self, action, results):
   self.__all = True
   self.__any = False
-  for app in results:
-   if results[app]:
+  for app, status in results:
+   if status:
     self.__any = True
    else:
     self.__all = False
@@ -301,8 +330,10 @@ class AllAppsResult(UserDict.DictMixin):
   return self.__bool
  def __getitem__(self, item):
   return self.__results[item]
- def keys(self):
-  return self.__results.keys()
+ def __iter__(self):
+  return self.__results.__iter__()
+ def __len__(self):
+  return len(self.__results)
  def __repr__(self):
   return "<AllAppsResult %s for action %s>" % (repr(self.__bool),
                                                repr(self.action))
