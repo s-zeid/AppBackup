@@ -174,7 +174,7 @@ Attributes (in addition to those defined in the App class):
                     or "(ignored)" if the app is being ignored
  backup_time_unix: the last time the app was backed up, as a Unix timestamp
  ignored:          True if the user wants to ignore this app; False otherwise
- tarpath:          the full path to the .tar.gz backup of the app's data
+ backup_path:      the full path to the .tar.gz backup of the app's data
 
 """
  
@@ -182,7 +182,7 @@ Attributes (in addition to those defined in the App class):
   "appbackup",
   "ignored",
   "backup_time_str", "backup_time_unix", "_backup_time", "__backup_time",
-  "tarpath",
+  "backup_path",
  ]
  info_tpl = App.info_tpl + ":  $backup_time_str"
  
@@ -193,7 +193,7 @@ Attributes (in addition to those defined in the App class):
   r.update(dict(
    backup_time_str  = "Backup time",
    ignored          = "Ignored",
-   tarpath          = "Backup path",
+   backup_path      = "Backup path",
   ))
   return r
  
@@ -215,21 +215,21 @@ appbackup is an AppBackup instance.
   super(AppBackupApp, self).__init__(bundle_container, data_container)
   self.appbackup = appbackup
   if self.useable:
-   self.tarpath = os.path.join(appbackup._tarballs_dir, self.bundle_id + ".tar.gz")
+   self.backup_path = os.path.join(appbackup._tarballs_dir, self.bundle_id + ".tar.gz")
    self.ignored = self.bundle_id in appbackup._ignore_list
    # self.__backup_time
    if self.bundle_id in appbackup._backup_times:
     self.__backup_time = appbackup._backup_times[self.bundle_id]
-   elif os.path.isfile(os.path.realpath(self.tarpath)):
+   elif os.path.isfile(os.path.realpath(self.backup_path)):
     try:
-     self.__backup_time = time.localtime(float(os.stat(self.tarpath).st_mtime))
+     self.__backup_time = time.localtime(float(os.stat(self.backup_path).st_mtime))
     except EnvironmentError: self.__backup_time = time.localtime(0)
     appbackup._backup_times.update(self)
    else:
     self.__backup_time = None
     appbackup._backup_times.remove(self)
   else:
-   self.tarpath = ""
+   self.backup_path = ""
    self.ignored = False
    self.__backup_time = None
  @property
@@ -249,10 +249,10 @@ appbackup is an AppBackup instance.
   """Backs up this app's saved data."""
   if self.ignored: raise AppBackupError("This app is being ignored.")
   if not self.useable: raise AppBackupError("This app is not useable.")
-  if not os.path.exists(self.tarpath):
-   f = open(self.tarpath, "w")
+  if not os.path.exists(self.backup_path):
+   f = open(self.backup_path, "w")
    f.close()
-  tar = tarfile.open(self.tarpath.encode("utf8"), "w:gz")
+  tar = tarfile.open(self.backup_path.encode("utf8"), "w:gz")
   for i in ("Documents", "Library"):
    tar.add(os.path.join(self.containers.data.path, i).encode("utf8"), arcname=i)
   tar.close()
@@ -262,8 +262,8 @@ appbackup is an AppBackup instance.
   """Deletes this app's BACKUP."""
   if self.ignored: raise AppBackupError("This app is being ignored.")
   if not self.useable: raise AppBackupError("This app is not useable.")
-  if os.path.exists(self.tarpath):
-   os.remove(self.tarpath)
+  if os.path.exists(self.backup_path):
+   os.remove(self.backup_path)
    self.__backup_time = None
    self.appbackup._backup_times.remove(self, quick)
  def format_backup_time(self, fmt="%Y-%m-%d %H:%M:%S"):
@@ -282,8 +282,8 @@ exists for compatibility with the other action methods in this class.
 """
   if self.ignored: raise AppBackupError("This app is being ignored.")
   if not self.useable: raise AppBackupError("This app is not useable.")
-  if os.path.exists(self.tarpath):
-   tar = tarfile.open(self.tarpath.encode("utf8"))
+  if os.path.exists(self.backup_path):
+   tar = tarfile.open(self.backup_path.encode("utf8"))
    tar.extractall(self.containers.data.path.encode("utf8"))
    tar.close()
  def unignore(self, quick=False):
