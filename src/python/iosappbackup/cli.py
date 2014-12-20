@@ -49,8 +49,9 @@ def main(argv=sys.argv):
 
 class CLI(CLI):
  default_command = None
- description = __doc__
  program = "iosappbackup"
+ description = "Backs up and restores the saved data and settings of" \
+               " installed iOS App Store apps."
  
  app_class  = AppBackupApp
  app_root   = None
