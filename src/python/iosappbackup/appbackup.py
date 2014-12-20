@@ -41,11 +41,12 @@ import tarfile
 import time
 import UserDict
 
-import propertylist
-
 from iosapplist.app import *
 from iosapplist.applist import *
 from iosapplist.container import ContainerRoot
+
+import propertylist
+
 from justifiedbool import JustifiedBool
 from util import *
 

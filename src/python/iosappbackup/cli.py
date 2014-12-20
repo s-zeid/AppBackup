@@ -34,9 +34,10 @@
 import os
 import sys
 
-from appbackup import *
 from iosapplist.cli import CLI, Command, CommandCommand, output
 from iosapplist.container import ContainerRoot
+
+from appbackup import *
 from justifiedbool import *
 from util import *
 
