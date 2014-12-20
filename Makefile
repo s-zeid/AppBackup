@@ -24,7 +24,16 @@ src/FixPermissions/FixPermissions: src/FixPermissions/*.c
 	[ x"${CC}" == x"" ] && true || ldid -S $@
 
 
-.PHONY: out/python/path deb install test clean
+.PHONY: sdist out/python/path deb install test clean
+
+sdist: src/python/setup.py
+	mkdir -p out/python/sdist/src
+	cp -a "$(dir $^)" out/python/sdist/src
+	cd out/python/sdist; \
+	 "$^" sdist && \
+	 rm -f ../"$$("$^" --name)"-*.tar.gz && \
+	 cp -a dist/"$$("$^" --fullname)".tar.gz ..
+	rm -rf out/python/sdist
 
 out/python/path: src/python/setup.py
 	mkdir -p $@ $@/../src

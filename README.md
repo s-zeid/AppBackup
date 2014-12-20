@@ -57,6 +57,8 @@ Directory structure with descriptions for some files
         * `path/`  
           Contains the `easy_install`-ed Python packages that will be copied
           into the .deb file
+        * `iosappbackup-<version>.tar.gz`  
+          Python source distribution generated with `make sdist`.
 * `src/`  
     * `FixPermissions/` \*  
       FixPermissions (C; fixes storage directory permissions)
