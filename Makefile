@@ -74,3 +74,4 @@ test:
 clean:
 	 rm -f src/gui/AppBackupGUI src/gui/*.o
 	 rm -f src/FixPermissions/FixPermissions src/FixPermissions/*.o
+	 rm -rf out/python
