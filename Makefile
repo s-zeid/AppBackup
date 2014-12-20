@@ -33,6 +33,18 @@ out/python/path: src/python/setup.py
 	cd "$@"/..; export PYTHONPATH="$(notdir $@):"; \
 	 "$^" easy_install -d "$(notdir $@)" -Z -N -a -O2 "$(dir $^)"
 	rm -rf "$@"/../src
+	@echo "Removing old Python package versions..."
+	for i in `grep '^\./.*\.egg$$' "$@"/easy-install.pth`; do \
+	 latest=`basename "$$i"`; \
+	 egg_name=`grep '^Name:[ \t][ \t]*' "$@/$$latest"/EGG-INFO/PKG-INFO`; \
+	 egg_name=`printf "$$egg_name" | sed -e 's/^Name:[ \t][ \t]*//g'`; \
+	 for j in "$@"/"$$egg_name"-*.egg; do \
+	  if [ x"$$(basename "$$j")" != x"$$latest" ]; then \
+	   echo "rm -rf $$j"; \
+	   rm -rf "$$j"; \
+	  fi \
+	 done \
+	done
 
 deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	rm -rf "${DEB_TMP}"
