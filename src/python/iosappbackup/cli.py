@@ -179,6 +179,7 @@ class StarbucksCommand(Command):
  names = ["starbucks"]
  add_args = False
  show_in_help = False
+ description = "Outputs the name of a shitty coffee chain."
  
  def main(self, cli):
   yield output.normal(AppBackup.starbucks())
