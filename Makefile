@@ -2,7 +2,7 @@ include config
 
 LD         = ${CC}
 
-CFLAGS     = -lobjc -arch armv6 -Wall
+CFLAGS     = -lobjc -arch armv6 -Wall -Werror
 LDFLAGS    = -bind_at_load
 FRAMEWORKS = -framework Foundation \
 	     -framework CoreFoundation \
