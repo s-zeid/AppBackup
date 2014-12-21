@@ -9,7 +9,7 @@ Changes in 3.0 "Maserati" (YYYY-MM-DD):
     · The CLI now has an interactive shell, which is also used by the GUI and is the reason why the GUI is faster.
     · The CLI now has a python command for starting a Python shell with iosappbackup/iosapplist already imported and AppBackup/AppList objects instantiated.
     · The app listing code has been moved into a separate Python package called iosapplist (http://code.s.zeid.me/iosapplist).
-    · The appbackup Python package is now called iosappbackup.
+    · The appbackup Python package is now called iosappbackup.  (The Debian package still uses the name "appbackup" for the launcher script installed in /usr/bin.)
     · Both the iosapplist and iosappbackup packages are available through PyPI.
     · Python dependencies are now managed using easy_install from Python's setuptools.
     · Major changes to the build process.
