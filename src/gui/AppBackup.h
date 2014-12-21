@@ -33,18 +33,24 @@
 
 #import <Foundation/Foundation.h>
 
+#import "BDSKTask.h"
+
 @interface AppBackup : NSObject {
+ @protected
  NSMutableArray *apps;
  BOOL            allBackedUp;
  BOOL            anyBackedUp;
  BOOL            anyCorrupted;
- NSMutableArray *runningTasks;
+ @private
+ BDSKTask       *_task;
+ NSFileHandle   *_stdin;
+ NSFileHandle   *_stdout;
+ NSMutableArray *_runningTasks;
 }
 @property (retain) NSMutableArray *apps;
 @property (assign) BOOL            allBackedUp;
 @property (assign) BOOL            anyBackedUp;
 @property (assign) BOOL            anyCorrupted;
-@property (retain) NSMutableArray *runningTasks;
 - (id)init;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;

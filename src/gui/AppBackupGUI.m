@@ -52,13 +52,19 @@
                 autorelease];
  // Start up the AppBackup CLI bridge
  self.appbackup = [[[AppBackup alloc] init] autorelease];
- // Set up the navigation and root view controllers
- UIViewController *rootVC = [[AppListVC alloc] initWithAppBackup:appbackup];
- self.navigationController = [[[UINavigationController alloc]
-                               initWithRootViewController:rootVC] autorelease];
- [rootVC release];
- [window addSubview:navigationController.view];
- [window makeKeyAndVisible];
+ if (self.appbackup == nil) {
+  // the CLI bridge failed to start
+  NSLog(@"AppBackup CLI failed to start");
+  abort();
+ } else {
+  // Set up the navigation and root view controllers
+  UIViewController *rootVC = [[AppListVC alloc] initWithAppBackup:appbackup];
+  self.navigationController = [[[UINavigationController alloc]
+                                initWithRootViewController:rootVC] autorelease];
+  [rootVC release];
+  [window addSubview:navigationController.view];
+  [window makeKeyAndVisible];
+ }
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl {

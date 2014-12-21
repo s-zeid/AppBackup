@@ -31,7 +31,6 @@
 
 // AppBackup CLI Bridge
 
-#import "BDSKTask.h"
 #import "util.h"
 
 #import "AppBackup.h"
@@ -41,7 +40,6 @@
 @synthesize allBackedUp;
 @synthesize anyBackedUp;
 @synthesize anyCorrupted;
-@synthesize runningTasks;
 
 - (id)init {
  self = [super init];
@@ -50,7 +48,25 @@
   self.allBackedUp = NO;
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
-  self.runningTasks = [NSMutableArray array];
+  _runningTasks = [NSMutableArray array];
+  // Start task
+  _task = [[BDSKTask alloc] init];
+  _task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
+  _task.arguments = [NSArray arrayWithObjects:
+                             @"--robot=plist", @"shell", @"--null", nil];;
+  _task.standardInput  = [NSPipe pipe];
+  _task.standardOutput = [NSPipe pipe];
+  [_runningTasks addObject:_task];
+  [_task launch];
+  _stdin  = [[_task standardInput]  fileHandleForWriting];
+  _stdout = [[_task standardOutput] fileHandleForReading];
+  NSData *ps1 = [_stdout readDataOfLength:1];
+  NSData *null = [NSData dataWithBytes:"\0" length:1];
+  if (ps1.length < 1 || ![ps1 isEqualToData:null]) {
+   [self terminateAllRunningTasks];
+   [self release];
+   return nil;
+  }
  }
  return self;
 }
@@ -110,24 +126,40 @@
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
- // Start task
- BDSKTask *task = [[BDSKTask alloc] init];
- task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
- task.arguments = [[NSArray arrayWithObjects:@"--robot=plist", cmd, nil]
-                   arrayByAddingObjectsFromArray:args];
- task.standardOutput = [NSPipe pipe];
- [runningTasks addObject:task];
- [task launch];
- // Wait for it to finish and process result
- NSFileHandle *handle = [[task standardOutput] fileHandleForReading];
- NSData *data = [handle readDataToEndOfFile];
- [handle closeFile];
- [runningTasks removeObject:task];
+ NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
+                      arrayByAddingObjectsFromArray:args];
+ NSData *null = [NSData dataWithBytes:"\0" length:1];
+ // Send command to the shell
+ NSData *plist = [NSPropertyListSerialization
+                  dataFromPropertyList:cmdArray
+                  format:NSPropertyListXMLFormat_v1_0
+                  errorDescription:nil];
+ [_stdin writeData:plist];
+ [_stdin writeData:null];
+ // Wait for it to finish and receive result
+ const int increment = 256;
+ NSMutableData *data = [NSMutableData dataWithLength:increment];
+ unsigned long long pos = 0;
+ NSData *byteData;
+ unsigned char *byte = malloc(1);
+ while (true) {
+  if (pos % increment == 0)
+   [data increaseLengthBy:increment];
+  byteData = [_stdout readDataOfLength:1];
+  if (byteData.length < 1 || [byteData isEqualToData:null]) {
+   break;
+  } else {
+   //[byteData getBytes:byte length:1];
+   [data replaceBytesInRange:NSMakeRange(pos, 1) withBytes:byteData.bytes];
+   pos++;
+  }
+ }
+ free(byte);
+ // Process result
  NSDictionary *dict = (NSDictionary *)[NSPropertyListSerialization
                        propertyListFromData:data
                        mutabilityOption:NSPropertyListImmutable
                        format:NULL errorDescription:nil];
- [task release];
  return dict;
 }
 
@@ -146,12 +178,12 @@
  // Stop any running tasks
  BDSKTask *task;
  int i;
- for (i = 0; i < [runningTasks count]; i++) {
-  task = [runningTasks objectAtIndex:i];
+ for (i = 0; i < [_runningTasks count]; i++) {
+  task = [_runningTasks objectAtIndex:i];
   if ([task isRunning])
    [task terminate];
  }
- [runningTasks removeAllObjects];
+ [_runningTasks removeAllObjects];
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
@@ -204,7 +236,10 @@
  self.anyBackedUp = NO;
  self.anyCorrupted = NO;
  [self terminateAllRunningTasks];
- self.runningTasks = nil;
+ _task = nil;
+ _stdin = nil;
+ _stdout = nil;
+ _runningTasks = nil;
  [super dealloc];
 }
 @end
