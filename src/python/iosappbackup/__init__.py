@@ -38,6 +38,6 @@ __version__ = "3.0"
 codename    = "Maserati"  # git push all maserati
 
 from appbackup import AppBackup
-from cli import main
+from __main__ import main
 
 __all__     = ["AppBackup", "main"]
