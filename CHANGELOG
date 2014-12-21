@@ -13,6 +13,7 @@ Changes in 3.0 "Maserati" (YYYY-MM-DD):
     · Both the iosapplist and iosappbackup packages are available through PyPI.
     · Python dependencies are now managed using easy_install from Python's setuptools.
     · Major changes to the build process.
+ • Starting with this release, major releases of AppBackup have codenames.  (3.0 is "Maserati".)
 
 Changes in 2.0.2 (2011-05-31):
  • Fixed a bug with translations where if something wasn't translated then nothing would appear in the UI (expected behavior is that the English text would appear instead).
