@@ -117,10 +117,13 @@ class AppBackupCommands(Command):
  
  @classmethod
  def description(self, name):
-  human = dict([(i, i.title()) for i in self.names])
+  human = dict([(i, i.title() + "s") for i in self.names])
   human["backup"] = "Backs up"
   human["unignore"] = "Un-ignores"
-  return "%s one or more apps." % human[name]
+  if name not in ("ignore", "unignore"):
+   return "%s the data of one or more apps." % human[name]
+  else:
+   return "%s one or more apps." % human[name]
  
  def add_args(self, p, cli):
   p.add_argument("-a", "--all", action="store_true",
