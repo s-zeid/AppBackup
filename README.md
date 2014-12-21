@@ -25,9 +25,6 @@ Directory structure with descriptions for some files
 * `data/`
     * `AppBackup.app/`  
       Files included in .app bundle, excluding subdirectories
-        * `python/`  
-        Symbolic links to 3rd-party or other external Python packages in
-        `lib/python/`; these will be derefernced when the .deb is generated
     * `DEBIAN/`  
       Debian package control files
     * `images/`  
