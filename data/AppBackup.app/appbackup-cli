@@ -32,5 +32,6 @@
 # CLI runner
 
 export PYTHONPATH="$(dirname "$0")/python:"
+export IOSAPPLIST_CLI_DEBUG=
 
 python -O "$(dirname "$0")/python/iosappbackup" "$@"
