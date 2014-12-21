@@ -100,7 +100,10 @@ the `config` file before building for the first time:
  * Edit `config` as necessary.
  * Compiling binaries is enabled by default; make `CC` in `config` be blank
    to disable that.
- * Precompiled binaries are included in the git repository.
+ * Precompiled binaries are not included in the git repository, but you can
+   extract them from a pre-made AppBackup Debian package and put them into
+   the correct places in the source tree if you are only trying to change or
+   rebuild the Python parts.
 
 AppBackup is built using a Makefile.  The most common invocations are:
 
