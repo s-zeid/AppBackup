@@ -39,7 +39,7 @@ setup(
                  +["iosapplist>=3.0dev17"],
  entry_points={
   "console_scripts": [
-    "iosappbackup=iosappbackup.cli:main"
+    "iosappbackup=iosappbackup:main"
   ]
  },
 )
