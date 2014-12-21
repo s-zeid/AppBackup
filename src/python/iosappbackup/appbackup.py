@@ -83,10 +83,7 @@ class AppBackup(object):
   if not os.path.isdir(os.path.realpath(self._tarballs_dir)):
    os.mkdir(self._tarballs_dir, dir_mask)
   
-  self._backup_times = _BackupTimes(self)
-  self._ignore_list = _IgnoreList(self)
-  
-  self.apps = AppList(apps_root, app_class=AppBackupApp, appbackup=self)
+  self.apps = AppBackupAppList(apps_root, self, app_class=AppBackupApp)
   self.find_app = lambda *args, **kwargs: self.apps.find(*args, **kwargs)
   if find_apps: self.find_apps()
   else: self._update_backup_info()
@@ -146,9 +143,8 @@ class AppBackup(object):
  
  def find_apps(self, force=False):
   """Initializes self.apps if it doesn't already exist."""
-  if force or not hasattr(self, "apps") or not len(self.apps):
+  if force or not hasattr(self, "apps") or not self.apps:
    self.apps = self.apps.find_all()
-   self._update_backup_info()
  
  def ignore_all(self):
   """Tells AppBackup to ignore this app."""
@@ -176,6 +172,27 @@ key, or a callable that is passed an App and returns a sort key.
  def unignore_all(self):
   """Tells AppBackup to quit ignoring all apps."""
   return self._do_on_all("unignore")
+
+
+class AppBackupAppList(AppList):
+ """Manages the list of App Store apps, along with AppBackup-specific properties.
+
+Attributes (in addition to those defined in the AppList class):
+  appbackup:  the AppBackup instance passed to the constructor
+
+"""
+ def __init__(self, root, appbackup, *args, **kwargs):
+  kwargs["appbackup"] = appbackup
+  super(AppBackupAppList, self).__init__(root, *args, **kwargs)
+  self.appbackup = appbackup
+ 
+ def find_all(self):
+  """Finds all App Store apps and updates data on the AppBackup instance."""
+  self.appbackup._backup_times = _BackupTimes(self.appbackup)
+  self.appbackup._ignore_list = _IgnoreList(self.appbackup)
+  r = super(AppBackupAppList, self).find_all()
+  self.appbackup._update_backup_info()
+  return r
 
 
 class AppBackupApp(App):
