@@ -79,16 +79,15 @@ class CLI(CLI):
 class CommandCommand(CommandCommand):
  def add_args(self, p, cli):
   parse_function = super(CommandCommand, self).add_args(p, cli)
-  p.add_argument("--config-dir", "-c", default=None, metavar='<path>',
+  p.add_argument("--config-dir", "-c", default="", metavar='<path>',
                  help='The path to the AppBackup configuration directory'
                       ' (defaults to "<--root>/'
                       '../Library/Preferences/AppBackup").')
   return parse_function
  def main(self, cli):
   output_generator = super(CommandCommand, self).main(cli)
-  if self.options.config_dir:
-   if cli.config_dir is None:
-    cli.config_dir = self.options.config_dir
+  if cli.config_dir is None:
+   cli.config_dir = self.options.config_dir
   return output_generator
 
 CLI.commands.register(CommandCommand)
