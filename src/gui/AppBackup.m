@@ -61,8 +61,7 @@
   _stdin  = [[_task standardInput]  fileHandleForWriting];
   _stdout = [[_task standardOutput] fileHandleForReading];
   NSData *ps1 = [_stdout readDataOfLength:1];
-  NSData *null = [NSData dataWithBytes:"\0" length:1];
-  if (ps1.length < 1 || ![ps1 isEqualToData:null]) {
+  if (ps1.length < 1 || ((char *)ps1.bytes)[0] != '\0') {
    [self terminateAllRunningTasks];
    [self release];
    return nil;
@@ -126,7 +125,6 @@
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
- NSData *null = [NSData dataWithBytes:"\0" length:1];
  // Send command to the shell
  NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
                       arrayByAddingObjectsFromArray:args];
@@ -135,7 +133,7 @@
                      format:NSPropertyListXMLFormat_v1_0
                      errorDescription:nil];
  [_stdin writeData:cmdPlist];
- [_stdin writeData:null];
+ [_stdin writeData:[NSData dataWithBytes:"\0" length: 1]];
  // Wait for it to finish and receive result
  const int increment = 256;
  NSMutableData *resultPlist = [NSMutableData dataWithLength:increment];
@@ -146,7 +144,7 @@
   if (pos % increment == 0)
    [resultPlist increaseLengthBy:increment];
   byteData = [_stdout readDataOfLength:1];
-  if (byteData.length < 1 || [byteData isEqualToData:null]) {
+  if (byteData.length < 1 || ((char *)byteData.bytes)[0] == '\0') {
    break;
   } else {
    range.location = pos;
