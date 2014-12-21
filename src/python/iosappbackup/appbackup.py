@@ -59,6 +59,7 @@ APPBACKUP_CONFIG_DIRECTORY = u"/var/mobile/Library/Preferences/AppBackup"
 
 class AppBackup(object):
  """The main class of the AppBackup library."""
+ 
  def __init__(self, find_apps=True, config_dir=None, apps_root=None):
   dir_mask = stat.S_IRWXU|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH
   
@@ -89,6 +90,7 @@ class AppBackup(object):
   self.find_app = lambda *args, **kwargs: self.apps.find(*args, **kwargs)
   if find_apps: self.find_apps()
   else: self._update_backup_info()
+ 
  def _do_on_all(self, action):
   # Performs the specified action on all apps.
   self.find_apps()
@@ -107,6 +109,7 @@ class AppBackup(object):
    return AllAppsResult(action, results)
   else:
    raise AppBackupError("%s is not a valid action." % repr(action))
+ 
  def _migrate_old_config_dir(self):
   if (os.path.isdir(os.path.realpath(u"/var/mobile/Library/AppBackup")) and 
       not os.path.exists(u"/var/mobile/Library/AppBackup/This has been moved")):
@@ -117,6 +120,7 @@ class AppBackup(object):
    with open(u"/var/mobile/Library/AppBackup/This has been moved", "w") as f:
     f.write((u"This folder has been moved to %s since AppBackup version 1.0.7."
               % APPBACKUP_CONFIG_DIRECTORY).encode("utf8"))
+ 
  def _update_backup_info(self):
   # Updates the any/all_backed_up and any_corrupted attributes.
   self.all_backed_up = bool(len(self.apps))
@@ -129,24 +133,31 @@ class AppBackup(object):
      self.all_backed_up = False
    else:
     self.any_corrupted = True
+ 
  def backup_all(self):
   """Backs up all apps' saved data."""
   return self._do_on_all("backup")
+ 
  def delete_all(self):
   """Deletes all apps' backups."""
   return self._do_on_all("delete")
+ 
  # find_app is a functools.partial defined in AppBackup.__init__
+ 
  def find_apps(self, force=False):
   """Initializes self.apps if it doesn't already exist."""
   if force or not hasattr(self, "apps") or not len(self.apps):
    self.apps = self.apps.find_all()
    self._update_backup_info()
+ 
  def ignore_all(self):
   """Tells AppBackup to ignore this app."""
   return self._do_on_all("ignore")
+ 
  def restore_all(self):
   """Restores all apps' saved data."""
   return self._do_on_all("restore")
+ 
  def sort_apps(self, key="sort_key"):
   """Returns an iterator that yields each app in the cache sorted according to key.
 
@@ -156,10 +167,12 @@ key, or a callable that is passed an App and returns a sort key.
 """
   self.find_apps()
   return self.apps.sorted(key)
+ 
  @classmethod
  def starbucks(self):
   """STARBUCKS!!!!!111!11!!!one!!1!"""
   return u"STARBUCKS!!!!!111!11!!!one!!1!"
+ 
  def unignore_all(self):
   """Tells AppBackup to quit ignoring all apps."""
   return self._do_on_all("unignore")
@@ -233,9 +246,11 @@ appbackup is an AppBackup instance.
    self.backup_path = ""
    self.ignored = False
    self.__backup_time = None
+ 
  @property
  def _backup_time(self):
   return self.__backup_time
+ 
  @property
  def backup_time_str(self):
   if self.ignored:
@@ -243,9 +258,11 @@ appbackup is an AppBackup instance.
   if self.__backup_time:
    return self.format_backup_time()
   return "(not backed up)"
+ 
  @property
  def backup_time_unix(self):
   return float(time.mktime(self._backup_time)) if self._backup_time else 0.0
+ 
  def backup(self, quick=False):
   """Backs up this app's saved data."""
   if self.ignored: raise AppBackupError("This app is being ignored.")
@@ -259,6 +276,7 @@ appbackup is an AppBackup instance.
   tar.close()
   self.__backup_time = time.localtime()
   self.appbackup._backup_times.update(self, quick)
+ 
  def delete(self, quick=False):
   """Deletes this app's BACKUP."""
   if self.ignored: raise AppBackupError("This app is being ignored.")
@@ -267,13 +285,16 @@ appbackup is an AppBackup instance.
    os.remove(self.backup_path)
    self.__backup_time = None
    self.appbackup._backup_times.remove(self, quick)
+ 
  def format_backup_time(self, fmt="%Y-%m-%d %H:%M:%S"):
   """Formats the backup time, in ISO 8601 format by default."""
   return time.strftime(fmt, self._backup_time) if self._backup_time else ""
+ 
  def ignore(self, quick=False):
   """Tells AppBackup to ignore this app."""
   self.appbackup._ignore_list.add(self, quick)
   self.ignored = True
+ 
  def restore(self, quick=False):
   """Restores this app's saved data.
 
@@ -287,20 +308,26 @@ exists for compatibility with the other action methods in this class.
    tar = tarfile.open(self.backup_path.encode("utf8"))
    tar.extractall(self.containers.data.path.encode("utf8"))
    tar.close()
+ 
  def unignore(self, quick=False):
   """Tells AppBackup to quit ignoring this app."""
   self.appbackup._ignore_list.remove(self, quick)
   self.ignored = False
 
+
 class AppBackupError(Exception):
  def __init__(self, message=None):
   self.message = message or "Unknown error."
+ 
  def __repr__(self):
   return "AppBackupError(%s)" % self.message
+ 
  def __str__(self):
   return self.message
+ 
  def __unicode__(self):
   return to_unicode(self.message)
+
 
 class AllAppsResult(object):
  def __init__(self, action, results):
@@ -313,28 +340,38 @@ class AllAppsResult(object):
     self.__all = False
   self.__action = action
   self.__results = results
+ 
  @property
  def action(self):
   return self.__action
+ 
  @property
  def all(self):
   return self.__all
+ 
  @property
  def any(self):
   return self.__any
+ 
  @property
  def bool(self):
   return self.all
+ 
  def __int__(self):
   return int(self.__bool)
+ 
  def __nonzero__(self):
   return self.__bool
+ 
  def __getitem__(self, item):
   return self.__results[item]
+ 
  def __iter__(self):
   return self.__results.__iter__()
+ 
  def __len__(self):
   return len(self.__results)
+ 
  def __repr__(self):
   return "<AllAppsResult %s for action %s>" % (repr(self.__bool),
                                                repr(self.action))
@@ -351,25 +388,33 @@ class _BackupTimes(object):
   else:
    self.data = {}
    self.save()
+ 
  @property
  def filename(self):
   return self.appbackup._backuptimes_plist
+ 
  def __contains__(self, item):
   return item in self.data
+ 
  def __getitem__(self, item):
   return time.localtime(float(self.data[item]))
+ 
  def get(self, item):
   return self.__getitem__(item)
+ 
  def remove(self, app, quick=False):
   if app.bundle_id in self.data: del self.data[app.bundle_id]
   self.save()
   if not quick: self.appbackup._update_backup_info()
+ 
  def save(self):
   propertylist.save(self.data, self.filename)
+ 
  def update(self, app, quick=False):
   self.data[app.bundle_id] = str(app.backup_time_unix)
   self.save()
   if not quick: self.appbackup._update_backup_info()
+
 
 class _IgnoreList(object):
  def __init__(self, appbackup):
@@ -379,25 +424,32 @@ class _IgnoreList(object):
   else:
    self.data = []
    self.save()
+ 
  @property
  def filename(self):
   return self.appbackup._ignore_txt
+ 
  def __contains__(self, item):
   return item in self.data
+ 
  def __getitem__(self, item):
   return item in self.data
+ 
  def get(self, item):
   return self.__getitem__(item)
+ 
  def add(self, app, quick=False):
   if app.bundle_id not in self.data:
    self.data.append(app.bundle_id)
    self.data.sort()
    self.save()
   if not quick: self.appbackup._update_backup_info()
+ 
  def remove(self, app, quick=False):
   if app.bundle_id in self.data:
    self.data.remove(app.bundle_id)
    self.save()
   if not quick: self.appbackup._update_backup_info()
+ 
  def save(self):
   with open(self.filename, "w") as f: f.write("\n".join(self.data))
