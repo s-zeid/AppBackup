@@ -1,4 +1,4 @@
-Changes in 3.0 (YYYY-MM-DD):
+Changes in 3.0 "Maserati" (YYYY-MM-DD):
  • AppBackup now runs faster, (after the splash screen disappears), especially on older devices.
  • Fixed a bug when the device is using a language for which the Yes and OK buttons have the same label:  the ActionHandler would fail to perform the requested action after the user confirmed the action.
  • Use a new URL for the app's page on my site.
