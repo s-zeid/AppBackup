@@ -80,7 +80,7 @@ Prerequisites for building
 
  * Linux (tested with Fedora; other distros, OS X, Cygwin, etc. may work
    but I haven't tested them)
- * Working iOS toolchain that has GCC (tested with a 3.1.2 toolchain)
+ * Working iOS toolchain that uses clang (tested with a 3.1.2 toolchain)
  * bash; dpkg; GNU make; Python 2.5 (OS X only), 2.6, or 2.7
  * Python setuptools
 
