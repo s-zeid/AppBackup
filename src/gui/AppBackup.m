@@ -53,7 +53,7 @@
   _task = [[BDSKTask alloc] init];
   _task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
   _task.arguments = [NSArray arrayWithObjects:
-                             @"--robot=plist", @"shell", @"--null", nil];;
+                             @"--robot=plist", @"shell", @"--null", nil];
   _task.standardInput  = [NSPipe pipe];
   _task.standardOutput = [NSPipe pipe];
   [_runningTasks addObject:_task];
