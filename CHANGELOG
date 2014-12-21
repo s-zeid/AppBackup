@@ -1,9 +1,18 @@
 Changes in 3.0 (YYYY-MM-DD):
+ • AppBackup now runs faster, (after the splash screen disappears), especially on older devices.
  • Fixed a bug when the device is using a language for which the Yes and OK buttons have the same label:  the ActionHandler would fail to perform the requested action after the user confirmed the action.
  • Use a new URL for the app's page on my site.
  • Use HTTPS for links to the Web site.
- • The about page is now valid HTML 5.
- • Changes to the build process.  This should not affect users.
+ • The about page is now valid HTML 5 and has a somewhat refined appearance.
+ • Of interest to developers (these should not affect users):
+    · The command line interface uses a new syntax and output format.
+    · The CLI now has an interactive shell, which is also used by the GUI and is the reason why the GUI is faster.
+    · The CLI now has a python command for starting a Python shell with iosappbackup/iosapplist already imported and AppBackup/AppList objects instantiated.
+    · The app listing code has been moved into a separate Python package called iosapplist (http://code.s.zeid.me/iosapplist).
+    · The appbackup Python package is now called iosappbackup.
+    · Both the iosapplist and iosappbackup packages are available through PyPI.
+    · Python dependencies are now managed using easy_install from Python's setuptools.
+    · Major changes to the build process.
 
 Changes in 2.0.2 (2011-05-31):
  • Fixed a bug with translations where if something wasn't translated then nothing would appear in the UI (expected behavior is that the English text would appear instead).
