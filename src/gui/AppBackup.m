@@ -126,41 +126,41 @@
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
- NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
-                      arrayByAddingObjectsFromArray:args];
  NSData *null = [NSData dataWithBytes:"\0" length:1];
  // Send command to the shell
- NSData *plist = [NSPropertyListSerialization
-                  dataFromPropertyList:cmdArray
-                  format:NSPropertyListXMLFormat_v1_0
-                  errorDescription:nil];
- [_stdin writeData:plist];
+ NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
+                      arrayByAddingObjectsFromArray:args];
+ NSData *cmdPlist = [NSPropertyListSerialization
+                     dataFromPropertyList:cmdArray
+                     format:NSPropertyListXMLFormat_v1_0
+                     errorDescription:nil];
+ [_stdin writeData:cmdPlist];
  [_stdin writeData:null];
  // Wait for it to finish and receive result
  const int increment = 256;
- NSMutableData *data = [NSMutableData dataWithLength:increment];
+ NSMutableData *resultPlist = [NSMutableData dataWithLength:increment];
  unsigned long long pos = 0;
  NSData *byteData;
- unsigned char *byte = malloc(1);
+ NSRange range = NSMakeRange(0, 1);
  while (true) {
   if (pos % increment == 0)
-   [data increaseLengthBy:increment];
+   [resultPlist increaseLengthBy:increment];
   byteData = [_stdout readDataOfLength:1];
   if (byteData.length < 1 || [byteData isEqualToData:null]) {
    break;
   } else {
-   //[byteData getBytes:byte length:1];
-   [data replaceBytesInRange:NSMakeRange(pos, 1) withBytes:byteData.bytes];
+   range.location = pos;
+   [resultPlist replaceBytesInRange:range withBytes:byteData.bytes];
    pos++;
   }
  }
- free(byte);
  // Process result
- NSDictionary *dict = (NSDictionary *)[NSPropertyListSerialization
-                       propertyListFromData:data
-                       mutabilityOption:NSPropertyListImmutable
-                       format:NULL errorDescription:nil];
- return dict;
+ NSDictionary *resultDict
+  = (NSDictionary *)[NSPropertyListSerialization
+                     propertyListFromData:resultPlist
+                     mutabilityOption:NSPropertyListImmutable
+                     format:NULL errorDescription:nil];
+ return resultDict;
 }
 
 - (NSString *)starbucks {
