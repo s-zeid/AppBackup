@@ -33,6 +33,13 @@
 
 #import <Foundation/Foundation.h>
 
+
+#define PRODUCT_NAME    [[NSBundle mainBundle] \
+                         objectForInfoDictionaryKey:@"CFBundleDisplayName"]
+#define PRODUCT_VERSION [[NSBundle mainBundle] \
+                         objectForInfoDictionaryKey:@"CFBundleVersion"]
+
+
 @interface _ : NSObject {}
 + (NSString *)s:(NSString *)s;
 + (NSString *)bundledFilePath:(NSString *)path;
