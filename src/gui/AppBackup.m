@@ -49,7 +49,7 @@
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
   _runningTasks = [NSMutableArray array];
-  // Start task
+  // Start the CLI shell
   _task = [[BDSKTask alloc] init];
   _task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
   _task.arguments = [NSArray arrayWithObjects:
@@ -125,6 +125,10 @@
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
+ if ([args count] > 0)
+  NSLog(@"running `%@ %@`", cmd, [args componentsJoinedByString:@" "]);
+ else
+  NSLog(@"running `%@`", cmd);
  // Send command to the shell
  NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
                       arrayByAddingObjectsFromArray:args];
@@ -158,6 +162,15 @@
                      propertyListFromData:resultPlist
                      mutabilityOption:NSPropertyListImmutable
                      format:NULL errorDescription:nil];
+ NSObject *returnCode = [resultDict objectForKey:@"return_code"];
+ if (returnCode != nil) {
+  if ([returnCode isKindOfClass:[NSNumber class]])
+   NSLog(@"command finished with return code %d",
+         [(NSNumber *)returnCode integerValue]);
+  else
+   NSLog(@"command finished with an INVALID TYPE for the return code!");
+ } else
+  NSLog(@"command finished withOUT a return code!");
  return resultDict;
 }
 
