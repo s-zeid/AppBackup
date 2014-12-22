@@ -54,8 +54,6 @@
 #define LOG_PATH_APPBACKUPGUI   LOG_ROOT @"/AppBackupGUI.log"
 #define LOG_PATH_FIXPERMISSIONS LOG_ROOT @"/FixPermissions.log"
 
-#define CONDITION_ERROR_DISMISSED 1
-
 
 @implementation ErrorHandler
 
