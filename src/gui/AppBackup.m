@@ -31,6 +31,9 @@
 
 // AppBackup CLI Bridge
 
+#import <UIKit/UIKit.h>
+
+#import "ErrorHandler.h"
 #import "util.h"
 
 #import "AppBackup.h"
@@ -42,12 +45,18 @@
 @synthesize anyCorrupted;
 
 - (id)init {
+ return [self initWithGUI:nil];
+}
+
+- (id)initWithGUI:(UIApplication *)gui {
  self = [super init];
  if (self) {
   self.apps = [NSMutableArray array];
   self.allBackedUp = NO;
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
+  _gui = gui;
+  _shellReturned = nil;
   // Start the CLI shell
   _shellTask = [[BDSKTask alloc] init];
   _shellTask.launchPath = [_ bundledFilePath:@"appbackup-cli"];
@@ -62,9 +71,18 @@
   NSData *ps1 = [_shellStdout readDataOfLength:1];
   if (ps1.length < 1 || ((char *)ps1.bytes)[0] != '\0') {
    // The shell failed to start properly
+   if (ps1.length < 1)
+    NSLog(@"appbackup-cli did not output any prompt");
+   else if (((char *)ps1.bytes)[0] != '\0')
+    NSLog(@"appbackup-cli did not output the correct prompt");
+   NSLog(@"appbackup-cli failed to start properly");
    [self terminateShell];
-   [self release];
-   return nil;
+   if (_gui != nil) {
+    NSString *text = [NSString stringWithFormat:
+                                [_ s:@"error_shell_failed_to_start"],
+                                PRODUCT_NAME];
+    [self _displayShellExitErrorWithText:text];
+   }
   }
  }
  return self;
@@ -162,6 +180,7 @@
                      propertyListFromData:resultPlist
                      mutabilityOption:NSPropertyListImmutable
                      format:NULL errorDescription:nil];
+ // Log return code
  NSObject *returnCode = [resultDict objectForKey:@"return_code"];
  if (returnCode != nil) {
   if ([returnCode isKindOfClass:[NSNumber class]])
@@ -171,7 +190,63 @@
    NSLog(@"command finished with an INVALID TYPE for the return code!");
  } else
   NSLog(@"command finished withOUT a return code!");
+ // Get Python tracebacks if there are any
+ NSArray *tracebacks = [NSArray array];
+ NSObject *output = [resultDict objectForKey:@"output"];
+ if ([output isKindOfClass:[NSDictionary class]]) {
+  NSObject *tracebacksMaybe = [(NSDictionary*)output objectForKey:@"traceback"];
+  if ([tracebacksMaybe isKindOfClass:[NSArray class]] &&
+      [(NSArray *)tracebacksMaybe count] > 0) {
+   tracebacks = (NSArray *)tracebacksMaybe;
+  }
+ }
+ // Display error if the shell exited
+ if (self.shellReturned != nil) {
+  if ([tracebacks count] > 0) {
+   // log caught tracebacks first
+   NSLog(@"command also reported one or more Python errors:");
+   for (int i = 0; i < [tracebacks count]; i++) {
+    NSLog(@"%@", [tracebacks objectAtIndex:i]);
+   }
+  }
+  if (_gui != nil) {
+   NSString *text = [NSString stringWithFormat:
+                               [_ s:@"error_shell_terminated_improperly"],
+                               PRODUCT_NAME];
+   ErrorHandler *eh = [self _displayShellExitErrorWithText:text];
+   [eh waitForErrorToBeDismissed];
+  }
+ }
+ // Otherwise, display Python tracebacks if there are any
+ else if ([tracebacks count] > 0) {
+  if (_gui != nil) {
+   NSLog(@"command reported one or more Python errors:  (displayed to user)");
+   NSString *text = [NSString stringWithFormat:
+                               [_ s:@"error_unexpected_nonfatal"],
+                               PRODUCT_NAME];
+   ErrorHandler *eh = [self _displayShellTracebacks:tracebacks withText:text];
+   [eh waitForErrorToBeDismissed];
+  } else {
+   NSLog(@"command reported one or more Python errors:");
+   for (int i = 0; i < [tracebacks count]; i++) {
+    NSLog(@"%@", [tracebacks objectAtIndex:i]);
+   }
+  }
+ }
+ // Return result
  return resultDict;
+}
+
+- (NSNumber *)shellReturned {
+ if (_shellReturned != nil)
+  return _shellReturned;
+ if (![_shellTask isRunning]) {
+  _shellReturned = [NSNumber numberWithInt:_shellTask.terminationStatus];
+  NSLog(@"appbackup-cli exited with return code %d",
+        [_shellReturned integerValue]);
+  return _shellReturned;
+ }
+ return nil;
 }
 
 - (NSString *)starbucks {
@@ -187,8 +262,10 @@
 
 - (void)terminateShell {
  // Stop the shell
- if ([_shellTask isRunning])
+ if ([_shellTask isRunning]) {
   [_shellTask terminate];
+  [_shellTask waitUntilExit];
+ }
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
@@ -235,12 +312,40 @@
  }
 }
 
+- (ErrorHandler *)_displayShellExitErrorWithText:(NSString *)text {
+ NSString *error = [NSString stringWithFormat:
+                              @"(appbackup-cli exited with return code %d)",
+                              [self.shellReturned integerValue]];
+ ErrorHandler *eh = [[ErrorHandler alloc]
+                     initWithError:error
+                         withTitle:[_ s:@"error_occurred_fatal"]
+                          withText:text
+                           isFatal:YES];
+ [eh performSelectorOnMainThread:@selector(showAlert)
+     withObject:nil waitUntilDone:YES];
+ return eh;
+}
+
+- (ErrorHandler *)_displayShellTracebacks:(NSArray *)tracebacks
+                                 withText:(NSString *)text {
+ NSString *error = [tracebacks componentsJoinedByString:@"\n"];
+ ErrorHandler *eh = [[ErrorHandler alloc]
+                      initWithError:error
+                          withTitle:[_ s:@"error_occurred"]
+                           withText:text
+                            isFatal:NO];
+ [eh performSelectorOnMainThread:@selector(showAlert)
+     withObject:nil waitUntilDone:YES];
+ return eh;
+}
+
 - (void)dealloc {
  self.apps = nil;
  self.allBackedUp = NO;
  self.anyBackedUp = NO;
  self.anyCorrupted = NO;
  [self terminateShell];
+ _shellReturned = nil;
  _shellTask = nil;
  _shellStdin = nil;
  _shellStdout = nil;

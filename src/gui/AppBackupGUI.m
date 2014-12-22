@@ -41,6 +41,7 @@
 #import "util.h"
 
 #import "AppBackupGUI.h"
+#import "ErrorHandler.h"
 
 @implementation AppBackupGUI
 @synthesize window;
@@ -51,12 +52,8 @@
  self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]
                 autorelease];
  // Start up the AppBackup CLI bridge
- self.appbackup = [[[AppBackup alloc] init] autorelease];
- if (self.appbackup == nil) {
-  // the CLI bridge failed to start
-  NSLog(@"AppBackup CLI failed to start");
-  abort();
- } else {
+ self.appbackup = [[[AppBackup alloc] initWithGUI:self] autorelease];
+ if (self.appbackup.shellReturned == nil) {
   // Set up the navigation and root view controllers
   UIViewController *rootVC = [[AppListVC alloc] initWithAppBackup:appbackup];
   self.navigationController = [[[UINavigationController alloc]

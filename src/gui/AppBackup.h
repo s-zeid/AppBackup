@@ -32,6 +32,7 @@
 // AppBackup CLI Bridge (header)
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #import "BDSKTask.h"
 
@@ -42,15 +43,19 @@
  BOOL            anyBackedUp;
  BOOL            anyCorrupted;
  @private
+ UIApplication  *_gui;
  BDSKTask       *_shellTask;
  NSFileHandle   *_shellStdin;
  NSFileHandle   *_shellStdout;
+ NSNumber       *_shellReturned;
 }
-@property (retain) NSMutableArray *apps;
-@property (assign) BOOL            allBackedUp;
-@property (assign) BOOL            anyBackedUp;
-@property (assign) BOOL            anyCorrupted;
+@property (retain)   NSMutableArray *apps;
+@property (assign)   BOOL            allBackedUp;
+@property (assign)   BOOL            anyBackedUp;
+@property (assign)   BOOL            anyCorrupted;
+@property (readonly) NSNumber       *shellReturned;
 - (id)init;
+- (id)initWithGUI:(UIApplication *)gui;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;
 - (NSDictionary *)doAction:(NSString *)action onApp:(NSDictionary *)app;
