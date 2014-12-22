@@ -31,14 +31,57 @@
 
 # GUI runner
 
+LOG_ROOT=/var/mobile/Library/Preferences/AppBackup/logs
+LOG_PATH_FIXPERMISSIONS_OUT_TMP=/tmp/AppBackup-FixPermissions-touched.log
+LOG_PATH_FIXPERMISSIONS_TMP=/tmp/AppBackup-FixPermissions-errors.log
+LOG_PATH_FIXPERMISSIONS_OUT="$LOG_ROOT"/FixPermissions-touched.log
+LOG_PATH_FIXPERMISSIONS="$LOG_ROOT"/FixPermissions.log
+LOG_PATH_APPBACKUPGUI="$LOG_ROOT"/AppBackupGUI.log
+
+username=`id -un`
+
+log_if_mobile() {
+ # Log debugging info if we're running as the mobile user
+ # (which should always be true, but it's always good to be safe)
+ local log_file="$1"
+ local r=127
+ shift
+ if [ x"$username" = x"mobile" ]; then
+  "$@" &> "$log_file"; r=$?
+ else
+  "$@"; r=$?
+ fi
+ printf '\n%s\n' "(\`$@\` returned with code $r)" &>> "$log_file"
+ return $r
+}
+
 # Fix permissions on user directory (This is a binary with setuid root)
 # Make a blank file in /Applications/AppBackup.app called NoFixPermissions to
 # disable this.
+fix_permissions() {
+ "$(dirname "$0")"/FixPermissions > "$LOG_PATH_FIXPERMISSIONS_OUT_TMP";
+}
 if [ ! -e "$(dirname "$0")/NoFixPermissions" ]; then
- "$(dirname "$0")"/FixPermissions > /tmp/FixPermissions.log
+ log_if_mobile "$LOG_PATH_FIXPERMISSIONS_TMP" fix_permissions
+else
+ echo "(FixPermissions disabled by user)" &> "$LOG_PATH_FIXPERMISSIONS_TMP"
 fi
 
-# Run the GUI and log debug info to $DEBUG_FILE if we're mobile (which we
-# should be)
+# Make the debug directory if it does not exist, but only if
+# /var/mobile/Library/Preferences is a directory and we're mobile
+# (as we should be).  Also move the FixPermissions logs to there if
+# applicable.
+debug_grandparent_dir="$(dirname "$(dirname "$LOG_ROOT")")";
+if [ -d "$debug_grandparent_dir" ] && [ x"$username" = x"mobile" ]; then
+ mkdir -p "$LOG_ROOT"
+ if [ -e "$LOG_PATH_FIXPERMISSIONS_OUT_TMP" ]; then
+  mv "$LOG_PATH_FIXPERMISSIONS_OUT_TMP" "$LOG_PATH_FIXPERMISSIONS_OUT"
+ fi
+ if [ -e "$LOG_PATH_FIXPERMISSIONS_TMP" ]; then
+  mv "$LOG_PATH_FIXPERMISSIONS_TMP" "$LOG_PATH_FIXPERMISSIONS"
+ fi
+fi
+
+# Run the GUI and log debugging info if we're mobile (which we should be)
 cd "$(dirname "$0")"
-exec "$(dirname "$0")/AppBackupGUI_" "$@"
+log_if_mobile "$LOG_PATH_APPBACKUPGUI" exec "$(dirname "$0")/AppBackupGUI_" "$@"
