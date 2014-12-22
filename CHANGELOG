@@ -1,6 +1,11 @@
 Changes in 3.0 "Maserati" (YYYY-MM-DD):
  • AppBackup now runs faster (after the splash screen disappears), especially on older devices.
  • Fixed a bug when the device is using a language for which the Yes and OK buttons have the same label:  the ActionHandler would fail to perform the requested action after the user confirmed the action.
+ • Many errors are now reported to the user with an option to send me an email with the error along with the two new log files added.  (New translation strings were added as a part of this.)
+ • Two new log files are available:
+    · /var/mobile/Library/Preferences/AppBackup/logs/AppBackupGUI.log
+    · /var/mobile/Library/Preferences/AppBackup/logs/FixPermissions.log
+   If you email me about an error, please be sure to include these log files if you aren't sending the email from within the app.
  • Use a new URL for the app's page on my site.
  • Use HTTPS for links to the Web site.
  • The about page is now valid HTML 5 and has a somewhat refined appearance.
