@@ -86,7 +86,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
- [self.appbackup terminateAllRunningTasks];
+ [self.appbackup terminateShell];
 }
 
 - (void)showAboutScreen {

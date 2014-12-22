@@ -48,21 +48,21 @@
   self.allBackedUp = NO;
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
-  _runningTasks = [NSMutableArray array];
   // Start the CLI shell
-  _task = [[BDSKTask alloc] init];
-  _task.launchPath = [_ bundledFilePath:@"appbackup-cli"];
-  _task.arguments = [NSArray arrayWithObjects:
-                             @"--robot=plist", @"shell", @"--null", nil];
-  _task.standardInput  = [NSPipe pipe];
-  _task.standardOutput = [NSPipe pipe];
-  [_runningTasks addObject:_task];
-  [_task launch];
-  _stdin  = [[_task standardInput]  fileHandleForWriting];
-  _stdout = [[_task standardOutput] fileHandleForReading];
-  NSData *ps1 = [_stdout readDataOfLength:1];
+  _shellTask = [[BDSKTask alloc] init];
+  _shellTask.launchPath = [_ bundledFilePath:@"appbackup-cli"];
+  _shellTask.arguments = [NSArray arrayWithObjects:
+                                   @"--robot=plist", @"shell", @"--null", nil];
+  _shellTask.standardInput  = [NSPipe pipe];
+  _shellTask.standardOutput = [NSPipe pipe];
+  [_shellTask launch];
+  _shellStdin  = [[_shellTask standardInput]  fileHandleForWriting];
+  _shellStdout = [[_shellTask standardOutput] fileHandleForReading];
+  // Wait for the shell to get ready
+  NSData *ps1 = [_shellStdout readDataOfLength:1];
   if (ps1.length < 1 || ((char *)ps1.bytes)[0] != '\0') {
-   [self terminateAllRunningTasks];
+   // The shell failed to start properly
+   [self terminateShell];
    [self release];
    return nil;
   }
@@ -136,8 +136,8 @@
                      dataFromPropertyList:cmdArray
                      format:NSPropertyListXMLFormat_v1_0
                      errorDescription:nil];
- [_stdin writeData:cmdPlist];
- [_stdin writeData:[NSData dataWithBytes:"\0" length: 1]];
+ [_shellStdin writeData:cmdPlist];
+ [_shellStdin writeData:[NSData dataWithBytes:"\0" length: 1]];
  // Wait for it to finish and receive result
  const int increment = 256;
  NSMutableData *resultPlist = [NSMutableData dataWithLength:increment];
@@ -147,7 +147,7 @@
  while (true) {
   if (pos % increment == 0)
    [resultPlist increaseLengthBy:increment];
-  byteData = [_stdout readDataOfLength:1];
+  byteData = [_shellStdout readDataOfLength:1];
   if (byteData.length < 1 || ((char *)byteData.bytes)[0] == '\0') {
    break;
   } else {
@@ -185,16 +185,10 @@
  return starbucks;
 }
 
-- (void)terminateAllRunningTasks {
- // Stop any running tasks
- BDSKTask *task;
- int i;
- for (i = 0; i < [_runningTasks count]; i++) {
-  task = [_runningTasks objectAtIndex:i];
-  if ([task isRunning])
-   [task terminate];
- }
- [_runningTasks removeAllObjects];
+- (void)terminateShell {
+ // Stop the shell
+ if ([_shellTask isRunning])
+  [_shellTask terminate];
 }
 
 - (BOOL)updateAppAtIndex:(NSInteger)index {
@@ -246,11 +240,10 @@
  self.allBackedUp = NO;
  self.anyBackedUp = NO;
  self.anyCorrupted = NO;
- [self terminateAllRunningTasks];
- _task = nil;
- _stdin = nil;
- _stdout = nil;
- _runningTasks = nil;
+ [self terminateShell];
+ _shellTask = nil;
+ _shellStdin = nil;
+ _shellStdout = nil;
  [super dealloc];
 }
 @end

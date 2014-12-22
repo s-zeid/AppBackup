@@ -42,10 +42,9 @@
  BOOL            anyBackedUp;
  BOOL            anyCorrupted;
  @private
- BDSKTask       *_task;
- NSFileHandle   *_stdin;
- NSFileHandle   *_stdout;
- NSMutableArray *_runningTasks;
+ BDSKTask       *_shellTask;
+ NSFileHandle   *_shellStdin;
+ NSFileHandle   *_shellStdout;
 }
 @property (retain) NSMutableArray *apps;
 @property (assign) BOOL            allBackedUp;
@@ -59,7 +58,7 @@
 - (NSDictionary *)runCmd:(NSString *)cmd;
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args;
 - (NSString *)starbucks;
-- (void)terminateAllRunningTasks;
+- (void)terminateShell;
 - (BOOL)updateAppAtIndex:(NSInteger)index;
 - (BOOL)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)updateBackupInfo;
