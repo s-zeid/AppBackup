@@ -59,7 +59,7 @@ int isdir(char *path) {
 
 void exit_if_not_dir(char *path) {
  if (!isdir(path)) {
-  printf("error: %s is not a directory\n", path);
+  fprintf(stderr, "FixPermissions: error: %s is not a directory\n", path);
   exit(EXIT_FAILURE);
  }
 }
