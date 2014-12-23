@@ -40,6 +40,7 @@ from iosapplist.container import ContainerRoot
 from appbackup import *
 from justifiedbool import *
 from util import *
+from . import __version__ as pkg_version
 
 
 __all__ = ["CLI", "Command", "main"]
@@ -52,6 +53,7 @@ def main(argv=sys.argv):
 class CLI(CLI):
  default_command = None
  program = "iosappbackup"
+ version = pkg_version
  description = "Backs up and restores the saved data and settings of" \
                " installed iOS App Store apps."
  
