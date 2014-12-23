@@ -76,7 +76,7 @@
    else if (((char *)ps1.bytes)[0] != '\0')
     NSLog(@"appbackup-cli did not output the correct prompt");
    NSLog(@"appbackup-cli failed to start properly");
-   [self terminateShell];
+   [self terminateShellAndWaitUntilExit];
    if (_gui != nil) {
     NSString *text = [NSString stringWithFormat:
                                 [_ s:@"error_shell_failed_to_start"],
@@ -262,6 +262,13 @@
 
 - (void)terminateShell {
  // Stop the shell
+ if ([_shellTask isRunning]) {
+  [_shellTask terminate];
+ }
+}
+
+- (void)terminateShellAndWaitUntilExit {
+ // Stop the shell and wait for it to exit
  if ([_shellTask isRunning]) {
   [_shellTask terminate];
   [_shellTask waitUntilExit];

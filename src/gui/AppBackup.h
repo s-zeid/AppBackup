@@ -64,6 +64,7 @@
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args;
 - (NSString *)starbucks;
 - (void)terminateShell;
+- (void)terminateShellAndWaitUntilExit;
 - (BOOL)updateAppAtIndex:(NSInteger)index;
 - (BOOL)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict;
 - (void)updateBackupInfo;
