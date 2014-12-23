@@ -114,8 +114,8 @@
 
 - (NSDictionary *)doAction:(NSString *)action
                   onApp:(NSDictionary *)app {
- NSString *data_uuid = [app objectForKey:@"data_uuid"];
- NSArray *args = [NSArray arrayWithObjects:/*@"--uuid", */data_uuid, nil];
+ NSString *bundle_id = [app objectForKey:@"bundle_id"];
+ NSArray *args = [NSArray arrayWithObjects:bundle_id, nil];
  NSDictionary *r = [self runCmd:action withArgs:args];
  return r;
 }
