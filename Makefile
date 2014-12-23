@@ -85,12 +85,13 @@ test:
 	ssh mobile@"${DEVICE}"
 
 sdist: src/python/setup.py
-	mkdir -p out/python/sdist/src
-	cp -a "$(dir $^)" out/python/sdist/src
+	mkdir -p out/python
+	rm -rf out/python/sdist
+	cp -a "$(dir $^)" out/python/sdist
 	cd out/python/sdist; \
-	 "$^" sdist && \
-	 rm -f ../"$$("$^" --name)"-*.tar.gz && \
-	 cp -a dist/"$$("$^" --fullname)".tar.gz ..
+	 "./$(notdir $^)" sdist && \
+	 rm -f ../"$$("./$(notdir $^)" --name)"-*.tar.gz && \
+	 cp -a dist/"$$("./$(notdir $^)" --fullname)".tar.gz ..
 	rm -rf out/python/sdist
 
 clean:
