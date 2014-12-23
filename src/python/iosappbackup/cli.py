@@ -34,7 +34,7 @@
 import os
 import sys
 
-from iosapplist.cli import CLI, Command, CommandCommand, output
+from iosapplist.cli import CLI, Command, ShellCommand, output
 from iosapplist.container import ContainerRoot
 
 from appbackup import *
@@ -46,7 +46,7 @@ __all__ = ["CLI", "Command", "main"]
 
 
 def main(argv=sys.argv):
- return CLI()(["command"] + argv[1:])
+ return CLI().start(argv[1:])
 
 
 class CLI(CLI):
@@ -76,21 +76,21 @@ class CLI(CLI):
   return self.__appbackup
 
 
-class CommandCommand(CommandCommand):
+class CommandCommand(ShellCommand):
  def add_args(self, p, cli):
-  parse_function = super(CommandCommand, self).add_args(p, cli)
+  parse_function = super(ShellCommand, self).add_args(p, cli)
   p.add_argument("--config-dir", "-c", default="", metavar='<path>',
                  help='The path to the AppBackup configuration directory'
                       ' (defaults to "<--root>/'
                       '../Library/Preferences/AppBackup").')
   return parse_function
  def main(self, cli):
-  output_generator = super(CommandCommand, self).main(cli)
+  output_generator = super(ShellCommand, self).main(cli)
   if cli.config_dir is None:
    cli.config_dir = self.options.config_dir
   return output_generator
 
-CLI.commands.register(CommandCommand)
+CLI.commands.register(ShellCommand)
 
 
 from iosapplist.cli.commands.python_repl import PythonReplCommand
@@ -134,7 +134,7 @@ class AppBackupCommands(Command):
   apps = self.extra
   if not len(apps) and not self.options.all:
    yield output.error("Please specify one or more apps, or use -a / --all.")
-   yield output.stop(2)
+   raise StopIteration(2)
   
   if not cli.appbackup.apps:
    cli.appbackup.apps.find_all()
@@ -174,7 +174,7 @@ class AppBackupCommands(Command):
      success = False
      yield output.error(u"%s: %s" % (app.friendly if app else i, result.reason))
    return_code = 0 if success else (1 if len(apps) == 1 else 0)
-  yield output.stop(return_code)
+  raise StopIteration(return_code)
 
 CLI.commands.register(AppBackupCommands)
 
@@ -188,7 +188,7 @@ class StarbucksCommand(Command):
  
  def main(self, cli):
   yield output.normal(AppBackup.starbucks())
-  yield output.stop(0)
+  raise StopIteration(0)
 
 CLI.commands.register(StarbucksCommand)
 

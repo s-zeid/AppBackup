@@ -36,7 +36,7 @@ setup(
  ],
  packages=find_packages(),
  install_requires=["argparse", "CFPropertyList", "simplejson"]
-                 +["iosapplist>=3.0dev19"],
+                 +["iosapplist>=3.0dev21"],
  entry_points={
   "console_scripts": [
     "iosappbackup=iosappbackup:main"
