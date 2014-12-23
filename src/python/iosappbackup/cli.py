@@ -76,7 +76,7 @@ class CLI(CLI):
   return self.__appbackup
 
 
-class CommandCommand(ShellCommand):
+class ShellCommand(ShellCommand):
  def add_args(self, p, cli):
   parse_function = super(ShellCommand, self).add_args(p, cli)
   p.add_argument("--config-dir", "-c", default="", metavar='<path>',
