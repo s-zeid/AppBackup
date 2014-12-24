@@ -134,6 +134,7 @@
 
 - (void)showAboutScreen:(id)sender {
  // Called when you tap the About button
+ NSLog(@"showing about screen");
  AboutScreenVC *aboutScreenVC = [[AboutScreenVC alloc] init];
  [self.navigationController pushViewController:aboutScreenVC animated:YES];
  [aboutScreenVC release];

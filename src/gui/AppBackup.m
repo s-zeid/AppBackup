@@ -71,7 +71,7 @@
                                    @"--robot=plist", @"shell", @"--null", nil];
   _shellTask.standardInput  = [NSPipe pipe];
   _shellTask.standardOutput = [NSPipe pipe];
-  NSLog(@"starting the shell using the command [\"%@\", \"%@\"]",
+  NSLog(@"starting the AppBackup shell using the command [\"%@\", \"%@\"]",
         _shellTask.launchPath,
         [_shellTask.arguments componentsJoinedByString:@"\", \""]);
   [_shellTask launch];
@@ -160,10 +160,10 @@
  [_runningCommandCondition unlock];
  _runningCommand = YES;
  if ([args count] > 0)
-  NSLog(@"running shell command [\"%@\", \"%@\"]", cmd,
+  NSLog(@"running AppBackup shell command [\"%@\", \"%@\"]", cmd,
         [args componentsJoinedByString:@"\", \""]);
  else
-  NSLog(@"running shell command [\"%@\"]", cmd);
+  NSLog(@"running AppBackup shell command [\"%@\"]", cmd);
  // Send command to the shell
  NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
                       arrayByAddingObjectsFromArray:args];

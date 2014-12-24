@@ -71,16 +71,17 @@
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl {
  if ([[nsurl scheme] isEqualToString:@"appbackup"]) {
   NSString *url = [nsurl absoluteString];
+  NSLog(@"launched by URL \"%@\"", url);
   if ([url isEqualToString:@"appbackup://about"])
    [self performSelector:@selector(showAboutScreen) withObject:nil
          afterDelay:0.0];
-  if ([url isEqualToString:@"appbackup://bad-behavior"]) {
+  else if ([url isEqualToString:@"appbackup://bad-behavior"]) {
    [self performSelector:@selector(showBadBehaviorScreen) withObject:nil
          afterDelay:0.0];
   } else if ([url isEqualToString:@"appbackup://test"] ||
-      [url isEqualToString:@"appbackup://starbucks"] ||
-      [url isEqualToString:@"appbackup://bnay"] ||
-      [url isEqualToString:@"appbackup://starbucks/bnay/or/emily"]) {
+             [url isEqualToString:@"appbackup://starbucks"] ||
+             [url isEqualToString:@"appbackup://bnay"] ||
+             [url isEqualToString:@"appbackup://starbucks/bnay/or/emily"]) {
    [self performSelector:@selector(showTestScreen) withObject:nil
          afterDelay:0.0];
   }
@@ -95,6 +96,7 @@
 
 - (void)showAboutScreen {
  // Show about screen
+ NSLog(@"showing about screen");
  UIViewController *vc = [[AboutScreenVC alloc] init];
  [self.navigationController pushViewController:vc animated:YES];
  [vc release];
@@ -109,6 +111,7 @@
 }
 
 - (void)showTestScreen {
+ NSLog(@"showing test screen");
  // Show test screen
  UIViewController *vc = [[TestScreenVC alloc] init];
  [self.navigationController pushViewController:vc animated:YES];
