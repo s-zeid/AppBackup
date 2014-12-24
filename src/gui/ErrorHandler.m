@@ -50,7 +50,7 @@
          [NSString stringWithFormat:@"%@ version %@", \
                     PRODUCT_NAME, PRODUCT_VERSION]
 
-#define LOG_ROOT @"/var/mobile/Library/Preferences/AppBackup/logs"
+#define LOG_ROOT CONFIG_ROOT @"/logs"
 #define LOG_PATH_APPBACKUPGUI   LOG_ROOT @"/AppBackupGUI.log"
 #define LOG_PATH_FIXPERMISSIONS LOG_ROOT @"/FixPermissions.log"
 

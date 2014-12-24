@@ -29,21 +29,37 @@
  * 
  */
 
-// Utility functions (header)
+// Bad behavior testing screen view controller (header)
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
+#import "MBProgressHUD.h"
 
-#define PRODUCT_NAME    [[NSBundle mainBundle] \
-                         objectForInfoDictionaryKey:@"CFBundleDisplayName"]
-#define PRODUCT_VERSION [[NSBundle mainBundle] \
-                         objectForInfoDictionaryKey:@"CFBundleVersion"]
-
-#define CONFIG_ROOT @"/var/mobile/Library/Preferences/AppBackup"
+#import "AppBackup.h"
 
 
-@interface _ : NSObject {}
-+ (NSString *)s:(NSString *)s;
-+ (NSString *)bundledFilePath:(NSString *)path;
-+ (NSString *)localizeDate:(NSString *)date;
+@interface BadBehaviorVC : UIViewController
+           <
+            UITableViewDataSource, UITableViewDelegate,
+            UIAlertViewDelegate,
+            MBProgressHUDDelegate
+           > {
+ UITableView *table;
+ @private
+ AppBackup     *_appbackup;
+ MBProgressHUD *_hud;
+}
+@property (retain) UITableView *table;
+- (id)initWithAppBackup:(AppBackup *)appbackup;
+- (void)loadView;
+- (void)viewDidAppear:(BOOL)animated;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;
+- (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s;
+- (UITableViewCell *)tableView:(UITableView *)tv
+                     cellForRowAtIndexPath:(NSIndexPath *)ip;
+- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip;
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)cellID;
+- (void)alertView:(UIAlertView *)alertView
+        didDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void)dealloc;
 @end

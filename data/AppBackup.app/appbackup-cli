@@ -31,6 +31,19 @@
 
 # CLI runner
 
+# bad behavior testing
+CONFIG_ROOT="/var/mobile/Library/Preferences/AppBackup"
+FAIL_TO_START_COOKIE="$CONFIG_ROOT/bad-behavior-make-shell-fail-to-start"
+if [ x"$(cat "$FAIL_TO_START_COOKIE" 2>/dev/null)" = x"please" ]; then
+ rm "$FAIL_TO_START_COOKIE"
+ if [ $? -eq 0 ]; then
+  echo "appbackup-cli: failing to start on user request" >&2
+  exit 64
+ else
+  echo "appbackup-cli: NOT failing to start on user request" >&2
+ fi
+fi
+
 export PYTHONPATH="$(dirname "$0")/python:"
 export IOSAPPLIST_CLI_DEBUG=
 

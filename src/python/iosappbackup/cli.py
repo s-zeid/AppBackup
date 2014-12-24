@@ -31,7 +31,9 @@
 
 """A command-line interface to AppBackup."""
 
+import argparse
 import os
+import signal
 import sys
 
 from iosapplist.cli import CLI, Command, ShellCommand, output
@@ -179,6 +181,35 @@ class AppBackupCommands(Command):
   raise StopIteration(return_code)
 
 CLI.commands.register(AppBackupCommands)
+
+
+class BadBehaviorCommand(Command):
+ """Used by the GUI to test its error handling capabilities."""
+ names = ["--bad-behavior"]
+ show_in_help = False
+ 
+ actions = ["exit-while-running-command", "report-traceback"]
+
+ def add_args(self, p, cli):
+  p.add_argument("action", help="The type of bad behavior to commit.")
+  p.formatter_class = argparse.RawDescriptionHelpFormatter
+  p.epilog = "actions:\n" + "\n".join(["  " + action for action in self.actions])
+ 
+ def main(self, cli):
+  action = self.options.action
+  if action not in self.actions:
+   yield output.error("%s is not a valid action" % actions)
+   yield output.error("Run `%s --help` for a list of valid actions." % self.argv[0])
+  
+  if action == "exit-while-running-command":
+   # the CLI engine catches SystemExit's, so we can't use sys.exit() for this
+   os.kill(os.getpid(), signal.SIGTERM)
+  elif action == "report-traceback":
+   raise RuntimeError("test error plz ignore kthxbai")
+  
+  raise StopIteration(0)
+
+CLI.commands.register(BadBehaviorCommand)
 
 
 class StarbucksCommand(Command):

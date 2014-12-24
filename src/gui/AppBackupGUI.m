@@ -37,6 +37,7 @@
 #import "AppBackup.h"
 #import "AppListVC.h"
 #import "AboutScreenVC.h"
+#import "BadBehaviorVC.h"
 #import "TestScreenVC.h"
 #import "util.h"
 
@@ -73,7 +74,10 @@
   if ([url isEqualToString:@"appbackup://about"])
    [self performSelector:@selector(showAboutScreen) withObject:nil
          afterDelay:0.0];
-  if ([url isEqualToString:@"appbackup://test"] ||
+  if ([url isEqualToString:@"appbackup://bad-behavior"]) {
+   [self performSelector:@selector(showBadBehaviorScreen) withObject:nil
+         afterDelay:0.0];
+  } else if ([url isEqualToString:@"appbackup://test"] ||
       [url isEqualToString:@"appbackup://starbucks"] ||
       [url isEqualToString:@"appbackup://bnay"] ||
       [url isEqualToString:@"appbackup://starbucks/bnay/or/emily"]) {
@@ -92,6 +96,14 @@
 - (void)showAboutScreen {
  // Show about screen
  UIViewController *vc = [[AboutScreenVC alloc] init];
+ [self.navigationController pushViewController:vc animated:YES];
+ [vc release];
+}
+
+- (void)showBadBehaviorScreen {
+ // Show bad behavior testing screen
+ NSLog(@"showing bad behavior screen");
+ UIViewController *vc = [[BadBehaviorVC alloc] initWithAppBackup:self.appbackup];
  [self.navigationController pushViewController:vc animated:YES];
  [vc release];
 }
