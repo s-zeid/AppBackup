@@ -147,9 +147,10 @@
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
  if ([args count] > 0)
-  NSLog(@"running `%@ %@`", cmd, [args componentsJoinedByString:@" "]);
+  NSLog(@"running shell command [\"%@\", \"%@\"]", cmd,
+        [args componentsJoinedByString:@"\", \""]);
  else
-  NSLog(@"running `%@`", cmd);
+  NSLog(@"running shell command [\"%@\"]", cmd);
  // Send command to the shell
  NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
                       arrayByAddingObjectsFromArray:args];
