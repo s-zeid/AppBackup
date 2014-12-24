@@ -49,6 +49,8 @@
  NSFileHandle   *_shellStdin;
  NSFileHandle   *_shellStdout;
  NSNumber       *_shellReturned;
+ BOOL            _runningCommand;
+ NSCondition    *_runningCommandCondition;
 }
 @property (retain)   NSMutableArray *apps;
 @property (assign)   BOOL            allBackedUp;

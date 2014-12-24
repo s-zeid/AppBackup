@@ -62,6 +62,8 @@
   _gui = gui;
   _window = window;
   _shellReturned = nil;
+  _runningCommand = NO;
+  _runningCommandCondition = [NSCondition new];
   // Start the CLI shell
   _shellTask = [[BDSKTask alloc] init];
   _shellTask.launchPath = [_ bundledFilePath:@"appbackup-cli"];
@@ -152,6 +154,11 @@
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
+ [_runningCommandCondition lock];
+ while (_runningCommand != NO)
+  [_runningCommandCondition wait];
+ [_runningCommandCondition unlock];
+ _runningCommand = YES;
  if ([args count] > 0)
   NSLog(@"running shell command [\"%@\", \"%@\"]", cmd,
         [args componentsJoinedByString:@"\", \""]);
@@ -243,6 +250,8 @@
    }
   }
  }
+ _runningCommand = NO;
+ [_runningCommandCondition signal];
  // Return result
  return resultDict;
 }
@@ -371,6 +380,7 @@
  self.anyBackedUp = NO;
  self.anyCorrupted = NO;
  [self terminateShell];
+ _runningCommandCondition = nil;
  _shellReturned = nil;
  _shellTask = nil;
  _shellStdin = nil;
