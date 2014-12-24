@@ -68,7 +68,11 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	touch "${DEB_TMP}"/Applications/AppBackup.app/about.html
 	src/gui/about.html/make-about-html.py > "${DEB_TMP}"/Applications/AppBackup.app/about.html
 	cp -a src/gui/about.html/basic.css "${DEB_TMP}"/Applications/AppBackup.app/basic.css
-	dpkg-deb -b "${DEB_TMP}" out
+	true; \
+	 name="$$(grep '^Name:[ \t][ \t]*' data/DEBIAN/control | sed -e 's/^Name:[ \t][ \t]*//g')" ; \
+	 version="$$(grep '^Version:[ \t][ \t]*' data/DEBIAN/control | sed -e 's/^Version:[ \t][ \t]*//g')" ; \
+	 arch="$$(grep '^Architecture:[ \t][ \t]*' data/DEBIAN/control | sed -e 's/^Architecture:[ \t][ \t]*//g')" ; \
+	 dpkg-deb -b "${DEB_TMP}" "out/$${name}_$${version}_$${arch}.deb"
 	rm -r "${DEB_TMP}"
 
 install:
