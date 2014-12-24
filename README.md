@@ -125,7 +125,7 @@ If you wish to use `make install` or `make test`, make sure your device
 has an SSH server installed, and CHANGE THE ROOT AND MOBILE USERS' PASSWORDS.
 You will also need to manually install the AppBackup package dependencies:
 
-    $ sudo apt-get install bash coreutils-bin python
+    $ sudo apt-get install bash coreutils-bin python setuptools
 
 The Python version on your device must be at 2.5, 2.6, or 2.7.
 

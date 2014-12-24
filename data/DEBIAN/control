@@ -10,4 +10,4 @@ Icon: https://uploads.s.zeid.me/AppBackup/icon.png
 Maintainer: Scott Zeid <support@s.zeid.me>
 Author: Scott Zeid <support@s.zeid.me>
 Section: Utilities
-Depends: bash, coreutils, python (>= 2.5), python (<< 3.0)
+Depends: bash, coreutils, python (>= 2.5), python (<< 3.0), setuptools
