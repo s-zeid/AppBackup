@@ -49,6 +49,10 @@
 }
 
 - (id)initWithGUI:(UIApplication *)gui {
+ return [self initWithGUI:gui withWindow:nil];
+}
+
+- (id)initWithGUI:(UIApplication *)gui withWindow:(UIWindow *)window {
  self = [super init];
  if (self) {
   self.apps = [NSMutableArray array];
@@ -56,6 +60,7 @@
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
   _gui = gui;
+  _window = window;
   _shellReturned = nil;
   // Start the CLI shell
   _shellTask = [[BDSKTask alloc] init];
@@ -84,7 +89,7 @@
     NSString *text = [NSString stringWithFormat:
                                 [_ s:@"error_shell_failed_to_start"],
                                 PRODUCT_NAME];
-    [self _displayShellExitErrorWithText:text];
+    [self _displayShellExitErrorWithText:text usingWindow:YES];
    }
   } else
    NSLog(@"appbackup-cli started properly");
@@ -218,7 +223,7 @@
    NSString *text = [NSString stringWithFormat:
                                [_ s:@"error_shell_terminated_improperly"],
                                PRODUCT_NAME];
-   ErrorHandler *eh = [self _displayShellExitErrorWithText:text];
+   ErrorHandler *eh = [self _displayShellExitErrorWithText:text usingWindow:NO];
    [eh waitForErrorToBeDismissed];
   }
  }
@@ -327,7 +332,8 @@
  }
 }
 
-- (ErrorHandler *)_displayShellExitErrorWithText:(NSString *)text {
+- (ErrorHandler *)_displayShellExitErrorWithText:(NSString *)text
+                                     usingWindow:(BOOL)useWindow {
  NSString *error = [NSString stringWithFormat:
                               @"(appbackup-cli exited with return code %d)",
                               [self.shellReturned integerValue]];
@@ -336,8 +342,13 @@
                          withTitle:[_ s:@"error_occurred_fatal"]
                           withText:text
                            isFatal:YES];
- [eh performSelectorOnMainThread:@selector(showAlert)
-     withObject:nil waitUntilDone:YES];
+ if (useWindow) {
+  [eh performSelectorOnMainThread:@selector(showAlertWithWindow:)
+      withObject:_window waitUntilDone:YES];
+ } else {
+  [eh performSelectorOnMainThread:@selector(showAlert)
+      withObject:nil waitUntilDone:YES];
+ }
  return eh;
 }
 

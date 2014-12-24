@@ -44,6 +44,7 @@
  BOOL            anyCorrupted;
  @private
  UIApplication  *_gui;
+ UIWindow       *_window;
  BDSKTask       *_shellTask;
  NSFileHandle   *_shellStdin;
  NSFileHandle   *_shellStdout;
@@ -56,6 +57,7 @@
 @property (readonly) NSNumber       *shellReturned;
 - (id)init;
 - (id)initWithGUI:(UIApplication *)gui;
+- (id)initWithGUI:(UIApplication *)gui withWindow:(UIWindow *)window;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;
 - (NSDictionary *)doAction:(NSString *)action onApp:(NSDictionary *)app;

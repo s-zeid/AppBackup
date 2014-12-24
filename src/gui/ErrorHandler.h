@@ -84,6 +84,12 @@
  */
 - (void)showAlert;
 
+/**
+ * Shows a UIAlertView for the error on the main thread, adds it as a subview
+ * to the given window, and makes the window key and visible.
+ */
+- (void)showAlertWithWindow:(UIWindow *)window;
+
 /** Blocks until the error is dismissed by the user. */
 - (void)waitForErrorToBeDismissed;
 

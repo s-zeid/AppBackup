@@ -75,12 +75,16 @@
 }
 
 - (void)showAlert {
- [self performSelectorOnMainThread:
-        @selector(_showAlertCallback)
-       withObject: nil waitUntilDone:YES];
+ return [self showAlertWithWindow:nil];
 }
 
-- (void)_showAlertCallback {
+- (void)showAlertWithWindow:(UIWindow *)window {
+ [self performSelectorOnMainThread:
+	@selector(_showAlertCallbackWithWindow:)
+       withObject:window waitUntilDone:YES];
+}
+
+- (void)_showAlertCallbackWithWindow:(UIWindow*)window {
  _screen = [[UIAlertView alloc] init];
  _screen.delegate = self;
  _screen.title = _title;
@@ -95,6 +99,10 @@
  if (!_isFatal) {
   _cancelButtonIndex = [_screen addButtonWithTitle:[_ s:@"ok"]];
   [_screen setCancelButtonIndex:_cancelButtonIndex];
+ }
+ if (window != nil) {
+  [window addSubview:_screen];
+  [window makeKeyAndVisible];
  }
  [_screen show];
  [self retain];
