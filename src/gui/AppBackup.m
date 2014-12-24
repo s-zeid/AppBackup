@@ -267,6 +267,7 @@
 - (void)terminateShell {
  // Stop the shell
  if ([_shellTask isRunning]) {
+  NSLog(@"terminating the shell");
   [_shellTask terminate];
  }
 }
@@ -274,7 +275,9 @@
 - (void)terminateShellAndWaitUntilExit {
  // Stop the shell and wait for it to exit
  if ([_shellTask isRunning]) {
+  NSLog(@"terminating the shell");
   [_shellTask terminate];
+  NSLog(@"waiting for the shell to exit");
   [_shellTask waitUntilExit];
  }
 }
