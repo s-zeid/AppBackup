@@ -6,6 +6,7 @@ Changes in 3.0 "Maserati" (YYYY-MM-DD):
     · /var/mobile/Library/Preferences/AppBackup/logs/AppBackupGUI.log
     · /var/mobile/Library/Preferences/AppBackup/logs/FixPermissions.log
    If you email me about an error, please be sure to include these log files if you aren't sending the email from within the app.
+ • Added a new icon which may look more in place on iOS 7+ devices.
  • Use a new URL for the app's page on my site.
  • Use HTTPS for links to the Web site.
  • The about page is now valid HTML 5 and has a somewhat refined appearance.
