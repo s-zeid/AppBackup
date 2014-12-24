@@ -86,7 +86,8 @@
                                 PRODUCT_NAME];
     [self _displayShellExitErrorWithText:text];
    }
-  }
+  } else
+   NSLog(@"appbackup-cli started properly");
  }
  return self;
 }
