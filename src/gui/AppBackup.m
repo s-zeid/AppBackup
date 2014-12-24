@@ -64,6 +64,9 @@
                                    @"--robot=plist", @"shell", @"--null", nil];
   _shellTask.standardInput  = [NSPipe pipe];
   _shellTask.standardOutput = [NSPipe pipe];
+  NSLog(@"starting the shell using the command [\"%@\", \"%@\"]",
+        _shellTask.launchPath,
+        [_shellTask.arguments componentsJoinedByString:@"\", \""]);
   [_shellTask launch];
   _shellStdin  = [[_shellTask standardInput]  fileHandleForWriting];
   _shellStdout = [[_shellTask standardOutput] fileHandleForReading];
