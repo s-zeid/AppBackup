@@ -86,7 +86,11 @@
    else if (((char *)ps1.bytes)[0] != '\0')
     NSLog(@"appbackup-cli did not output the correct prompt");
    NSLog(@"appbackup-cli failed to start properly");
+   BOOL wasRunning = self.shellReturned == nil;
    [self terminateShellAndWaitUntilExit];
+   if (!wasRunning)
+    NSLog(@"appbackup-cli exited with return code %d",
+          [self.shellReturned integerValue]);
    if (_gui != nil) {
     NSString *text = [NSString stringWithFormat:
                                 [_ s:@"error_shell_failed_to_start"],
@@ -163,6 +167,8 @@
  // Make sure the shell is actually running
  if (self.shellReturned != nil) {
   NSLog(@"the AppBackup shell is not running!");
+  NSLog(@"it exited with return code %d",
+        [self.shellReturned integerValue]);
   if (_gui != nil) {
    NSString *text = [NSString stringWithFormat:
                                [_ s:@"error_shell_not_running"],
@@ -232,6 +238,8 @@
  }
  // Display error if the shell exited
  if (self.shellReturned != nil) {
+  NSLog(@"appbackup-cli exited with return code %d",
+        [self.shellReturned integerValue]);
   if ([tracebacks count] > 0) {
    // log caught tracebacks first
    NSLog(@"command also reported one or more Python errors:");
@@ -274,8 +282,6 @@
   return _shellReturned;
  if (![_shellTask isRunning]) {
   _shellReturned = [NSNumber numberWithInt:_shellTask.terminationStatus];
-  NSLog(@"appbackup-cli exited with return code %d",
-        [_shellReturned integerValue]);
   return _shellReturned;
  }
  return nil;
@@ -307,6 +313,8 @@
   [_shellTask terminate];
   NSLog(@"waiting for the shell to exit");
   [_shellTask waitUntilExit];
+  NSLog(@"shell exited with return code %d",
+        [self.shellReturned integerValue]);
  }
 }
 
