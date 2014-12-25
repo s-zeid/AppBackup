@@ -154,17 +154,30 @@
 }
 
 - (NSDictionary *)runCmd:(NSString *)cmd withArgs:(NSArray *)args {
+ // Wait for other commands to finish
  [_runningCommandCondition lock];
  while (_runningCommand != NO)
   [_runningCommandCondition wait];
  [_runningCommandCondition unlock];
  _runningCommand = YES;
+ // Make sure the shell is actually running
+ if (self.shellReturned != nil) {
+  NSLog(@"the AppBackup shell is not running!");
+  if (_gui != nil) {
+   NSString *text = [NSString stringWithFormat:
+                               [_ s:@"error_shell_not_running"],
+                               PRODUCT_NAME];
+   ErrorHandler *eh = [self _displayShellExitErrorWithText:text usingWindow:NO];
+   [eh waitForErrorToBeDismissed];
+  }
+  return nil;
+ }
+ // Send command to the shell
  if ([args count] > 0)
   NSLog(@"running AppBackup shell command [\"%@\", \"%@\"]", cmd,
         [args componentsJoinedByString:@"\", \""]);
  else
   NSLog(@"running AppBackup shell command [\"%@\"]", cmd);
- // Send command to the shell
  NSArray *cmdArray = [[NSArray arrayWithObjects:cmd, nil]
                       arrayByAddingObjectsFromArray:args];
  NSData *cmdPlist = [NSPropertyListSerialization
