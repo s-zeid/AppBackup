@@ -41,13 +41,21 @@
 #import "BadBehaviorVC.h"
 
 
+#define  SECTION_SHELL           0
+#define   HEADER_SHELL           @"Make the CLI shell..."
+#define NUM_ROWS_SHELL           3
 #define  ROW_SHELL_FAIL_TO_START 0
 #define TEXT_SHELL_FAIL_TO_START @"fail to start"
 #define  ROW_SHELL_EXIT          1
 #define TEXT_SHELL_EXIT          @"exit while running a command"
 #define  ROW_SHELL_TRACEBACK     2
 #define TEXT_SHELL_TRACEBACK     @"report a Python traceback"
-#define  NUM_ROWS 3
+
+#define  SECTION_OTHER           1
+#define   HEADER_OTHER           @"Other"
+#define NUM_ROWS_OTHER           1
+#define  ROW_OTHER_STOP_SHELL    0
+#define TEXT_OTHER_STOP_SHELL    @"Stop the CLI shell"
 
 
 @implementation BadBehaviorVC
@@ -92,15 +100,29 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tv {
- return 1;
+ return 2;
 }
 
 - (NSString *)tableView:(UITableView *)tv titleForHeaderInSection:(NSInteger)s {
- return @"Make the CLI shell...";
+ switch (s) {
+  case SECTION_SHELL:
+   return HEADER_SHELL;
+  case SECTION_OTHER:
+   return HEADER_OTHER;
+  default:
+   return @"";
+ }
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
- return NUM_ROWS;
+ switch (s) {
+  case SECTION_SHELL:
+   return NUM_ROWS_SHELL;
+  case SECTION_OTHER:
+   return NUM_ROWS_OTHER;
+  default:
+   return 0;
+ }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv
@@ -114,12 +136,24 @@
  UILabel *label;
  // Name label
  label = (UILabel *)[cell viewWithTag:1];
- if      (ip.row == ROW_SHELL_FAIL_TO_START)
-  label.text = TEXT_SHELL_FAIL_TO_START;
- else if (ip.row == ROW_SHELL_EXIT)
-  label.text = TEXT_SHELL_EXIT;
- else if (ip.row == ROW_SHELL_TRACEBACK)
-  label.text = TEXT_SHELL_TRACEBACK;
+ switch (ip.section) {
+  case SECTION_SHELL:
+   switch (ip.row) {
+    case ROW_SHELL_FAIL_TO_START:
+     label.text = TEXT_SHELL_FAIL_TO_START; break;
+    case ROW_SHELL_EXIT:
+     label.text = TEXT_SHELL_EXIT; break;
+    case ROW_SHELL_TRACEBACK:
+     label.text = TEXT_SHELL_TRACEBACK; break;
+   }
+   break;
+  case SECTION_OTHER:
+   switch (ip.row) {
+    case ROW_OTHER_STOP_SHELL:
+     label.text = TEXT_OTHER_STOP_SHELL; break;
+   }
+   break;
+ }
  // Done!
  return cell;
 }
@@ -127,27 +161,43 @@
 - (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)ip {
  [tv deselectRowAtIndexPath:ip animated:YES];
  NSString *action = nil;
- if        (ip.row == ROW_SHELL_FAIL_TO_START) {
-  action = nil;
-  // write "crash at startup" cookie file
-  NSString *magicWord = @"please" @"\n";
-  [[NSFileManager defaultManager]
-   createFileAtPath:CONFIG_ROOT @"/bad-behavior-make-shell-fail-to-start"
-   contents:[magicWord dataUsingEncoding:NSUTF8StringEncoding]
-   attributes:nil];
-  // request restart
-  UIAlertView *alert = [[UIAlertView alloc] init];
-  alert.title = [NSString stringWithFormat:@"Please restart %@.", PRODUCT_NAME];
-  alert.delegate = self;
-  [alert setCancelButtonIndex:[alert addButtonWithTitle:[_ s:@"ok"]]];
-  [alert show];
-  [alert release];
- } else if (ip.row == ROW_SHELL_EXIT) {
-  // run test command
-  action = @"exit-while-running-command";
- } else if (ip.row == ROW_SHELL_TRACEBACK) {
-  // run test command
-  action = @"report-traceback";
+ switch (ip.section) {
+  case SECTION_SHELL:
+   switch (ip.row) {
+    case ROW_SHELL_FAIL_TO_START:
+     action = nil;
+     // write "crash at startup" cookie file
+     NSString *magicWord = @"please" @"\n";
+     [[NSFileManager defaultManager]
+      createFileAtPath:CONFIG_ROOT @"/bad-behavior-make-shell-fail-to-start"
+      contents:[magicWord dataUsingEncoding:NSUTF8StringEncoding]
+      attributes:nil];
+     // request restart
+     UIAlertView *alert = [[UIAlertView alloc] init];
+     alert.title = [NSString stringWithFormat:@"Please restart %@.", PRODUCT_NAME];
+     alert.delegate = self;
+     [alert setCancelButtonIndex:[alert addButtonWithTitle:[_ s:@"ok"]]];
+     [alert show];
+     [alert release];
+     break;
+    case ROW_SHELL_EXIT:
+     // run test command
+     action = @"exit-while-running-command";
+     break;
+    case ROW_SHELL_TRACEBACK:
+     // run test command
+     action = @"report-traceback";
+     break;
+   }
+   break;
+  case SECTION_OTHER:
+   switch (ip.row) {
+    case ROW_OTHER_STOP_SHELL:
+     action = nil;
+     [self terminateShellAndWaitUntilExit];
+     break;
+   }
+   break;
  }
  if (action != nil)
   [self runBadBehaviorCommandWithArgs:[NSArray arrayWithObjects:action, nil]];
@@ -169,6 +219,19 @@
 
 - (void)_runBadBehaviorCommandCallbackWithArgs:(NSArray *)args {
  [_appbackup runCmd:@"--bad-behavior" withArgs:args];
+}
+
+- (void)terminateShellAndWaitUntilExit {
+ _hud = [[MBProgressHUD alloc] initWithWindow:self.view.window];
+ _hud.delegate = self;
+ _hud.labelText = [_ s:@"please_wait"];
+ [self.view.window addSubview:_hud];
+ [_hud showWhileExecuting:@selector(_terminateShellAndWaitUntilExitCallback)
+       onTarget:self withObject:nil animated:YES];
+}
+
+- (void)_terminateShellAndWaitUntilExitCallback {
+ [_appbackup terminateShellAndWaitUntilExit];
 }
 
 - (void)hideHUD {
