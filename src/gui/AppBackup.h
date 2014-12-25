@@ -43,23 +43,25 @@
  BOOL            anyBackedUp;
  BOOL            anyCorrupted;
  @private
- UIApplication  *_gui;
- UIWindow       *_window;
- BDSKTask       *_shellTask;
- NSFileHandle   *_shellStdin;
- NSFileHandle   *_shellStdout;
- NSNumber       *_shellReturned;
- BOOL            _runningCommand;
- NSCondition    *_runningCommandCondition;
+ UIViewController *_vc;
+ UIWindow         *_window;
+ BDSKTask         *_shellTask;
+ NSFileHandle     *_shellStdin;
+ NSFileHandle     *_shellStdout;
+ NSNumber         *_shellReturned;
+ BOOL              _runningCommand;
+ NSCondition      *_runningCommandCondition;
 }
-@property (retain)   NSMutableArray *apps;
-@property (assign)   BOOL            allBackedUp;
-@property (assign)   BOOL            anyBackedUp;
-@property (assign)   BOOL            anyCorrupted;
-@property (readonly) NSNumber       *shellReturned;
+
+@property (retain)   UIViewController *vc;
+@property (retain)   NSMutableArray   *apps;
+@property (assign)   BOOL              allBackedUp;
+@property (assign)   BOOL              anyBackedUp;
+@property (assign)   BOOL              anyCorrupted;
+@property (readonly) NSNumber         *shellReturned;
+
 - (id)init;
-- (id)initWithGUI:(UIApplication *)gui;
-- (id)initWithGUI:(UIApplication *)gui withWindow:(UIWindow *)window;
+- (id)initWithVC:(UIViewController *)vc;
 - (NSString *)backupTimeTextForApp:(NSDictionary *)app;
 - (NSDictionary *)doActionOnAllApps:(NSString *)action;
 - (NSDictionary *)doAction:(NSString *)action onApp:(NSDictionary *)app;

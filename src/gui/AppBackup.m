@@ -45,22 +45,17 @@
 @synthesize anyCorrupted;
 
 - (id)init {
- return [self initWithGUI:nil];
+ return [self initWithVC:nil];
 }
 
-- (id)initWithGUI:(UIApplication *)gui {
- return [self initWithGUI:gui withWindow:nil];
-}
-
-- (id)initWithGUI:(UIApplication *)gui withWindow:(UIWindow *)window {
+- (id)initWithVC:(UIViewController *)vc {
  self = [super init];
  if (self) {
   self.apps = [NSMutableArray array];
   self.allBackedUp = NO;
   self.anyBackedUp = NO;
   self.anyCorrupted = NO;
-  _gui = gui;
-  _window = window;
+  _vc = vc;
   _shellReturned = nil;
   _runningCommand = NO;
   _runningCommandCondition = [NSCondition new];
@@ -91,11 +86,13 @@
    if (!wasRunning)
     NSLog(@"appbackup-cli exited with return code %d",
           [self.shellReturned integerValue]);
-   if (_gui != nil) {
+   if (_vc != nil) {
     NSString *text = [NSString stringWithFormat:
                                 [_ s:@"error_shell_failed_to_start"],
                                 PRODUCT_NAME];
-    [self _displayShellExitErrorWithText:text usingWindow:YES];
+    if (_vc.view != nil && _vc.view.window != nil)
+     [_vc.view.window makeKeyAndVisible];
+    [self _displayShellExitErrorWithText:text];
    }
   } else
    NSLog(@"appbackup-cli started properly");
@@ -169,11 +166,11 @@
   NSLog(@"the AppBackup shell is not running!");
   NSLog(@"it exited with return code %d",
         [self.shellReturned integerValue]);
-  if (_gui != nil) {
+  if (_vc != nil) {
    NSString *text = [NSString stringWithFormat:
                                [_ s:@"error_shell_not_running"],
                                PRODUCT_NAME];
-   ErrorHandler *eh = [self _displayShellExitErrorWithText:text usingWindow:NO];
+   ErrorHandler *eh = [self _displayShellExitErrorWithText:text];
    [eh waitForErrorToBeDismissed];
   }
   return nil;
@@ -247,17 +244,17 @@
     NSLog(@"%@", [tracebacks objectAtIndex:i]);
    }
   }
-  if (_gui != nil) {
+  if (_vc != nil) {
    NSString *text = [NSString stringWithFormat:
                                [_ s:@"error_shell_terminated_improperly"],
                                PRODUCT_NAME];
-   ErrorHandler *eh = [self _displayShellExitErrorWithText:text usingWindow:NO];
+   ErrorHandler *eh = [self _displayShellExitErrorWithText:text];
    [eh waitForErrorToBeDismissed];
   }
  }
  // Otherwise, display Python tracebacks if there are any
  else if ([tracebacks count] > 0) {
-  if (_gui != nil) {
+  if (_vc != nil) {
    NSLog(@"command reported one or more Python errors:  (displayed to user)");
    NSString *text = [NSString stringWithFormat:
                                [_ s:@"error_unexpected_nonfatal"],
@@ -362,23 +359,18 @@
  }
 }
 
-- (ErrorHandler *)_displayShellExitErrorWithText:(NSString *)text
-                                     usingWindow:(BOOL)useWindow {
+- (ErrorHandler *)_displayShellExitErrorWithText:(NSString *)text {
  NSString *error = [NSString stringWithFormat:
                               @"(appbackup-cli exited with return code %d)",
                               [self.shellReturned integerValue]];
  ErrorHandler *eh = [[ErrorHandler alloc]
-                     initWithError:error
+                        initWithVC:_vc
+                         withError:error
                          withTitle:[_ s:@"error_occurred_fatal"]
                           withText:text
                            isFatal:YES];
- if (useWindow) {
-  [eh performSelectorOnMainThread:@selector(showAlertWithWindow:)
-      withObject:_window waitUntilDone:YES];
- } else {
-  [eh performSelectorOnMainThread:@selector(showAlert)
-      withObject:nil waitUntilDone:YES];
- }
+ [eh performSelectorOnMainThread:@selector(showAlert)
+     withObject:nil waitUntilDone:YES];
  return eh;
 }
 
@@ -386,10 +378,11 @@
                                  withText:(NSString *)text {
  NSString *error = [tracebacks componentsJoinedByString:@"\n"];
  ErrorHandler *eh = [[ErrorHandler alloc]
-                      initWithError:error
-                          withTitle:[_ s:@"error_occurred"]
-                           withText:text
-                            isFatal:NO];
+                        initWithVC:_vc
+                         withError:error
+                         withTitle:[_ s:@"error_occurred"]
+                          withText:text
+                           isFatal:NO];
  [eh performSelectorOnMainThread:@selector(showAlert)
      withObject:nil waitUntilDone:YES];
  return eh;
@@ -406,6 +399,7 @@
  _shellTask = nil;
  _shellStdin = nil;
  _shellStdout = nil;
+ _vc = nil;
  [super dealloc];
 }
 @end

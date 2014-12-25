@@ -52,19 +52,24 @@
  // Create the window and navigation controller.
  self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]
                 autorelease];
+ UIViewController *tmpVC = [[UIViewController alloc] init];
+ [window addSubview:tmpVC.view];
  // Start up the AppBackup CLI bridge
- self.appbackup = [[[AppBackup alloc] initWithGUI:self withWindow:window]
-                   autorelease];
+ self.appbackup = [[[AppBackup alloc] initWithVC:tmpVC] autorelease];
  if (self.appbackup.shellReturned == nil) {
   // Set up the navigation and root view controllers
-  UIViewController *rootVC = [[AppListVC alloc] initWithAppBackup:appbackup];
+  UIViewController *appListVC = [[AppListVC alloc] initWithAppBackup:appbackup];
   self.navigationController = [[[UINavigationController alloc]
-                                initWithRootViewController:rootVC] autorelease];
-  [rootVC release];
+                                initWithRootViewController:appListVC] autorelease];
+  [appListVC release];
+  self.appbackup.vc = navigationController;
+  [tmpVC.view removeFromSuperview];
+  [tmpVC release];
   [window addSubview:navigationController.view];
   [window makeKeyAndVisible];
+  [navigationController viewDidAppear:NO];
  }
- // AppBackup's initWithGUI:window: will set up the window if it doesn't start
+ // AppBackup's initWithVC: will set up the window if it doesn't start
  // properly.
 }
 

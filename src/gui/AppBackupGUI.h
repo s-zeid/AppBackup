@@ -40,9 +40,11 @@
  AppBackup              *appbackup;
  UINavigationController *navigationController;
 }
+
 @property (retain) UIWindow               *window;
 @property (retain) AppBackup              *appbackup;
 @property (retain) UINavigationController *navigationController;
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl;
 - (void)applicationWillTerminate:(UIApplication *)application;

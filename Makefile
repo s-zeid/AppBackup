@@ -8,6 +8,7 @@ FRAMEWORKS = -framework Foundation \
 	     -framework CoreFoundation \
 	     -framework CoreGraphics \
 	     -framework UIKit \
+	     -framework MessageUI \
 	     -I lib/obj-c
 
 DEB_TMP    = out/deb-build
