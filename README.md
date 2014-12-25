@@ -23,7 +23,7 @@ Directory structure with descriptions for some files
 ----------------------------------------------------
 
 * `data/`
-    * `AppBackup.app/`  
+    * `bundle/`  
       Files included in .app bundle, excluding subdirectories
     * `DEBIAN/`  
       Debian package control files

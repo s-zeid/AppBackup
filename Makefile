@@ -50,9 +50,9 @@ out/python/path: src/python/setup.py
 deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	rm -rf "${DEB_TMP}"
 	mkdir "${DEB_TMP}"
-	mkdir -p "${DEB_TMP}"/Applications/AppBackup.app
+	mkdir -p "${DEB_TMP}"/Applications
 	cp -a data/DEBIAN "${DEB_TMP}"/
-	cp -a data/AppBackup.app "${DEB_TMP}"/Applications/
+	cp -a data/bundle "${DEB_TMP}"/Applications/AppBackup.app
 	cp -a data/usr "${DEB_TMP}"/
 	cp -a out/python/path "${DEB_TMP}"/Applications/AppBackup.app/python
 	cp -a src/gui/AppBackupGUI "${DEB_TMP}"/Applications/AppBackup.app/AppBackupGUI_

@@ -75,7 +75,7 @@ for i in xrange(3):
 
 os.chdir(repo_root)
 
-info_plist = plistlib.readPlist(os.path.join("data", "AppBackup.app", "Info.plist"))
+info_plist = plistlib.readPlist(os.path.join("data", "bundle", "Info.plist"))
 app_name   = htmlentities(info_plist["CFBundleDisplayName"], exclude="")
 version    = htmlentities(info_plist["CFBundleShortVersionString"], exclude="")
 tplvars    = dict(app_name=app_name, changelog="", credits="", license="",
