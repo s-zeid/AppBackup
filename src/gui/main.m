@@ -32,13 +32,21 @@
 // GUI Runner
 
 #include <stdio.h>
+
 #import <Foundation/Foundation.h>
+
 #import "AppBackupGUI.h"
+#import "util.h"
+
 
 #define APP_DELEGATE_NAME @"AppBackupGUI"
 
+
 int main (int argc, char **argv) {
  NSAutoreleasePool *p = [[NSAutoreleasePool alloc] init];
+ NSLog(@"And now for something completely different.");
+ NSLog(@"It'ssssssssssssssss...");
+ NSLog(@"%@ version %@", PRODUCT_NAME, PRODUCT_VERSION);
  int ret = UIApplicationMain(argc, argv, APP_DELEGATE_NAME, APP_DELEGATE_NAME);
  [p drain];
  return ret;

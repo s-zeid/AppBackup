@@ -46,9 +46,6 @@
 #define ERROR_REPORT_SUBJECT \
          [NSString stringWithFormat:@"%@ runtime error", \
                     PRODUCT_NAME]
-#define ERROR_REPORT_INFO \
-         [NSString stringWithFormat:@"%@ version %@", \
-                    PRODUCT_NAME, PRODUCT_VERSION]
 
 #define LOG_ROOT CONFIG_ROOT @"/logs"
 #define LOG_PATH_APPBACKUPGUI   LOG_ROOT @"/AppBackupGUI.log"
@@ -138,12 +135,12 @@
   // Format message
   NSString *subject = ERROR_REPORT_SUBJECT;
   NSString *message = [NSString stringWithFormat:
-                                 @"\n___________________________\n\n%@\n\n%@"
+                                 @"\n___________________________\n\n%@"
                                  @"\n___________________________\n\n%@"
                                  @"\n___________________________\n\n%@"
                                  @"\n___________________________\n\n%@\n\n%@"
                                  @"\n___________________________\n\n",
-                                 ERROR_REPORT_INFO, _screen.message,
+                                 _screen.message,
                                  appbackupgui_log, fixpermissions_log,
                                  @"And now for something completely different:",
                                  [self _easterEgg]
