@@ -41,6 +41,11 @@
     </array>
    </dict>
   </array>
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+   <string>UIInterfaceOrientationPortrait</string>
+   <string>UIInterfaceOrientationPortraitUpsideDown</string>
+  </array>
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleInfoDictionaryVersion</key>
