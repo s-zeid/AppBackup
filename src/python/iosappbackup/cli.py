@@ -32,6 +32,7 @@
 """A command-line interface to AppBackup."""
 
 import argparse
+import errno
 import os
 import signal
 import socket
@@ -211,28 +212,41 @@ Only one client may connect to the server throughout its lifetime.
   host = "::1" if self.options.ip_version == 6 else "127.0.0.1"
   port = self.options.port
   
+  r = 127
   s = socket.socket(socket.AF_INET6 if self.options.ip_version == 6 else socket.AF_INET,
                     socket.SOCK_STREAM)
   s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   s.settimeout(None)
   s.bind((host, port))
   try:
-   s.listen(0)
-   conn, addr = s.accept()
-   if self.options.ip_version == 6:
-    yield output.error("received connection from [%s]:%d" % addr[:2])
-   else:
-    yield output.error("received connection from %s:%d" % addr)
-   shell = cli.commands["shell"](cli)
-   shell.stdin = conn.makefile("rb", 0)
-   shell.stdout = conn.makefile("wb", 0)
-   r = shell.run(["shell"] + self.extra)
-  except:
-   s.shutdown(socket.SHUT_RDWR)
-   s.close()
-   raise
+   while True:
+    x = None
+    try:
+     s.listen(0)
+     conn, addr = s.accept()
+     if self.options.ip_version == 6:
+      yield output.error("received connection from [%s]:%d" % addr[:2])
+     else:
+      yield output.error("received connection from %s:%d" % addr)
+     shell = cli.commands["shell"](cli)
+     shell.stdin = conn.makefile("rb", 0)
+     shell.stdout = conn.makefile("wb", 0)
+     r = shell.run(["shell"] + self.extra)
+    except Exception, exc:
+     x = exc
+    finally:
+     try:
+      conn.shutdown(socket.SHUT_RDWR)
+      conn.close()
+     except IOError, exc:
+      if exc.errno != errno.ENOTCONN:
+       x = exc
+  except KeyboardInterrupt:
+   pass
   s.shutdown(socket.SHUT_RDWR)
   s.close()
+  if x:
+   raise x
   raise StopIteration(r)
   yield None
 

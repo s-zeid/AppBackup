@@ -146,8 +146,8 @@ You must have the iosapplist Python package installed first:
 
     $ sudo pip install --pre -U iosapplist
 
-Each time you run AppBackup in the simulator, you must run the following
-command outside the simulator on the same machine:
+Before you run AppBackup in the simulator, you must run the following command
+outside the simulator on the same machine:
 
     $ ./appbackup.test \
        -r ~/Library/Developer/CoreSimulator/Devices/<uuid>/data \
@@ -161,7 +161,7 @@ however, the iOS Simulator's dyld will refuse to run the CLI or its launcher
 script, complaining that they are "built for Mac [sic] OS X".  Therefore, the
 simulator version uses a proxy that connects to the shell server invoked as
 above, which listens on localhost port 14121 and only accepts one connection
-per invocation.
+at a time.
 
 The Xcode project sets the preprocessor directive `USE_CLI_PROXY` to enable this
 behavior, regardless of whether the project is being built for the simulator.
