@@ -161,7 +161,7 @@
 			name = gui;
 			sourceTree = "<group>";
 		};
-		1AB40CE81A4C9489005BF813 /* obj-c */ = {
+		1AB40CE81A4C9489005BF813 /* lib */ = {
 			isa = PBXGroup;
 			children = (
 				1AB40CE91A4C9489005BF813 /* BDSKTask.h */,
@@ -169,7 +169,7 @@
 				1AB40CEB1A4C9489005BF813 /* MBProgressHUD.h */,
 				1AB40CEC1A4C9489005BF813 /* MBProgressHUD.m */,
 			);
-			name = "obj-c";
+			name = lib;
 			path = "../../lib/obj-c";
 			sourceTree = "<group>";
 		};
@@ -198,7 +198,7 @@
 				1AAFC0841A4E0A6000D52315 /* cli-proxy */,
 				1AB410F81A4CB8E6005BF813 /* bundle */,
 				1AB410F21A4CB379005BF813 /* python */,
-				1AB40CE81A4C9489005BF813 /* obj-c */,
+				1AB40CE81A4C9489005BF813 /* lib */,
 				1AB40C951A4C92FC005BF813 /* gui */,
 				1AD1A7D81A4C88DE00B036C1 /* Products */,
 			);
