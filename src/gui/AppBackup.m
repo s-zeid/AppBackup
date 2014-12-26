@@ -61,7 +61,11 @@
   _runningCommandCondition = [NSCondition new];
   // Start the CLI shell
   _shellTask = [[BDSKTask alloc] init];
+#ifdef USE_CLI_PROXY
+  _shellTask.launchPath = [_ bundledFilePath:@"appbackup-cli-proxy.app/appbackup-cli-proxy"];
+#else
   _shellTask.launchPath = [_ bundledFilePath:@"appbackup-cli"];
+#endif
   _shellTask.arguments = [NSArray arrayWithObjects:
                                    @"--robot=plist", @"shell", @"--null", nil];
   _shellTask.standardInput  = [NSPipe pipe];

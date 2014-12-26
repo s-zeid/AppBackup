@@ -91,10 +91,14 @@
  _deadParrot = [NSString stringWithFormat:
                           @"%@\n___________________________\n\n%@",
                           _text, _error];
+#ifdef USE_CLI_PROXY
+ NSLog(@"Dead parrot:  %@", _deadParrot);
+#else
  [[NSFileManager defaultManager]
   createFileAtPath:LOG_ROOT @"/" LOG_NAME_DEAD_PARROT
   contents:[_deadParrot dataUsingEncoding:NSUTF8StringEncoding]
   attributes:nil];
+#endif
  // set up the UIAlertView
  _screen = [[UIAlertView alloc] init];
  _screen.delegate = self;
