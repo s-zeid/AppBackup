@@ -13,3 +13,15 @@ src/python/dist
 src/python/*.egg-info
 src/python/temp
 test
+
+# Apple crap
+.DS_Store
+DerivedData/
+build/
+*.pbxuser
+xcuserdata
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xccheckout
+
