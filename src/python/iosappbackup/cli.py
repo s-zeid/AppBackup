@@ -34,6 +34,7 @@
 import argparse
 import os
 import signal
+import socket
 import sys
 
 from iosapplist.cli import CLI, Command, ShellCommand, output
@@ -181,6 +182,61 @@ class AppBackupCommands(Command):
   raise StopIteration(return_code)
 
 CLI.commands.register(AppBackupCommands)
+
+
+class ShellServerCommand(Command):
+ """Make the shell available over TCP.
+
+The server will always bind to localhost (127.0.0.1, or ::1 if -6 is used).
+
+Only one client may connect to the server throughout its lifetime.
+
+"""
+ names = ["shell-server"]
+ show_in_help = False
+ usage = "[options [...]] [shell-options [...]]"
+ 
+ def add_args(self, p, cli):
+  p.add_argument("--port", type=int, default=14121,
+                 help="The TCP port to which to bind (defaults to 14121).")
+  group = p.add_mutually_exclusive_group()
+  group.add_argument("-4", dest="ip_version", action="store_const", const=4,
+                     help="Use IPv4 (the default).")
+  group.add_argument("-6", dest="ip_version", action="store_const", const=6,
+                     help="Use IPv6.")
+  p.set_defaults(ip_version=4)
+  return p.parse_known_args
+ 
+ def main(self, cli):
+  host = "::1" if self.options.ip_version == 6 else "127.0.0.1"
+  port = self.options.port
+  
+  s = socket.socket(socket.AF_INET6 if self.options.ip_version == 6 else socket.AF_INET,
+                    socket.SOCK_STREAM)
+  s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+  s.settimeout(None)
+  s.bind((host, port))
+  try:
+   s.listen(0)
+   conn, addr = s.accept()
+   if self.options.ip_version == 6:
+    yield output.error("received connection from [%s]:%d" % addr[:2])
+   else:
+    yield output.error("received connection from %s:%d" % addr)
+   shell = cli.commands["shell"](cli)
+   shell.stdin = conn.makefile("rb", 0)
+   shell.stdout = conn.makefile("wb", 0)
+   r = shell.run(["shell"] + self.extra)
+  except:
+   s.shutdown(socket.SHUT_RDWR)
+   s.close()
+   raise
+  s.shutdown(socket.SHUT_RDWR)
+  s.close()
+  raise StopIteration(r)
+  yield None
+
+CLI.commands.register(ShellServerCommand)
 
 
 class BadBehaviorCommand(Command):
