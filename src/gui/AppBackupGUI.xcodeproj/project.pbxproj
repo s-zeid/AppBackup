@@ -23,7 +23,6 @@
 		1AB40CD01A4C92FC005BF813 /* util.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CBA1A4C92FC005BF813 /* util.m */; };
 		1AB40CED1A4C9489005BF813 /* BDSKTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CEA1A4C9489005BF813 /* BDSKTask.m */; };
 		1AB40CEE1A4C9489005BF813 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CEC1A4C9489005BF813 /* MBProgressHUD.m */; };
-		1AB410F31A4CB379005BF813 /* python in Resources */ = {isa = PBXBuildFile; fileRef = 1AB410F21A4CB379005BF813 /* python */; };
 		1AB411091A4CB8E6005BF813 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AB410FB1A4CB8E6005BF813 /* Default.png */; };
 		1AB4110A1A4CB8E6005BF813 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AB410FC1A4CB8E6005BF813 /* Default@2x.png */; };
 		1AB4110B1A4CB8E6005BF813 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AB410FD1A4CB8E6005BF813 /* Icon-60@2x.png */; };
@@ -89,7 +88,6 @@
 		1AB40CEA1A4C9489005BF813 /* BDSKTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDSKTask.m; sourceTree = "<group>"; };
 		1AB40CEB1A4C9489005BF813 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1AB40CEC1A4C9489005BF813 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		1AB410F21A4CB379005BF813 /* python */ = {isa = PBXFileReference; lastKnownFileType = folder; name = python; path = ../../out/python/python; sourceTree = "<group>"; };
 		1AB410FB1A4CB8E6005BF813 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		1AB410FC1A4CB8E6005BF813 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		1AB410FD1A4CB8E6005BF813 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
@@ -197,7 +195,6 @@
 			children = (
 				1AAFC0841A4E0A6000D52315 /* cli-proxy */,
 				1AB410F81A4CB8E6005BF813 /* bundle */,
-				1AB410F21A4CB379005BF813 /* python */,
 				1AB40CE81A4C9489005BF813 /* lib */,
 				1AB40C951A4C92FC005BF813 /* gui */,
 				1AD1A7D81A4C88DE00B036C1 /* Products */,
@@ -293,7 +290,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AB410F31A4CB379005BF813 /* python in Resources */,
 				1AB4110E1A4CB8E6005BF813 /* Icon-72@2x.png in Resources */,
 				1AB4110A1A4CB8E6005BF813 /* Default@2x.png in Resources */,
 				1AB305991A4DB3E300B987FA /* appbackup-cli-proxy.app in Resources */,
