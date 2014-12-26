@@ -190,7 +190,7 @@ class ShellServerCommand(Command):
 
 The server will always bind to localhost (127.0.0.1, or ::1 if -6 is used).
 
-Only one client may connect to the server throughout its lifetime.
+Only one client may connect to the server at a time.
 
 """
  names = ["shell-server"]
