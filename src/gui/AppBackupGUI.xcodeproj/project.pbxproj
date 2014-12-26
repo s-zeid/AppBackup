@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1AB305921A4DB15100B987FA /* appbackup-cli-proxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB305561A4DA96B00B987FA /* appbackup-cli-proxy.m */; };
+		1AAFC0861A4E0A6000D52315 /* appbackup-cli-proxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AAFC0851A4E0A6000D52315 /* appbackup-cli-proxy.m */; };
 		1AB305991A4DB3E300B987FA /* appbackup-cli-proxy.app in Resources */ = {isa = PBXBuildFile; fileRef = 1AB3056C1A4DB12C00B987FA /* appbackup-cli-proxy.app */; };
 		1AB40CC41A4C92FC005BF813 /* AboutScreenVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CA11A4C92FC005BF813 /* AboutScreenVC.m */; };
 		1AB40CC51A4C92FC005BF813 /* ActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CA31A4C92FC005BF813 /* ActionHandler.m */; };
@@ -60,7 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1AB305561A4DA96B00B987FA /* appbackup-cli-proxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "appbackup-cli-proxy.m"; sourceTree = "<group>"; };
+		1AAFC0851A4E0A6000D52315 /* appbackup-cli-proxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "appbackup-cli-proxy.m"; sourceTree = "<group>"; };
 		1AB3056C1A4DB12C00B987FA /* appbackup-cli-proxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "appbackup-cli-proxy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AB40CA01A4C92FC005BF813 /* AboutScreenVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutScreenVC.h; sourceTree = "<group>"; };
 		1AB40CA11A4C92FC005BF813 /* AboutScreenVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutScreenVC.m; sourceTree = "<group>"; };
@@ -122,6 +122,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1AAFC0841A4E0A6000D52315 /* cli-proxy */ = {
+			isa = PBXGroup;
+			children = (
+				1AAFC0851A4E0A6000D52315 /* appbackup-cli-proxy.m */,
+			);
+			name = "cli-proxy";
+			path = "../cli-proxy";
+			sourceTree = "<group>";
+		};
 		1AB40C951A4C92FC005BF813 /* gui */ = {
 			isa = PBXGroup;
 			children = (
@@ -142,7 +151,6 @@
 				1AB40CB21A4C92FC005BF813 /* ErrorHandler.h */,
 				1AB40CB31A4C92FC005BF813 /* ErrorHandler.m */,
 				1AB40CB41A4C92FC005BF813 /* main.m */,
-				1AB305561A4DA96B00B987FA /* appbackup-cli-proxy.m */,
 				1AB40CB51A4C92FC005BF813 /* OneAppHandler.h */,
 				1AB40CB61A4C92FC005BF813 /* OneAppHandler.m */,
 				1AB40CB71A4C92FC005BF813 /* TestScreenVC.h */,
@@ -187,6 +195,7 @@
 		1AD1A7CC1A4C87B000B036C1 = {
 			isa = PBXGroup;
 			children = (
+				1AAFC0841A4E0A6000D52315 /* cli-proxy */,
 				1AB410F81A4CB8E6005BF813 /* bundle */,
 				1AB410F21A4CB379005BF813 /* python */,
 				1AB40CE81A4C9489005BF813 /* obj-c */,
@@ -307,7 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AB305921A4DB15100B987FA /* appbackup-cli-proxy.m in Sources */,
+				1AAFC0861A4E0A6000D52315 /* appbackup-cli-proxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,6 +577,7 @@
 				1AB3058E1A4DB12C00B987FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		1AD1A7D01A4C87B000B036C1 /* Build configuration list for PBXProject "AppBackupGUI" */ = {
 			isa = XCConfigurationList;
