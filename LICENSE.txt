@@ -30,6 +30,8 @@ other dealings in this Software without prior written authorization.
 Localized strings for languages other than English were created by volunteers
 whose names are listed in the CREDITS file.
 
+*                         *                          *                         *
+
 This program contains the following libraries or portions of them:
 
  * iosapplist (http://code.s.zeid.me/iosapplist)

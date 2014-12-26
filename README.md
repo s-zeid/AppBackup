@@ -138,5 +138,5 @@ which means that it respects your freedoms.  AppBackup is released under
 the terms of the X11 License, and it also includes software released under
 similar free, permissive licenses.  For the full text of the license and
 copyright notices for AppBackup and all software included with it, see
-[the LICENSE file](http://code.s.zeid.me/appbackup/src/master/LICENSE)
+[the LICENSE.txt file](http://code.s.zeid.me/appbackup/src/master/LICENSE.txt)
 in the source repository.
