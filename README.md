@@ -16,6 +16,7 @@ Contents
  * Directory structure with descriptions for some files
  * Prerequisites for building
  * Building AppBackup
+ * Running AppBackup in the iOS Simulator
  * License
 
 
@@ -47,12 +48,16 @@ Directory structure with descriptions for some files
         * `iosappbackup-<version>.tar.gz`  
           Python source distribution generated with `make sdist`.
 * `src/`  
+    * `cli-proxy/`  
+      The CLI proxy client used in the iOS Simulator build.
     * `FixPermissions/` \*  
       FixPermissions (C; fixes storage directory permissions)
     * `gui/`  
       GUI source code and third-party libraries in Objective-C
         * `about.html/`  
           Generator for the HTML file used in the About screen
+        * `AppBackupGUI.xcodeproj`  
+          An Xcode project, *only* for use with iOS Simulator.
     * `python/`  
       Python packages that are part of AppBackup
         * `iosappbackup/`  
@@ -128,6 +133,38 @@ You will also need to manually install the AppBackup package dependencies:
     $ sudo apt-get install bash coreutils-bin python setuptools
 
 The Python version on your device must be at 2.5, 2.6, or 2.7.
+
+
+Running AppBackup in the iOS Simulator
+--------------------------------------
+
+AppBackup can be run in a limited fashion in the iOS Simulator, and an Xcode
+project is included at `src/gui/AppBackupGUI.xcodeproj` for this purpose.  (The
+Xcode project can**not** be used to compile the regular version of AppBackup.)
+
+You must have the iosapplist Python package installed first:
+
+    $ sudo pip install --pre -U iosapplist
+
+Each time you run AppBackup in the simulator, you must run the following
+command outside the simulator on the same machine:
+
+    $ ./appbackup.test \
+       -r ~/Library/Developer/CoreSimulator/Devices/<uuid>/data \
+       --robot=plist shell-server --null
+
+(You can, of course, point it to a different data directory.  That directory
+should have the same directory structure as `/var/mobile` from a real device.)
+
+AppBackup uses a command-line shell written in Python 2.5 to do its magic;
+however, the iOS Simulator's dyld will refuse to run the CLI or its launcher
+script, complaining that they are "built for Mac [sic] OS X".  Therefore, the
+simulator version uses a proxy that connects to the shell server invoked as
+above, which listens on localhost port 14121 and only accepts one connection
+per invocation.
+
+The Xcode project sets the preprocessor directive `USE_CLI_PROXY` to enable this
+behavior, regardless of whether the project is being built for the simulator.
 
 
 License
