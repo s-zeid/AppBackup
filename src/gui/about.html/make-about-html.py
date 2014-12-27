@@ -85,7 +85,7 @@ with open("CHANGELOG", "rb") as f:
  tplvars["changelog"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
 with open("CREDITS", "rb") as f:
  tplvars["credits"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
-with open("LICENSE", "rb") as f:
+with open("LICENSE.txt", "rb") as f:
  tplvars["license"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
 os.chdir(os.path.dirname(script))
 with open("about-template.html", "rb") as f:
