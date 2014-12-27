@@ -213,41 +213,71 @@ Only one client may connect to the server at a time.
   port = self.options.port
   
   r = 127
-  s = socket.socket(socket.AF_INET6 if self.options.ip_version == 6 else socket.AF_INET,
-                    socket.SOCK_STREAM)
+  x = None
+  af = socket.AF_INET6 if self.options.ip_version == 6 else socket.AF_INET
+  s = socket.socket(af, socket.SOCK_STREAM)
   s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   s.settimeout(None)
   s.bind((host, port))
   try:
    while True:
+    r = None
     x = None
+    conn = None
+    addr_str = None
     try:
      s.listen(0)
      conn, addr = s.accept()
      if self.options.ip_version == 6:
-      yield output.error("received connection from [%s]:%d" % addr[:2])
+      addr_str = "[%s]:%d" % addr[:2]
      else:
-      yield output.error("received connection from %s:%d" % addr)
+      addr_str = "%s:%d" % addr
+     yield output.error("received connection from %s" % addr_str)
      shell = cli.commands["shell"](cli)
      shell.stdin = conn.makefile("rb", 0)
      shell.stdout = conn.makefile("wb", 0)
      r = shell.run(["shell"] + self.extra)
     except Exception, exc:
      x = exc
+     raise
     finally:
      try:
-      conn.shutdown(socket.SHUT_RDWR)
-      conn.close()
+      if conn is not None:
+       conn.shutdown(socket.SHUT_RDWR)
+       conn.close()
+       conn = "closed"
      except IOError, exc:
-      if exc.errno != errno.ENOTCONN:
+      if exc.errno == errno.ENOTCONN:
+       conn = "closed"
+      else:
+       if not x:
+        x = exc
+        raise
+     except Exception, exc:
+      if not x:
        x = exc
+       raise
+     finally:
+      if conn == "closed":
+       if addr_str:
+        closed_message = "connection from %s closed" % addr_str
+       else:
+        closed_message = "connection closed"
+       if r is not None:
+        closed_message += "; shell returned %s" % str(r)
+       yield output.error(closed_message)
   except KeyboardInterrupt:
    pass
-  s.shutdown(socket.SHUT_RDWR)
-  s.close()
-  if x:
-   raise x
-  raise StopIteration(r)
+  finally:
+   try:
+    s.shutdown(socket.SHUT_RDWR)
+    s.close()
+   except IOError, exc:
+    if exc.errno != errno.ENOTCONN:
+     if not x:
+      x = exc
+      raise
+  raise StopIteration(r if r is not None else 127)
   yield None
 
 CLI.commands.register(ShellServerCommand)
