@@ -196,6 +196,8 @@ Only one client may connect to the server at a time.
  names = ["shell-server"]
  show_in_help = False
  usage = "[options [...]] [shell-options [...]]"
+
+ output_format = ""
  
  def add_args(self, p, cli):
   p.add_argument("--port", type=int, default=14121,
