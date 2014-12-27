@@ -67,8 +67,10 @@ int cli_proxy(int argc, char **argv) {
    if (r < 0)
     return (-r)*10;
    n++;
-   if (r > 0)
+   if (r > 0) {
     fprintf(stdout, "%c", buf[0]);
+    fflush(stdout);
+   }
   }
   NSLog(@"read %d byte(s)\n", n);
   
