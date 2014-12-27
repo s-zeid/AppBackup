@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1AAFC0861A4E0A6000D52315 /* appbackup-cli-proxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AAFC0851A4E0A6000D52315 /* appbackup-cli-proxy.m */; };
+		1AAFC08A1A4EB3CC00D52315 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AAFC0871A4EB3CC00D52315 /* Default-568h@2x.png */; };
+		1AAFC08B1A4EB3CC00D52315 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AAFC0881A4EB3CC00D52315 /* Default-667h@2x.png */; };
+		1AAFC08C1A4EB3CC00D52315 /* Default-736h@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AAFC0891A4EB3CC00D52315 /* Default-736h@3x.png */; };
 		1AB305991A4DB3E300B987FA /* appbackup-cli-proxy.app in Resources */ = {isa = PBXBuildFile; fileRef = 1AB3056C1A4DB12C00B987FA /* appbackup-cli-proxy.app */; };
 		1AB40CC41A4C92FC005BF813 /* AboutScreenVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CA11A4C92FC005BF813 /* AboutScreenVC.m */; };
 		1AB40CC51A4C92FC005BF813 /* ActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AB40CA31A4C92FC005BF813 /* ActionHandler.m */; };
@@ -60,6 +63,9 @@
 
 /* Begin PBXFileReference section */
 		1AAFC0851A4E0A6000D52315 /* appbackup-cli-proxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "appbackup-cli-proxy.m"; sourceTree = "<group>"; };
+		1AAFC0871A4EB3CC00D52315 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		1AAFC0881A4EB3CC00D52315 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
+		1AAFC0891A4EB3CC00D52315 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
 		1AB3056C1A4DB12C00B987FA /* appbackup-cli-proxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "appbackup-cli-proxy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AB40CA01A4C92FC005BF813 /* AboutScreenVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutScreenVC.h; sourceTree = "<group>"; };
 		1AB40CA11A4C92FC005BF813 /* AboutScreenVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutScreenVC.m; sourceTree = "<group>"; };
@@ -174,6 +180,9 @@
 		1AB410F81A4CB8E6005BF813 /* bundle */ = {
 			isa = PBXGroup;
 			children = (
+				1AAFC0871A4EB3CC00D52315 /* Default-568h@2x.png */,
+				1AAFC0881A4EB3CC00D52315 /* Default-667h@2x.png */,
+				1AAFC0891A4EB3CC00D52315 /* Default-736h@3x.png */,
 				1AB410FB1A4CB8E6005BF813 /* Default.png */,
 				1AB410FC1A4CB8E6005BF813 /* Default@2x.png */,
 				1AB410FD1A4CB8E6005BF813 /* Icon-60@2x.png */,
@@ -292,6 +301,7 @@
 			files = (
 				1AB4110E1A4CB8E6005BF813 /* Icon-72@2x.png in Resources */,
 				1AB4110A1A4CB8E6005BF813 /* Default@2x.png in Resources */,
+				1AAFC08C1A4EB3CC00D52315 /* Default-736h@3x.png in Resources */,
 				1AB305991A4DB3E300B987FA /* appbackup-cli-proxy.app in Resources */,
 				1AB411101A4CB8E6005BF813 /* Icon-76@2x.png in Resources */,
 				1AB4110C1A4CB8E6005BF813 /* Icon-60@3x.png in Resources */,
@@ -299,6 +309,8 @@
 				1AB4110D1A4CB8E6005BF813 /* Icon-72.png in Resources */,
 				1AB411131A4CB8E6005BF813 /* Icon@2x.png in Resources */,
 				1AB4110F1A4CB8E6005BF813 /* Icon-76.png in Resources */,
+				1AAFC08B1A4EB3CC00D52315 /* Default-667h@2x.png in Resources */,
+				1AAFC08A1A4EB3CC00D52315 /* Default-568h@2x.png in Resources */,
 				1AB411091A4CB8E6005BF813 /* Default.png in Resources */,
 				1AB4110B1A4CB8E6005BF813 /* Icon-60@2x.png in Resources */,
 				1AB411111A4CB8E6005BF813 /* Icon-iOS-3.1.png in Resources */,
