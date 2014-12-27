@@ -41,7 +41,7 @@
 
 
 int cli_proxy(int argc, char **argv) {
- fprintf(stderr, "connecting to CLI server\n");
+ NSLog(@"connecting to CLI server\n");
  CFReadStreamRef cfReadStream;
  CFWriteStreamRef cfWriteStream;
  CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)CLI_HOST, CLI_PORT, &cfReadStream, &cfWriteStream);
@@ -51,13 +51,13 @@ int cli_proxy(int argc, char **argv) {
  [outputStream retain];
  [inputStream open];
  [outputStream open];
- fprintf(stderr, "connected to CLI server\n");
+ NSLog(@"connected to CLI server\n");
  
  int r, n;
  bool started = false;
  unsigned char buf[1];
  while (true) {
-  fprintf(stderr, (started) ? "reading command output\n" : "reading initial prompt\n");
+  NSLog(@"%@", (started) ? @"reading command output\n" : @"reading initial prompt\n");
   buf[0] = 'r';
   n = 0;
   while (buf[0] != '\0') {
@@ -70,12 +70,12 @@ int cli_proxy(int argc, char **argv) {
    if (r > 0)
     fprintf(stdout, "%c", buf[0]);
   }
-  fprintf(stderr, "read %d byte(s)\n", n);
+  NSLog(@"read %d byte(s)\n", n);
   
   if (!started)
    started = true;
   
-  fprintf(stderr, "writing command input\n");
+  NSLog(@"writing command input\n");
   buf[0] = 'w';
   n = 0;
   while (buf[0] != '\0') {
@@ -87,7 +87,7 @@ int cli_proxy(int argc, char **argv) {
     return (-r)*10+1;
    n++;
   }
-  fprintf(stderr, "wrote %d byte(s)\n", n);
+  NSLog(@"wrote %d byte(s)\n", n);
  }
  
  return 0;
