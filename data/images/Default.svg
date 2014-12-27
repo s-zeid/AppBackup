@@ -11,12 +11,12 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="320"
-   height="460"
+   height="480"
    id="svg3091"
    version="1.1"
    inkscape:version="0.48.5 r10040"
    sodipodi:docname="Default.svg"
-   inkscape:export-filename="/home/scottywz/Sources/AppBackup/data/AppBackup.app/Default@2x.png"
+   inkscape:export-filename="/home/scottywz/Sources/AppBackup/data/bundle/Default@2x.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180">
   <defs
@@ -50,11 +50,12 @@
        gradientUnits="userSpaceOnUse" />
     <filter
        id="filter6290"
-       height="2.0143382"
-       y="-0.50716912"
+       height="2.0143383"
+       y="-0.50716913"
        width="1.2223207"
        x="-0.11116035"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          id="feGaussianBlur6292"
          stdDeviation="2.0286765"
@@ -90,9 +91,9 @@
        inkscape:collect="always" />
     <linearGradient
        gradientUnits="userSpaceOnUse"
-       y2="8.0667399"
+       y2="8.06674"
        x2="39.044338"
-       y1="8.0667399"
+       y1="8.06674"
        x1="6.9461918"
        id="linearGradient6248"
        xlink:href="#linearGradient6242"
@@ -204,7 +205,7 @@
        gradientUnits="userSpaceOnUse"
        x1="12.2744"
        y1="32.4165"
-       x2="35.3912"
+       x2="35.391201"
        y2="14.2033">
       <stop
          offset="0"
@@ -224,8 +225,8 @@
        gradientUnits="userSpaceOnUse"
        x1="14.9966"
        y1="11.1885"
-       x2="32.511"
-       y2="34.3075">
+       x2="32.511002"
+       y2="34.307499">
       <stop
          offset="0"
          style="stop-color:#EBEBEB"
@@ -276,7 +277,7 @@
        xlink:href="#linearGradient6036"
        id="linearGradient3519"
        gradientUnits="userSpaceOnUse"
-       x1="10.501720"
+       x1="10.50172"
        y1="3.6100161"
        x2="48.798885"
        y2="54.698483"
@@ -289,7 +290,7 @@
        gradientTransform="matrix(1.190476,0,0,1.190476,-4.308944,-3.833324)"
        x1="12.2744"
        y1="32.4165"
-       x2="35.3912"
+       x2="35.391201"
        y2="14.2033" />
     <linearGradient
        inkscape:collect="always"
@@ -299,8 +300,8 @@
        gradientTransform="matrix(1.190476,0,0,1.190476,-4.308944,-3.833323)"
        x1="14.9966"
        y1="11.1885"
-       x2="32.511"
-       y2="34.3075" />
+       x2="32.511002"
+       y2="34.307499" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4409"
@@ -517,8 +518,8 @@
        gradientTransform="matrix(1.190476,0,0,1.190476,-4.308944,-3.833323)"
        x1="14.9966"
        y1="11.1885"
-       x2="32.511"
-       y2="34.3075" />
+       x2="32.511002"
+       y2="34.307499" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#aigrd2"
@@ -527,7 +528,7 @@
        gradientTransform="matrix(1.190476,0,0,1.190476,-4.308944,-3.833324)"
        x1="12.2744"
        y1="32.4165"
-       x2="35.3912"
+       x2="35.391201"
        y2="14.2033" />
     <linearGradient
        inkscape:collect="always"
@@ -545,7 +546,7 @@
        id="linearGradient4373"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.9807685,0,0,0.9807685,0.3837105,-0.8525346)"
-       x1="10.501720"
+       x1="10.50172"
        y1="3.6100161"
        x2="48.798885"
        y2="54.698483" />
@@ -583,9 +584,9 @@
        id="linearGradient4381"
        gradientUnits="userSpaceOnUse"
        x1="6.9461918"
-       y1="8.0667399"
+       y1="8.06674"
        x2="39.044338"
-       y2="8.0667399" />
+       y2="8.06674" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -595,8 +596,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.8101934"
-     inkscape:cx="111.01247"
-     inkscape:cy="210.57027"
+     inkscape:cx="155.20664"
+     inkscape:cy="321.0557"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -621,7 +622,14 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-592.36218)">
+     transform="translate(0,-572.36218)">
+    <rect
+       y="572.36218"
+       x="0"
+       height="480"
+       width="320"
+       id="rect3883"
+       style="fill:#cccccc;fill-opacity:1;stroke:none" />
     <rect
        style="fill:url(#linearGradient3875);fill-opacity:1;stroke:none"
        id="rect3099"
