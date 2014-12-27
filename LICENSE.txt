@@ -35,7 +35,7 @@ whose names are listed in the CREDITS file.
 
 This program contains the following libraries or portions of them:
 
- * BDSKTask (http://code.google.com/p/mactlmgr/)
+ * BDSKTask (https://code.google.com/p/mactlmgr/)
     This software is Copyright (c) 2008-2011
     Adam Maxwell. All rights reserved.
     
@@ -94,8 +94,8 @@ This program contains the following libraries or portions of them:
 
 *                         *                          *                         *
 
-The Debian package distribution of this program contains the following libraries
-or portions of them:
+The Debian package distribution of this program also contains the following
+libraries or portions of them:
 
  * iosapplist (http://code.s.zeid.me/iosapplist)
     Copyright (C) 2008-2014 Scott Zeid
@@ -145,7 +145,7 @@ or portions of them:
     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
     IN THE SOFTWARE.
 
- * simplejson (http://pypi.python.org/pypi/simplejson/)
+ * simplejson (https://github.com/simplejson/simplejson)
     Copyright (c) 2006 Bob Ippolito
     
     Permission is hereby granted, free of charge, to any person obtaining a copy of
