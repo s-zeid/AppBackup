@@ -271,7 +271,7 @@
   easterEgg =
    @"\"Now that's what I call a dead %@.\"\n\n"
    @"\"No, no.  It's stunned.\"\n\n"
-   @"\"Look may lad, I've had just about enough of this.  That %@ is definitely"
+   @"\"Look my lad, I've had just about enough of this.  That %@ is definitely"
    @" deceased.  And when I bought it not half an hour ago, you assured me that"
    @" its lack of movement was due to it being 'tired and shagged out after a"
    @" long squawk'.\"\n\n"
