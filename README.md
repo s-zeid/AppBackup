@@ -147,7 +147,8 @@ You must have the iosapplist Python package installed first:
     $ sudo pip install --pre -U iosapplist
 
 Before you run AppBackup in the simulator, you must run the following command
-outside the simulator on the same machine:
+outside the simulator on the same machine, from the root directory of the source
+tree:
 
     $ ./appbackup.test \
        -r ~/Library/Developer/CoreSimulator/Devices/<uuid>/data \
