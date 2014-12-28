@@ -3,6 +3,8 @@ AppBackup 3.0~beta2 "Maserati"
 Copyright © 2008-2014 Scott Zeid (aka scottywz & DPGumby).
 https://s.zeid.me/projects/appbackup/
 
+AppBackup is free software, which means that it respects your freedoms.
+See https://www.gnu.org/philosophy/free-sw.html for more information.
 AppBackup is released under the X11 License.
 
 This program contains the following libraries or portions of them:
@@ -12,7 +14,7 @@ This program contains the following libraries or portions of them:
  • simplejson (Bob Ippolito; http://pypi.python.org/pypi/simplejson/)
  • MBProgressHUD (Matej Bukovinski, with modifications by Jonathan George;
    https://github.com/jdg/MBProgressHUD)
-See the LICENSE file for the copyright and license information for these
+See the LICENSE.txt file for the copyright and license information for these
 libraries.
 
 Translations for languages other than English were provided by the following
