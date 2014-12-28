@@ -39,88 +39,89 @@
 
 #import "OneAppHandler.h"
 
+
 @implementation OneAppHandler
-@synthesize app;
-@synthesize index;
-- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_ {
- self = [super initWithVC:vc_];
+
+@synthesize app = _app;
+@synthesize index = _index;
+
+- (id)initWithVC:(AppListVC *)vc appAtIndex:(NSInteger)index {
+ self = [super initWithVC:vc];
  if (self) {
-  self.app = [vc.appbackup.apps objectAtIndex:index_];
-  self.index = index_;
+  _app = [[vc.appbackup.apps objectAtIndex:index] retain];
+  _index = index;
  }
  return self;
 }
 
 - (void)doAction {
  NSString *text_ = [_ s:[NSString stringWithFormat:@"1_status_%@_doing",
-                         action]];
+                         self.action]];
  self.hudDetailsText = [NSString stringWithFormat:text_,
-                        [app objectForKey:@"friendly"]];
+                        [self.app objectForKey:@"friendly"]];
  [super doAction];
 }
 
 - (void)_doActionCallback {
- NSString *friendly = [app objectForKey:@"friendly"];
+ NSString *friendly = [self.app objectForKey:@"friendly"];
  NSString *title;
  NSString *text;
  BOOL      resultsBox  = YES;
- NSDictionary *r = [vc.appbackup doAction:action onApp:app];
+ NSDictionary *r = [self.vc.appbackup doAction:self.action onApp:self.app];
  NSDictionary *o = [r objectForKey:@"output"];
  NSDictionary *d = [[o objectForKey:@"normal"] objectAtIndex:0];
- NSNumber     *i = [NSNumber numberWithInt:index];
- [vc performSelectorOnMainThread:@selector(updateAppAtIndexWithDictUsingArray:)
-     withObject:[NSArray arrayWithObjects:i, d, nil] waitUntilDone:YES];
+ NSNumber     *i = [NSNumber numberWithLong:(long)self.index];
+ [self.vc performSelectorOnMainThread:@selector(updateAppAtIndexWithDictUsingArray:)
+          withObject:[NSArray arrayWithObjects:i, d, nil] waitUntilDone:YES];
  if ([[r objectForKey:@"success"] boolValue]) {
-  title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
-  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_done", action]];
+  title = [_ s:[NSString stringWithFormat:@"%@_done", self.action]];
+  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_done", self.action]];
   text  = [_ s:[NSString stringWithFormat:text, friendly]];
-  if ([action isEqualToString:@"ignore"] ||
-      [action isEqualToString:@"unignore"])
+  if ([self.action isEqualToString:@"ignore"] ||
+      [self.action isEqualToString:@"unignore"])
    resultsBox = NO;
  } else {
-  title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
-  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_failed", action]];
+  title = [_ s:[NSString stringWithFormat:@"%@_failed", self.action]];
+  text  = [_ s:[NSString stringWithFormat:@"1_status_%@_failed", self.action]];
   text  = [_ s:[NSString stringWithFormat:text, friendly]];
  }
- [self hideHUD];
  if (resultsBox)
   [self showResultWithTitle:title text:text];
 }
 
 - (void)start {
- NSString *prompt = [app objectForKey:@"bundle_id"];
+ NSString *prompt = [self.app objectForKey:@"bundle_id"];
  if ([prompt length] > 30)
   prompt = [[prompt substringWithRange:NSMakeRange(0, 30)]
             stringByAppendingString:@"..."];
  prompt = [NSString stringWithFormat:@"(%@)", prompt];
  NSString *cancelString = @"cancel";
- if (![[app objectForKey:@"useable"] boolValue]) {
+ if (![[self.app objectForKey:@"useable"] boolValue]) {
   // App is not useable
   prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
             [_ s:@"app_corrupted_prompt"]];
-  [validActions removeAllObjects]; // No actions possible
+  [self.validActions removeAllObjects]; // No actions possible
   cancelString = [_ s:@"ok"];
- } else if ([[app objectForKey:@"ignored"] boolValue]) {
+ } else if ([[self.app objectForKey:@"ignored"] boolValue]) {
   // App is ignored
   prompt = [NSString stringWithFormat:@"%@\n\n%@", prompt,
             [_ s:@"app_ignored_prompt"]];
-  [validActions setArray:[NSArray arrayWithObject:@"unignore"]];
- } else if ([[app objectForKey:@"backup_time_unix"] doubleValue] != 0.0) {
+  [self.validActions setArray:[NSArray arrayWithObject:@"unignore"]];
+ } else if ([[self.app objectForKey:@"backup_time_unix"] doubleValue] != 0.0) {
   // App is backed up
-  [validActions removeObject:@"unignore"];
+  [self.validActions removeObject:@"unignore"];
  } else {
   // App is not backed up
-  [validActions setArray:[NSArray arrayWithObjects:@"backup", @"ignore", nil]];
+  [self.validActions setArray:[NSArray arrayWithObjects:@"backup", @"ignore", nil]];
  }
- self.chooserTitle = [app objectForKey:@"friendly"];
+ self.chooserTitle = [self.app objectForKey:@"friendly"];
  self.chooserPrompt = prompt;
  self.chooserCancelText = [_ s:cancelString];
  [super start];
 }
 
 - (void)dealloc {
- self.app = nil;
- self.index = 0;
+ [_app release];
  [super dealloc];
 }
 @end

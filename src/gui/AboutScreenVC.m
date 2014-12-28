@@ -34,13 +34,18 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <UIKit/UIKit.h>
 
-#import "AboutScreenVC.h"
 #import "util.h"
+
+#import "AboutScreenVC.h"
+
 
 #define WEB_SITE @"https://s.zeid.me/projects/appbackup/"
 
-@implementation AboutScreenVC
-@synthesize webView;
+
+@implementation AboutScreenVC {
+ UIWebView *_webView;
+}
+
 - (void)loadView {
  // Get some frames
  CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
@@ -51,13 +56,11 @@
                             appFrame.size.height - navBarHeight);
  struct CGRect frame;
  // Set up main view
- self.view = [[[UIView alloc] initWithFrame:bounds] autorelease];
- UIView *view = self.view;
+ UIView *view = [[UIView alloc] initWithFrame:bounds];
+ self.view = view;
  view.backgroundColor = [UIColor whiteColor];
  // Configure the navigation bar
- NSString *title = [NSString stringWithFormat:[_ s:@"about_title"],
-                    [[NSBundle mainBundle]
-                     objectForInfoDictionaryKey:@"CFBundleDisplayName"]];
+ NSString *title = [NSString stringWithFormat:[_ s:@"about_title"], PRODUCT_NAME];
  self.navigationItem.title = title;
  // Make the bottom toolbar and add button
  frame = CGRectMake(0, bounds.size.height - navBarHeight, bounds.size.width,
@@ -79,14 +82,15 @@
  [toolbar release];
  // Make WebView
  frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - navBarHeight);
- self.webView = [[[UIWebView alloc] initWithFrame:frame] autorelease];
- [view addSubview:webView];
+ _webView = [[UIWebView alloc] initWithFrame:frame];
+ [view addSubview:_webView];
+ [view release];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
  NSURL *url = [NSURL fileURLWithPath:[_ bundledFilePath:@"about.html"]];
  NSURLRequest *request = [NSURLRequest requestWithURL:url];
- [webView loadRequest:request];
+ [_webView loadRequest:request];
  [super viewDidAppear:animated];
 }
 
@@ -97,7 +101,7 @@
 }
 
 - (void)dealloc {
- self.webView = nil;
+ [_webView release];
  [super dealloc];
 }
 @end

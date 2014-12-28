@@ -35,15 +35,10 @@
 
 #import "AppBackup.h"
 
-@interface AppBackupGUI : UIApplication <UIApplicationDelegate> {
- UIWindow               *window;
- AppBackup              *appbackup;
- UINavigationController *navigationController;
-}
+@interface AppBackupGUI : UIApplication <UIApplicationDelegate>
 
-@property (retain) UIWindow               *window;
-@property (retain) AppBackup              *appbackup;
-@property (retain) UINavigationController *navigationController;
+@property (nonatomic, retain) UIWindow               *window;
+@property (         readonly) AppBackup              *appbackup;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)nsurl;

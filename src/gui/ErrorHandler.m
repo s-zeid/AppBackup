@@ -55,17 +55,32 @@
 #define LOG_NAME_FIXPERMISSIONS @"FixPermissions.log"
 
 
-@implementation ErrorHandler
+@implementation ErrorHandler {
+ @private
+ UIResponder      *_screen;
+ NSCondition      *_dismissedCondition;
+ NSString         *_deadParrot;
+ NSInteger         _sendButtonIndex;
+ NSInteger         _exitButtonIndex;
+ NSInteger         _cancelButtonIndex;
+}
+
+@synthesize vc = _vc;
+@synthesize error = _error;
+@synthesize title = _title;
+@synthesize text = _text;
+@synthesize isFatal = _isFatal;
+
 
 - (id)initWithVC:(UIViewController *)vc
-       withError:(NSString *)error withTitle:(NSString *)title
-        withText:(NSString *)text isFatal:(BOOL)isFatal {
+           error:(NSString *)error  title:(NSString *)title
+            text:(NSString *)text isFatal:(BOOL)isFatal {
  self = [super init];
  if (self) {
-  _vc                 = vc;
-  _error              = error;
-  _title              = title;
-  _text               = text;
+  _vc                 = [vc retain];
+  _error              = [error retain];
+  _title              = [title retain];
+  _text               = [text retain];
   _isFatal            = isFatal;
   _screen             = nil;
   _dismissedCondition = nil;
@@ -100,40 +115,44 @@
   attributes:nil];
 #endif
  // set up the UIAlertView
- _screen = [[UIAlertView alloc] init];
- _screen.delegate = self;
- _screen.title = _title;
- _screen.message = _deadParrot;
+ UIAlertView *alertView = [[UIAlertView alloc] init];
+ alertView.delegate = self;
+ alertView.title = _title;
+ alertView.message = _deadParrot;
  if ([ERROR_REPORT_EMAIL length] > 0) {
-  _sendButtonIndex = [_screen addButtonWithTitle:[_ s:@"send_error_report"]];
+  _sendButtonIndex = [alertView addButtonWithTitle:[_ s:@"send_error_report"]];
   if (!_isFatal)
-   _exitButtonIndex = [_screen addButtonWithTitle:[_ s:@"exit_without_sending"]];
+   _exitButtonIndex = [alertView addButtonWithTitle:[_ s:@"exit_without_sending"]];
  }
  if (!_isFatal) {
-  _cancelButtonIndex = [_screen addButtonWithTitle:[_ s:@"ok"]];
-  [_screen setCancelButtonIndex:_cancelButtonIndex];
+  _cancelButtonIndex = [alertView addButtonWithTitle:[_ s:@"ok"]];
+  [alertView setCancelButtonIndex:_cancelButtonIndex];
  }
  if (window != nil) {
-  [window addSubview:_screen];
+  [window addSubview:alertView];
   [window makeKeyAndVisible];
  }
- [_screen show];
+ [alertView show];
  [self retain];
 }
 
 - (void)waitForErrorToBeDismissed {
+ [self retain];
  _dismissedCondition = [NSCondition new];
  [_dismissedCondition lock];
  while (_screen != nil)
   [_dismissedCondition wait];
  [_dismissedCondition unlock];
+ [_dismissedCondition release];
+ _dismissedCondition = nil;
+ [self release];
  return;
 }
 
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex {
+ _screen = nil;
  // What to do when you close the error screen
- [_screen autorelease];
  if (buttonIndex == _sendButtonIndex) {
   NSLog(@"And now for something completely different:\n%@", [self _easterEgg]);
   // email error report
@@ -144,10 +163,10 @@
   // fatal error xor user requested exit
   abort();
  }
- [self release];
- _screen = nil;
+ [alertView release];
  if (_dismissedCondition != nil)
   [_dismissedCondition signal];
+ [self release];
 }
   
 - (void)_emailErrorReport {
@@ -190,6 +209,8 @@
   // Send it
   mcvc.mailComposeDelegate = self;
   [_vc presentModalViewController:mcvc animated:YES];
+  _screen = mcvc;
+  [self retain];
  } else {
   // mailto: fallback
   
@@ -223,10 +244,17 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)mcvc
         didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+ _screen = nil;
  [_vc dismissModalViewControllerAnimated:YES];
  _vc.view = _vc.view;
+ [mcvc release];
+ if (_dismissedCondition != nil)
+  [_dismissedCondition signal];
+ 
  if (_isFatal)
   abort();
+ 
+ [self release];
 }
 
 - (NSData *)_getLogAsData:(NSString *)name {
@@ -247,11 +275,12 @@
 }
 
 - (void)dealloc {
- _error              = nil;
- _title              = nil;
- _text               = nil;
- _screen             = nil;
- _dismissedCondition = nil;
+ [_vc release];
+ [_error release];
+ [_title release];
+ [_text release];
+ [_screen release];
+ [_dismissedCondition release];
  _sendButtonIndex    = -1;
  _exitButtonIndex    = -1;
  _cancelButtonIndex  = -1;

@@ -38,15 +38,12 @@
 #import "MBProgressHUD.h"
 
 @interface AppListVC : UIViewController
-           <UITableViewDataSource, UITableViewDelegate> {
- UITableView *table;
- AppBackup   *appbackup;
- BOOL         appsLoaded;
-}
-@property (retain) UITableView *table;
-@property (retain) AppBackup   *appbackup;
-@property (assign) BOOL         appsLoaded;
-- (id)initWithAppBackup:(AppBackup *)appbackup_;
+           <UITableViewDataSource, UITableViewDelegate>
+
+@property (readonly) AppBackup *appbackup;
+@property (readonly) BOOL       appsLoaded;
+
+- (id)initWithAppBackup:(AppBackup *)appbackup;
 - (void)loadView;
 - (void)viewDidAppear:(BOOL)animated;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tv;

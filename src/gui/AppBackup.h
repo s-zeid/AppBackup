@@ -36,28 +36,13 @@
 
 #import "BDSKTask.h"
 
-@interface AppBackup : NSObject {
- @protected
- NSMutableArray *apps;
- BOOL            allBackedUp;
- BOOL            anyBackedUp;
- BOOL            anyCorrupted;
- @private
- UIViewController *_vc;
- UIWindow         *_window;
- BDSKTask         *_shellTask;
- NSFileHandle     *_shellStdin;
- NSFileHandle     *_shellStdout;
- NSNumber         *_shellReturned;
- BOOL              _runningCommand;
- NSCondition      *_runningCommandCondition;
-}
+@interface AppBackup : NSObject
 
 @property (retain)   UIViewController *vc;
-@property (retain)   NSMutableArray   *apps;
-@property (assign)   BOOL              allBackedUp;
-@property (assign)   BOOL              anyBackedUp;
-@property (assign)   BOOL              anyCorrupted;
+@property (readonly) NSMutableArray   *apps;
+@property (readonly) BOOL              allBackedUp;
+@property (readonly) BOOL              anyBackedUp;
+@property (readonly) BOOL              anyCorrupted;
 @property (readonly) NSNumber         *shellReturned;
 
 - (id)init;

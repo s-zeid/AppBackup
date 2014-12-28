@@ -34,40 +34,22 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-/**
- */
 
 @interface ErrorHandler : NSObject
-           <UIAlertViewDelegate, MFMailComposeViewControllerDelegate> {
- UIViewController *_vc;
- NSString         *_error;
- NSString         *_title;
- NSString         *_text;
- BOOL              _isFatal;
- UIAlertView      *_screen;
- NSCondition      *_dismissedCondition;
- @private
- NSString         *_deadParrot;
- NSInteger         _sendButtonIndex;
- NSInteger         _exitButtonIndex;
- NSInteger         _cancelButtonIndex;
-}
+           <UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 /* Properties */
 
 /** The view controller. */
-@property (retain, readonly) UIViewController *vc;
+@property (readonly) UIViewController *vc;
 /** The actual error; this may be emailed. */
-@property (retain, readonly) NSString *error;
+@property (readonly) NSString *error;
 /** The title of the alert view. */
-@property (retain, readonly) NSString *title;
+@property (readonly) NSString *title;
 /** The message text of the alert view; this may be emailed. */
-@property (retain, readonly) NSString *text;
+@property (readonly) NSString *text;
 /** Whether the error is fatal. */
-@property (assign, readonly) BOOL isFatal;
-
-/** The currently active UIAlertView. */
-@property (retain) UIAlertView    *screen;
+@property (readonly) BOOL isFatal;
 
 /* Selectors */
 
@@ -82,8 +64,8 @@
  *                otherwise not allow the user to continue using the program.
  */
 - (id)initWithVC:(UIViewController *)vc
-       withError:(NSString *)error withTitle:(NSString *)title
-        withText:(NSString *)text isFatal:(BOOL)isFatal;
+           error:(NSString *)error  title:(NSString *)title
+            text:(NSString *)text isFatal:(BOOL)isFatal;
 
 /**
  * Shows a UIAlertView for the error by sending _showAlertCallback: to

@@ -40,27 +40,30 @@
 
 #import "ActionHandler.h"
 
-@implementation ActionHandler
-@synthesize action;
-@synthesize chooserTitle;
-@synthesize chooserPrompt;
-@synthesize chooserCancelText;
-@synthesize hud;
-@synthesize hudDetailsText;
-@synthesize screen;
-@synthesize stage;
-@synthesize validActions;
-@synthesize vc;
+@implementation ActionHandler {
+ UIAlertView *_screen;
+ MBProgressHUD *_hud;
+ AppListVC *_vc;
+}
 
-- (id)initWithVC:(AppListVC *)vc_ {
+@synthesize action = _action;
+@synthesize chooserTitle = _chooserTitle;
+@synthesize chooserPrompt = _chooserPrompt;
+@synthesize chooserCancelText = _chooserCancelText;
+@synthesize hudDetailsText = _hudDetailsText;
+@synthesize stage = _stage;
+@synthesize validActions = _validActions;
+@synthesize vc = _vc;
+
+- (id)initWithVC:(AppListVC *)vc {
  self = [super init];
  if (self) {
-  self.vc = vc_;
-  self.validActions = [NSMutableArray arrayWithObjects:
-                        @"backup", @"restore", @"ignore", @"unignore",
-                        @"delete", nil];
-  self.chooserCancelText = [_ s:@"cancel"];
-  self.stage = AppBackupActionHandlerStageClosed;
+  _vc = [vc retain];
+  _validActions = [[NSMutableArray alloc] initWithObjects:
+                    @"backup", @"restore", @"ignore", @"unignore",
+                    @"delete", nil];
+  _chooserCancelText = [[_ s:@"cancel"] copy];
+  _stage = AppBackupActionHandlerStageClosed;
  }
  return self;
 }
@@ -68,70 +71,58 @@
 - (void)alertView:(UIAlertView *)alertView
         didDismissWithButtonIndex:(NSInteger)buttonIndex {
  // What to do when you close the backup all apps prompt
- NSString *buttonText = [alertView buttonTitleAtIndex:buttonIndex];
- [screen autorelease];
- if ((stage == AppBackupActionHandlerStageChoose &&
+ NSString *buttonText = [[alertView buttonTitleAtIndex:buttonIndex] copy];
+ _screen = nil;
+ if ((self.stage == AppBackupActionHandlerStageChoose &&
       [buttonText isEqualToString:[_ s:@"cancel"]]) ||
-     (stage == AppBackupActionHandlerStageConfirm &&
+     (self.stage == AppBackupActionHandlerStageConfirm &&
       [buttonText isEqualToString:[_ s:@"no"]]) ||
-     (stage == AppBackupActionHandlerStageResultScreen &&
+     (self.stage == AppBackupActionHandlerStageResultScreen &&
       [buttonText isEqualToString:[_ s:@"ok"]])) {
   // User canceled action or clicked OK
-  self.stage = AppBackupActionHandlerStageClosed;
-  [self autorelease];
-  return;
+  _stage = AppBackupActionHandlerStageClosed;
  } else if ([buttonText isEqualToString:[_ s:@"yes"]]) {
   // User confirmed action
-  self.stage = AppBackupActionHandlerStageInProgress;
+  _stage = AppBackupActionHandlerStageInProgress;
   [self doAction];
  } else {
   // User selected action and needs to confirm it first
-  self.stage = AppBackupActionHandlerStageConfirm;
+  _stage = AppBackupActionHandlerStageConfirm;
   int i;
   NSString *t;
-  for (i = 0; i < [validActions count]; i++) {
-   t = [validActions objectAtIndex:i];
+  for (i = 0; i < [self.validActions count]; i++) {
+   t = [self.validActions objectAtIndex:i];
    if ([buttonText isEqualToString:[_ s:t]]) {
-    self.action = t;
+    _action = [t copy];
     break;
    }
   }
-  self.screen = [[UIAlertView alloc] init];
-  screen.delegate = self;
-  screen.title = [_ s:@"are_you_sure"];
-  [screen addButtonWithTitle:[_ s:@"yes"]];
-  NSInteger cancel_btn = [screen addButtonWithTitle:[_ s:@"no"]];
-  [screen setCancelButtonIndex:cancel_btn];
-  [screen show];
+  _screen = [[UIAlertView alloc] init];
+  _screen.delegate = self;
+  _screen.title = [_ s:@"are_you_sure"];
+  [_screen addButtonWithTitle:[_ s:@"yes"]];
+  NSInteger cancel_btn = [_screen addButtonWithTitle:[_ s:@"no"]];
+  [_screen setCancelButtonIndex:cancel_btn];
+  [_screen show];
  }
+ [buttonText release];
+ [alertView release];
+ if (_stage == AppBackupActionHandlerStageClosed)
+  [self release];
 }
 
 - (void)doAction {
- self.hud = [[MBProgressHUD alloc] initWithWindow:vc.view.window];
- hud.delegate = self;
- hud.labelText = [_ s:@"please_wait"];
- hud.detailsLabelText = hudDetailsText;
- [vc.view.window addSubview:hud];
- [hud showWhileExecuting:@selector(_doActionCallback) onTarget:self
-      withObject:nil animated:YES];
+ _hud = [[MBProgressHUD alloc] initWithWindow:self.vc.view.window];
+ _hud.labelText = [_ s:@"please_wait"];
+ _hud.detailsLabelText = self.hudDetailsText;
+ [self.vc.view.window addSubview:_hud];
+ [_hud showWhileExecuting:@selector(_doActionCallback) onTarget:self
+       withObject:nil animated:YES];
+ [_hud release];
 }
 
 - (void)_doActionCallback {
  [self showResultWithTitle:@"" text:@""];
-}
-
-- (void)hideHUD {
- [self performSelectorOnMainThread:@selector(_hideHUDCallback) withObject:nil
-       waitUntilDone:YES];
-}
-
-- (void)_hideHUDCallback {
- [hud hide:YES];
- [hud autorelease];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud_ {
- [hud_ removeFromSuperview];
 }
 
 - (void)showResultWithTitle:(NSString *)title text:(NSString *)text {
@@ -142,39 +133,39 @@
 }
 
 - (void)_showResultWithTitleAndTextCallback:(NSArray *)array {
- self.stage = AppBackupActionHandlerStageResultScreen;
- self.screen = [[UIAlertView alloc] init];
- screen.title = [array objectAtIndex:0];
- screen.message = [array objectAtIndex:1];
- [screen addButtonWithTitle:[_ s:@"ok"]];
- [screen show];
+ _stage = AppBackupActionHandlerStageResultScreen;
+ _screen = [[UIAlertView alloc] init];
+ _screen.title = [array objectAtIndex:0];
+ _screen.message = [array objectAtIndex:1];
+ [_screen addButtonWithTitle:[_ s:@"ok"]];
+ [_screen show];
 }
 
 - (void)start {
- self.stage = AppBackupActionHandlerStageChoose;
- self.screen = [[UIAlertView alloc] init];
- screen.delegate = self;
- screen.title = chooserTitle;
- screen.message = chooserPrompt;
+ _stage = AppBackupActionHandlerStageChoose;
+ _screen = [[UIAlertView alloc] init];
+ _screen.delegate = self;
+ _screen.title = self.chooserTitle;
+ _screen.message = self.chooserPrompt;
  int i;
- for (i = 0; i < [validActions count]; i++)
-  [screen addButtonWithTitle:[_ s:[validActions objectAtIndex:i]]];
- NSInteger cancel_btn = [screen addButtonWithTitle:chooserCancelText];
- [screen setCancelButtonIndex:cancel_btn];
- [screen show];
+ for (i = 0; i < [self.validActions count]; i++)
+  [_screen addButtonWithTitle:[_ s:[self.validActions objectAtIndex:i]]];
+ NSInteger cancel_btn = [_screen addButtonWithTitle:self.chooserCancelText];
+ [_screen setCancelButtonIndex:cancel_btn];
+ [_screen show];
  [self retain];
 }
 
 - (void)dealloc {
- self.action = nil;
  self.chooserTitle = nil;
  self.chooserPrompt = nil;
  self.chooserCancelText = nil;
- self.hud = nil;
  self.hudDetailsText = nil;
- self.screen = nil;
- self.validActions = nil;
- self.vc = nil;
+ [_action release];
+ [_validActions release];
+ [_hud release];
+ [_screen release];
+ [_vc release];
  [super dealloc];
 }
 @end

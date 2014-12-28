@@ -36,8 +36,8 @@
 #import "ActionHandler.h"
 #import "AppListVC.h"
 
-@interface AllAppsHandler : ActionHandler {}
-- (id)initWithVC:(AppListVC *)vc_;
+@interface AllAppsHandler : ActionHandler
+- (id)initWithVC:(AppListVC *)vc;
 - (void)doAction;
 - (void)_doActionCallback;
 - (void)start;

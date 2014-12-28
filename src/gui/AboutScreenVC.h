@@ -33,10 +33,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AboutScreenVC : UIViewController {
- UIWebView *webView;
-}
-@property (retain) UIWebView *webView;
+@interface AboutScreenVC : UIViewController
 - (void)loadView;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)goToWebSite:(id)sender;

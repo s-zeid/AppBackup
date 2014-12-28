@@ -36,13 +36,10 @@
 #import "ActionHandler.h"
 #import "AppListVC.h"
 
-@interface OneAppHandler : ActionHandler {
- NSDictionary        *app;
- NSInteger            index;
-}
-@property (retain) NSDictionary        *app;
-@property (assign) NSInteger            index;
-- (id)initWithVC:(AppListVC *)vc_ appAtIndex:(NSInteger)index_;
+@interface OneAppHandler : ActionHandler
+@property (readonly) NSDictionary *app;
+@property (readonly) NSInteger     index;
+- (id)initWithVC:(AppListVC *)vc appAtIndex:(NSInteger)index;
 - (void)doAction;
 - (void)_doActionCallback;
 - (void)start;

@@ -38,37 +38,48 @@
 #import "AppListVC.h"
 #import "AboutScreenVC.h"
 #import "BadBehaviorVC.h"
+#import "ErrorHandler.h"
 #import "TestScreenVC.h"
 #import "util.h"
 
 #import "AppBackupGUI.h"
-#import "ErrorHandler.h"
 
-@implementation AppBackupGUI
-@synthesize window;
-@synthesize appbackup;
-@synthesize navigationController;
+
+@implementation AppBackupGUI {
+ @private
+ UINavigationController *_navigationController;
+}
+
+@synthesize window = _window;
+@synthesize appbackup = _appbackup;
+
+- (UIWindow *)window {
+ // iOS 5+ wants this:
+ // <https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplicationDelegate_Protocol/#//apple_ref/occ/intfp/UIApplicationDelegate/window>
+ if (_window == nil)
+  _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+ return _window;
+}
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
- // Create the window and navigation controller.
- self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]
-                autorelease];
+ // Set up the window and navigation controller
  UIViewController *tmpVC = [[UIViewController alloc] init];
- [window addSubview:tmpVC.view];
+ [self.window addSubview:tmpVC.view];
  // Start up the AppBackup CLI bridge
- self.appbackup = [[[AppBackup alloc] initWithVC:tmpVC] autorelease];
+ _appbackup = [[AppBackup alloc] initWithVC:tmpVC];
  if (self.appbackup.shellReturned == nil) {
   // Set up the navigation and root view controllers
-  UIViewController *appListVC = [[AppListVC alloc] initWithAppBackup:appbackup];
-  self.navigationController = [[[UINavigationController alloc]
-                                initWithRootViewController:appListVC] autorelease];
+  UIViewController *appListVC = [[AppListVC alloc] initWithAppBackup:self.appbackup];
+  _navigationController = [[UINavigationController alloc]
+                           initWithRootViewController:appListVC];
   [appListVC release];
-  self.appbackup.vc = navigationController;
+  self.appbackup.vc = _navigationController;
   [tmpVC.view removeFromSuperview];
-  [tmpVC release];
-  [window addSubview:navigationController.view];
-  [window makeKeyAndVisible];
-  [navigationController viewDidAppear:NO];
+  [self.window addSubview:_navigationController.view];
+  [self.window makeKeyAndVisible];
+  [_navigationController viewDidAppear:NO];
  }
+ [tmpVC release];
  // AppBackup's initWithVC: will set up the window if it doesn't start
  // properly.
 }
@@ -103,7 +114,7 @@
  // Show about screen
  NSLog(@"showing about screen");
  UIViewController *vc = [[AboutScreenVC alloc] init];
- [self.navigationController pushViewController:vc animated:YES];
+ [_navigationController pushViewController:vc animated:YES];
  [vc release];
 }
 
@@ -111,7 +122,7 @@
  // Show bad behavior testing screen
  NSLog(@"showing bad behavior screen");
  UIViewController *vc = [[BadBehaviorVC alloc] initWithAppBackup:self.appbackup];
- [self.navigationController pushViewController:vc animated:YES];
+ [_navigationController pushViewController:vc animated:YES];
  [vc release];
 }
 
@@ -119,14 +130,14 @@
  NSLog(@"showing test screen");
  // Show test screen
  UIViewController *vc = [[TestScreenVC alloc] init];
- [self.navigationController pushViewController:vc animated:YES];
+ [_navigationController pushViewController:vc animated:YES];
  [vc release];
 }
 
 - (void)dealloc {
- self.window = nil;
- self.appbackup = nil;
- self.navigationController = nil;
+ [_window release];
+ [_appbackup release];
+ [_navigationController release];
  [super dealloc];
 }
 @end

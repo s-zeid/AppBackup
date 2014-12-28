@@ -34,7 +34,6 @@
 #import <UIKit/UIKit.h>
 
 #import "AppListVC.h"
-#import "MBProgressHUD.h"
 
 /**
  * ActionHandler is an abstract base class for handling the case where the user
@@ -65,67 +64,49 @@ typedef enum {
  AppBackupActionHandlerStageResultScreen
 } AppBackupActionHandlerStage;
 
-@interface ActionHandler : NSObject
-           <MBProgressHUDDelegate, UIAlertViewDelegate> {
- NSString       *action;
- NSString       *chooserTitle;
- NSString       *chooserPrompt;
- NSString       *chooserCancelText;
- MBProgressHUD  *hud;
- NSString       *hudDetailsText;
- UIAlertView    *screen;
- NSMutableArray *validActions;
- AppListVC      *vc;
- AppBackupActionHandlerStage stage;
-}
+@interface ActionHandler : NSObject <UIAlertViewDelegate>
 
 /* Properties */
 
 /** The action to perform (backup, delete, ignore, unignore, restore). */
-@property (retain) NSString       *action;
+@property (readonly) NSString       *action;
 
 /**
  * The title text to use for the action chooser UIAlertView.  Must be set
  * before -[super start] is sent.
  */
-@property (retain) NSString       *chooserTitle;
+@property (copy) NSString       *chooserTitle;
 
 /**
  * The prompt text to use for the chooser (translates to the message property
  * of UIAlertView).  Must be set before -[super start] is sent.
  */
-@property (retain) NSString       *chooserPrompt;
+@property (copy) NSString       *chooserPrompt;
 
 /**
  * The text to use for the chooser's cancel button.  Defaults to
  * [_ s:@"cancel"].
  */
-@property (retain) NSString       *chooserCancelText;
-
-/** The progress HUD shown while the action is being performed. */
-@property (retain) MBProgressHUD  *hud;
+@property (copy) NSString       *chooserCancelText;
 
 /**
  * The details text to use for the progress HUD.  Must be set before
  * -[super doAction] is sent.
  */
-@property (retain) NSString       *hudDetailsText;
-
-/** The currently active UIAlertView. */
-@property (retain) UIAlertView    *screen;
+@property (copy) NSString       *hudDetailsText;
 
 /**
  * A list of valid actions for this instance in the order you want them to
  * appear.  Defaults to containing backup, restore, ignore, unignore, and
  * delete.  You must remove one or more of these before sending -[super start].
  */
-@property (retain) NSMutableArray *validActions;
+@property (readonly) NSMutableArray *validActions;
 
 /** The parent App List view controller. */
-@property (retain) AppListVC      *vc;
+@property (readonly) AppListVC      *vc;
 
 /** The current stage of the ActionHandler. */
-@property (assign) AppBackupActionHandlerStage stage;
+@property (readonly) AppBackupActionHandlerStage stage;
 
 /* Selectors */
 
@@ -137,7 +118,7 @@ typedef enum {
  * 
  * @param vc The AppListVC that created this ActionHandler.
  */
-- (id)initWithVC:(AppListVC *)vc_;
+- (id)initWithVC:(AppListVC *)vc;
 
 /**
  * Handles any button press on a UIAlertView.
@@ -165,18 +146,6 @@ typedef enum {
  * Do NOT send [super _doActionCallback] in your implementation.
  */
 - (void)_doActionCallback;
-
-/** Hides the progress HUD by sending _hideHUDCallback to the main thread. */
-- (void)hideHUD;
-
-/**
- * Hides the progress HUD.  DO NOT SEND THIS SELECTOR DIRECTLY; use hideHUD
- * instead.
- */
-- (void)_hideHUDCallback;
-
-/** Part of the MBProgressHUDDelegate protocol. */
-- (void)hudWasHidden:(MBProgressHUD *)hud;
 
 /**
  * Shows a UIAlertView for the result of the action using the given title and

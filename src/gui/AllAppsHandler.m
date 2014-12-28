@@ -40,8 +40,8 @@
 #import "AllAppsHandler.h"
 
 @implementation AllAppsHandler
-- (id)initWithVC:(AppListVC *)vc_ {
- self = [super initWithVC:vc_];
+- (id)initWithVC:(AppListVC *)vc {
+ self = [super initWithVC:vc];
  if (self) {
   [self.validActions removeObject:@"ignore"];
   [self.validActions removeObject:@"unignore"];
@@ -52,7 +52,7 @@
 
 - (void)doAction {
  self.hudDetailsText = [_ s:[NSString stringWithFormat:@"all_status_%@_doing",
-                             action]];
+                             self.action]];
  [super doAction];
 }
 
@@ -60,38 +60,37 @@
  NSString *title;
  NSString *text;
  BOOL      resultsBox = YES;
- NSDictionary *r = [vc.appbackup doActionOnAllApps:action];
+ NSDictionary *r = [self.vc.appbackup doActionOnAllApps:self.action];
  //NSDictionary *o = [r objectForKey:@"output"];
  NSNumber *no = [NSNumber numberWithBool:NO];
- [vc performSelectorOnMainThread:@selector(updateAppListUsingHUDFindAppsUsingArray:)
-     withObject:[NSArray arrayWithObjects:no, no, nil]
+ [self.vc performSelectorOnMainThread:@selector(updateAppListUsingHUDFindAppsUsingArray:)
+          withObject:[NSArray arrayWithObjects:no, no, nil]
      waitUntilDone:YES];
  if ([[r objectForKey:@"success"] boolValue]) {
-  title = [_ s:[NSString stringWithFormat:@"%@_done", action]];
-  text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", action]];
-  //if ([action isEqualToString:@"ignore"] ||
-  //    [action isEqualToString:@"unignore"])
+  title = [_ s:[NSString stringWithFormat:@"%@_done", self.action]];
+  text  = [_ s:[NSString stringWithFormat:@"all_status_%@_done", self.action]];
+  //if ([self.action isEqualToString:@"ignore"] ||
+  //    [self.action isEqualToString:@"unignore"])
   // resultsBox = NO;
  } else {
   if ([r objectForKey:@"return_code"] == 0)
-   title = [_ s:[NSString stringWithFormat:@"%@_partially_done", action]];
+   title = [_ s:[NSString stringWithFormat:@"%@_partially_done", self.action]];
   else
-   title = [_ s:[NSString stringWithFormat:@"%@_failed",action]];
-  text = [_ s:[NSString stringWithFormat:@"all_status_%@_failed", action]];
+   title = [_ s:[NSString stringWithFormat:@"%@_failed", self.action]];
+  text = [_ s:[NSString stringWithFormat:@"all_status_%@_failed", self.action]];
   text = [NSString stringWithFormat:@"%@\n\n%@",text,[r objectForKey:@"data"]];
  }
- [self hideHUD];
  if (resultsBox)
   [self showResultWithTitle:title text:text];
 }
 
 - (void)start {
- if (vc.appbackup.anyBackedUp)
+ if (self.vc.appbackup.anyBackedUp)
   self.chooserPrompt = [_ s:@"backup_restore_all_apps"];
  else {
   self.chooserPrompt = [_ s:@"backup_all_apps"];
-  [validActions removeObject:@"restore"];
-  [validActions removeObject:@"delete"];
+  [self.validActions removeObject:@"restore"];
+  [self.validActions removeObject:@"delete"];
  }
  [super start];
 }

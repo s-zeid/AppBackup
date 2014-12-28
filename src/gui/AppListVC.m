@@ -41,19 +41,25 @@
 #import "MBProgressHUD.h"
 #import "util.h"
 
+#import "AppListVC.h"
+
+
 #define NAME_TAG 1
 #define INFO_TAG 2
 
-#import "AppListVC.h"
 
-@implementation AppListVC
-@synthesize table;
-@synthesize appbackup;
-@synthesize appsLoaded;
-- (id)initWithAppBackup:(AppBackup *)appbackup_ {
+@implementation AppListVC {
+ UITableView *_table;
+}
+
+@synthesize appbackup = _appbackup;
+@synthesize appsLoaded = _appsLoaded;
+
+- (id)initWithAppBackup:(AppBackup *)appbackup {
  self = [super init];
  if (self) {
-  self.appbackup = appbackup_;
+  _appbackup = [appbackup retain];
+  _appsLoaded = NO;
  }
  return self;
 }
@@ -110,20 +116,19 @@
  [toolbar release];
  // Make table view
  frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height - navBarHeight);
- self.table = [[[UITableView alloc] initWithFrame:frame] autorelease];
- table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
- table.rowHeight = 68;
- table.dataSource = self;
- table.delegate = self;
- [view addSubview:table];
- self.appsLoaded = NO;
+ _table = [[UITableView alloc] initWithFrame:frame];
+ _table.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+ _table.rowHeight = 68;
+ _table.dataSource = self;
+ _table.delegate = self;
+ [view addSubview:_table];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
- if (!appsLoaded) {
-  [table reloadData];
+ if (!self.appsLoaded) {
+  [_table reloadData];
   [self updateAppListUsingHUD:YES];
-  self.appsLoaded = YES;
+  _appsLoaded = YES;
  }
  [super viewDidAppear:animated];
 }
@@ -156,14 +161,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tv numberOfRowsInSection:(NSInteger)s {
- return [appbackup.apps count];
+ return [self.appbackup.apps count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tv
                      cellForRowAtIndexPath:(NSIndexPath *)ip {
  static NSString *cellID = @"AppBackupAppCell";
  // Get the app
- NSMutableDictionary *app = [appbackup.apps objectAtIndex:ip.row];
+ NSMutableDictionary *app = [self.appbackup.apps objectAtIndex:ip.row];
  // Get an existing cell to reuse or make a new one if it doesn't exist yet
  UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:cellID];
  if (cell == nil)
@@ -180,7 +185,7 @@
   label.textColor = [UIColor grayColor];
  // Info label
  label = (UILabel *)[cell viewWithTag:INFO_TAG];
- label.text = [appbackup backupTimeTextForApp:app];
+ label.text = [self.appbackup backupTimeTextForApp:app];
  // Done!
  return cell;
 }
@@ -252,7 +257,7 @@
 
 - (void)_updateAppListCallbackWithHUD:(MBProgressHUD *)hud findApps:(BOOL)findApps {
  if (findApps)
-  [appbackup findApps];
+  [self.appbackup findApps];
  [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
        withObject:hud waitUntilDone:YES];
  
@@ -264,13 +269,13 @@
 }
 
 - (void)updateAppAtIndex:(NSInteger)index {
- [appbackup updateAppAtIndex:index];
+ [self.appbackup updateAppAtIndex:index];
  [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
        withObject:nil waitUntilDone:YES];
 }
 
 - (void)updateAppAtIndex:(NSInteger)index withDictionary:(NSDictionary *)dict {
- [appbackup updateAppAtIndex:index withDictionary:dict];
+ [self.appbackup updateAppAtIndex:index withDictionary:dict];
  [self performSelectorOnMainThread:@selector(updateTableAndRemoveHUD:)
        withObject:nil waitUntilDone:YES];
 }
@@ -281,14 +286,13 @@
 }
 
 - (void)updateTableAndRemoveHUD:(MBProgressHUD *)hud {
- [table reloadData];
+ [_table reloadData];
  if (hud) [hud removeFromSuperview];
 }
 
 - (void)dealloc {
- self.table = nil;
- self.appbackup = nil;
- self.appsLoaded = NO;
+ [_table release];
+ [_appbackup release];
  [super dealloc];
 }
 @end

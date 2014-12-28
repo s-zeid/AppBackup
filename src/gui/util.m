@@ -54,6 +54,7 @@
  local_formatter.dateStyle = NSDateFormatterMediumStyle;
  local_formatter.timeStyle = NSDateFormatterShortStyle;
  NSString *out = [local_formatter stringFromDate:nsdate];
+ [local_formatter release];
  if (out == nil || ![out length]) {
   NSDateFormatter *generic_formatter = [[NSDateFormatter alloc] init];
   [generic_formatter setDateFormat:@"MMM d, yyyy h:mm a"];
