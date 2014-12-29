@@ -59,7 +59,7 @@ deb: src/gui/AppBackupGUI src/FixPermissions/FixPermissions out/python/path
 	cp -a src/FixPermissions/FixPermissions "${DEB_TMP}"/Applications/AppBackup.app/
 	i18n/ini-to-strings.py i18n "${DEB_TMP}"/Applications/AppBackup.app
 	cp -a CHANGELOG "${DEB_TMP}"/Applications/AppBackup.app/
-	cp -a CREDITS "${DEB_TMP}"/Applications/AppBackup.app/
+	cp -a CREDITS.txt "${DEB_TMP}"/Applications/AppBackup.app/
 	cp -a LICENSE.txt "${DEB_TMP}"/Applications/AppBackup.app/
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/*/*.py[co]
 	rm -f "${DEB_TMP}"/Applications/AppBackup.app/python/*.py[co]
