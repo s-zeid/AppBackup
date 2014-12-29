@@ -81,7 +81,7 @@ version    = htmlentities(info_plist["CFBundleShortVersionString"], exclude="")
 tplvars    = dict(app_name=app_name, changelog="", credits="", license="",
                   template="document", version=version)
 
-with open("CHANGELOG", "rb") as f:
+with open("CHANGELOG.txt", "rb") as f:
  tplvars["changelog"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
 with open("CREDITS.txt", "rb") as f:
  tplvars["credits"] = htmlentities(unicode(f.read(), "utf8"), exclude="")
