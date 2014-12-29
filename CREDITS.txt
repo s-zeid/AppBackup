@@ -8,12 +8,13 @@ See https://www.gnu.org/philosophy/free-sw.html for more information.
 AppBackup is released under the X11 License.
 
 This program contains the following libraries or portions of them:
- • iosapplist (me; http://code.s.zeid.me/iosapplist)
- • BDSKTask (Adam Maxwell; http://code.google.com/p/mactlmgr/)
- • CFPropertyList (Ben Cochran; https://github.com/bencochran/CFPropertyList)
- • simplejson (Bob Ippolito; http://pypi.python.org/pypi/simplejson/)
+ • BDSKTask (Adam Maxwell; https://code.google.com/p/mactlmgr/)
  • MBProgressHUD (Matej Bukovinski, with modifications by Jonathan George;
    https://github.com/jdg/MBProgressHUD)
+ • iosapplist (me; http://code.s.zeid.me/iosapplist)
+ • CFPropertyList (Ben Cochran; https://github.com/bencochran/CFPropertyList)
+ • simplejson (Bob Ippolito; https://github.com/simplejson/simplejson)
+ • argparse (Steven J. Bethard; https://code.google.com/p/argparse/)
 See the LICENSE.txt file for the copyright and license information for these
 libraries.
 
@@ -32,6 +33,8 @@ volunteers:
  • Nikita "ZAY" Peshkov - Russian
  • Ramón Cutanda - Spanish
  • Magnus Pålsson - Swedish
+If you want to help translate AppBackup into a different language, please
+go to https://s.zeid.me/projects/appbackup/#translations for instructions.
 
 This app's logo is a Tango icon.  The icon is © Tango Desktop Project and
 released under the Creative Commons Attribution Share-Alike license.
@@ -47,8 +50,3 @@ people who paid me lots of money to see their names in lights:
  • BigBoss, for hosting AppBackup on his repository.
  • Justin Hill for letting me test on his iPhone 4.
  • Everyone who has sent me bug reports.
-
-If you want to help translate AppBackup into a different language, please go
-to <https://s.zeid.me/projects/appbackup/>.  Currently, it supports Chinese,
-Czech, Dutch, English, French, German, Greek, Italian, Japanese, Norwegian,
-Russian, Spanish, and Swedish.
