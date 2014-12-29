@@ -11,10 +11,10 @@
   <string>AppBackup</string>
   <key>CFBundleVersion</key>
   <string>2.99.3</string>
-  <key>CFBundleExecutable</key>
-  <string>AppBackupGUI</string>
   <key>CFBundleShortVersionString</key>
   <string>2.99.3</string>
+  <key>CFBundleExecutable</key>
+  <string>AppBackupGUI</string>
   <key>CFBundleIconFile</key>
   <string>Icon-iOS-3.1.png</string>
   <key>CFBundleIconFiles</key>
