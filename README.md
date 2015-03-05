@@ -86,6 +86,7 @@ Prerequisites for building
  * Linux (tested with Fedora; other distros, OS X, Cygwin, etc. may work
    but I haven't tested them)
  * Working iOS toolchain that uses clang (tested with a 3.1.2 toolchain)
+ * The `NSTask.h` file must be added to the iOS SDK; see below
  * bash; dpkg; GNU make; Python 2.5 (OS X only), 2.6, or 2.7
  * Python setuptools
 
@@ -93,6 +94,20 @@ At the time of this writing, I am using Fedora 20 and
 [this toolchain](https://code.google.com/p/ios-toolchain-based-on-clang-for-linux/)
 with the iOS 3.1.2 SDK to develop AppBackup.  The iOS device I use for
 testing runs iOS 3.1.3.
+
+In order for AppBackup to build successfully, the `NSTask.h` file must be
+copied from the Foundation framework in an OS X SDK to the Foundation
+framework in the iOS or iOS Simulator SDK.  On a Mac running OS X Yosemite:
+
+    # iOS
+    sudo cp -a \
+     /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSTask.h \
+     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework/Headers/
+    
+    # iOS Simulator
+    sudo cp -a \
+     /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSTask.h \
+     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/Foundation.framework/Headers/
 
 
 Building AppBackup
