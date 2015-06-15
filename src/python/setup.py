@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 setup(
  name="iosappbackup",
- version="3.0.dev10",
+ version="3.0.dev11",
  description="Backs up and restores the saved data and settings of"
              " installed iOS App Store apps.",
  url="http://code.s.zeid.me/appbackup",
