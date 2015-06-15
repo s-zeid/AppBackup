@@ -2,7 +2,7 @@
 # An iOS application that backs up and restores the saved data and
 # preferences of App Store apps.
 #
-# Copyright (C) 2008-2014 Scott Zeid
+# Copyright (C) 2008-2015 Scott Zeid
 # https://s.zeid.me/projects/appbackup/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -192,6 +192,9 @@ The server will always bind to localhost (127.0.0.1, or ::1 if -6 is used).
 
 Only one client may connect to the server at a time.
 
+Tracebacks from commands executed by clients will be sent to the client
+normally as well as sent to (local) standard error.
+
 """
  names = ["shell-server"]
  show_in_help = False
@@ -238,7 +241,7 @@ Only one client may connect to the server at a time.
      shell = cli.commands["shell"](cli)
      shell.stdin = conn.makefile("rb", 0)
      shell.stdout = conn.makefile("wb", 0)
-     r = shell.run(["shell"] + self.extra)
+     r = shell.run(["shell", "--tracebacks-to-stderr"] + self.extra)
     except Exception, exc:
      x = exc
      raise
