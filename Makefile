@@ -2,8 +2,8 @@ include config
 
 LD         = ${CC}
 
-CFLAGS     = -lobjc -arch armv6 -Wall -Werror
-LDFLAGS    = -bind_at_load
+CFLAGS     = -arch armv6 -Wall -Werror
+LDFLAGS    = -lobjc -bind_at_load
 FRAMEWORKS = -framework Foundation \
 	     -framework CoreFoundation \
 	     -framework CoreGraphics \
