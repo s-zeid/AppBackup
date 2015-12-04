@@ -10,7 +10,7 @@ setup(
  version="3.0.dev11",
  description="Backs up and restores the saved data and settings of"
              " installed iOS App Store apps.",
- url="http://code.s.zeid.me/appbackup",
+ url="https://code.s.zeid.me/appbackup",
  author="Scott Zeid",
  author_email="s@zeid.me",
  license="X11 License:  https://tldrlegal.com/license/x11-license",

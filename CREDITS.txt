@@ -11,7 +11,7 @@ This program contains the following libraries or portions of them:
  • BDSKTask (Adam Maxwell; https://code.google.com/p/mactlmgr/)
  • MBProgressHUD (Matej Bukovinski, with modifications by Jonathan George;
    https://github.com/jdg/MBProgressHUD)
- • iosapplist (me; http://code.s.zeid.me/iosapplist)
+ • iosapplist (me; https://code.s.zeid.me/iosapplist)
  • CFPropertyList (Ben Cochran; https://github.com/bencochran/CFPropertyList)
  • simplejson (Bob Ippolito; https://github.com/simplejson/simplejson)
  • argparse (Steven J. Bethard; https://code.google.com/p/argparse/)
