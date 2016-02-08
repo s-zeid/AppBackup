@@ -12,7 +12,7 @@ setup(
              " installed iOS App Store apps.",
  url="https://code.s.zeid.me/appbackup",
  author="Scott Zeid",
- author_email="s@zeid.me",
+ author_email="support+appbackup@s.zeid.me",
  license="X11 License:  https://tldrlegal.com/license/x11-license",
  classifiers=[
   "Development Status :: 3 - Alpha",
